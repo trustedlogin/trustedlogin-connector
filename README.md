@@ -35,9 +35,17 @@ It is important that you use the `wp.js` script to setup the local dev site, whi
         - Installs WordPress
         - Creates admin users, as specified in `NGROK_USERS` env variable
         - Activates plugin
+- Ensure that Docker is running
 - Build plugin for release and ZIP
     - `yarn`
     - `node wp.js zip`
+
+Note: if that doesn't work, make sure Docker is running and then run the following instead:
+
+```bash
+yarn build && npx --yes plugin-machine plugin build --token=notempty && npx --yes plugin-machine plugin zip --token=notempty
+```
+
 - Activate Plugin
     - `node wp.js --activate`
 - Reset WordPress
