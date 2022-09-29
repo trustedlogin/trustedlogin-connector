@@ -173,6 +173,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           {!minimal ? (
             <TitleDescriptionLink
               title={__("Log In Using Access Key", "trustedlogin-vendor")}
+              description={__("Paste the Access Key to log into the connected website.", "trustedlogin-vendor")}
             />
           ) : null}
 
