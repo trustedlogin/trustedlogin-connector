@@ -160,8 +160,9 @@ class AccessKeyLogin
 			);
 		}
 
-		// TODO: Replace with an array of all valid sites
-		return $valid_secrets[0]['url_parts'];
+		//Return all url parts
+		//@see https://github.com/trustedlogin/vendor/issues/109
+		return wp_list_pluck( $valid_secrets, 'url_parts' );
 	}
 
 	/**

@@ -155,12 +155,13 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 		$output = $handler->handle();
 		$this->assertIsArray( $output );
 		//With the right things in it
-		$this->assertArrayHasKey( 'loginurl', $output);
+		$first = $output[0];//@see https://github.com/trustedlogin/vendor/issues/109
+		$this->assertArrayHasKey( 'loginurl', $first);
 		$this->assertTrue(
-			(bool)filter_var($output['loginurl'], FILTER_VALIDATE_URL)
+			(bool)filter_var($first['loginurl'], FILTER_VALIDATE_URL)
 		);
-		$this->assertArrayHasKey( 'siteurl', $output);
-		$this->assertSame( 'https://trustedlogin.support', $output['siteurl']);
+		$this->assertArrayHasKey( 'siteurl', $first);
+		$this->assertSame( 'https://trustedlogin.support', $first['siteurl']);
 	}
 
 	/**
