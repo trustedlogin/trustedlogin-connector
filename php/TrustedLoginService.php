@@ -315,6 +315,48 @@ class TrustedLoginService
 	}
 
 	/**
+	 * Helper function: verify the structure of an envelope is valid.
+	 *
+	 * @since TODO
+	 *
+	 * @param array|mixed      Envelope to validate
+	 *
+	 * @return array|\WP_Error Valid envelope or error if invalid.
+	 */
+	public function verifyEnvelope( $envelope )
+	{
+
+		if (empty($envelope)) {
+			$this->log('$envelope is empty', __METHOD__, 'error');
+			return new \WP_Error( 'empty_envelope', 'The envelope is empty.' );
+		}
+
+		if (is_object($envelope)) {
+			$envelope = (array) $envelope;
+		}
+
+		if (! is_array($envelope)) {
+			$this->log('Error: envelope not an array. e:', __METHOD__, 'error',[
+				'envelope' => $envelope
+			]);
+
+			return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly');
+		}
+
+		$required_keys = [ 'identifier', 'siteUrl', 'publicKey', 'nonce' ];
+
+		foreach ($required_keys as $required_key) {
+			if (! array_key_exists($required_key, $envelope)) {
+				$this->log('Error: malformed envelope.', __METHOD__, 'error', $envelope);
+
+				return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly or there was a server error.');
+			}
+		}
+
+		return $envelope;
+	}
+
+	/**
 	 * Helper function: Extract redirect url from encrypted envelope.
 	 *
 	 * @since 0.1.0
@@ -335,26 +377,12 @@ class TrustedLoginService
 	public function envelopeToUrl($envelope, $return_parts = false)
 	{
 
-		if (is_object($envelope)) {
-			$envelope = (array) $envelope;
-		}
-
-		if (! is_array($envelope)) {
+		if ( is_wp_error( $this->verifyEnvelope( $envelope ) ) ) {
 			$this->log('Error: envelope not an array. e:', __METHOD__, 'error',[
 				'envelope' => $envelope
 			]);
 
-			return new WP_Error('malformed_envelope', 'The data received is not formatted correctly');
-		}
-
-		$required_keys = [ 'identifier', 'siteUrl', 'publicKey', 'nonce' ];
-
-		foreach ($required_keys as $required_key) {
-			if (! array_key_exists($required_key, $envelope)) {
-				$this->log('Error: malformed envelope.', __METHOD__, 'error', $envelope);
-
-				return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly or there was a server error.');
-			}
+			return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly');
 		}
 
 		/** var \TrustedLogin\Vendor\Encryption $trustedlogin_encryption */
