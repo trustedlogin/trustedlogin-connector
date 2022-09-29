@@ -160,7 +160,7 @@ class AccessKeyLogin
 			);
 		}
 
-		//Return all url parts, not just 0
+	  //Return all url parts, not just 0
 		//@see https://github.com/trustedlogin/vendor/issues/109
 		return wp_list_pluck( $valid_secrets, 'url_parts' );
 	}
