@@ -219,9 +219,9 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
     return (
       <Layout
         minimal={minimal}
-        title={__("Select site to login to", "trustedlogin-vendor")}
+        title={__("Select site to log into.", "trustedlogin-vendor")}
         description={__(
-          "There are multiple sites associated with this access key",
+          "There are multiple sites associated with this access key.",
           "trustedlogin-vendor"
         )}>
         <>
