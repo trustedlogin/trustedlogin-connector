@@ -130,21 +130,21 @@ class AccessKeyLogin
 			trustedlogin_vendor()
 		);
 
-		$site_ids = $tl->apiGetSecretIds($access_key, $account_id);
+		$secret_ids = $tl->apiGetSecretIds($access_key, $account_id);
 
-		if (is_wp_error($site_ids)) {
+		if (is_wp_error($secret_ids)) {
 			return new \WP_Error(
 				400,
 				'invalid_secret_keys',
-				$site_ids->get_error_message()
+				$secret_ids->get_error_message()
 			);
 		}
 
-		if (empty($site_ids)) {
+		if (empty($secret_ids)) {
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
-				'no_secret_keys',
-				'No secret keys found'
+				'no_secret_ids',
+				'No secret ids found'
 			);
 		}
 
