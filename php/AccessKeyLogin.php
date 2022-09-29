@@ -160,6 +160,7 @@ class AccessKeyLogin
 			);
 		}
 
+		// TODO: Replace with an array of all valid sites
 		return $valid_secrets[0]['url_parts'];
 	}
 
@@ -167,7 +168,7 @@ class AccessKeyLogin
 	 * Verifies the $_POST request by the Access Key login form.
 	 *
 	 * @param bool $checkNonce. Optional. Default true. Set false to bypass nonce check.
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public function verifyGrantAccessRequest(bool $checkNonce = true)
 	{
