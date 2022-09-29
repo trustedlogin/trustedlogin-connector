@@ -23,7 +23,7 @@ class MaybeRedirect
 	 */
 	public static function adminInit(){
 
-		if( ! isset($_REQUEST['action']) && Reset::ACTION_NAME == $_REQUEST['action'] ) {
+		if( ! isset($_REQUEST['action']) || Reset::ACTION_NAME !== $_REQUEST['action'] ) {
 			return;
 		}
 
