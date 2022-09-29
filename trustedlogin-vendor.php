@@ -3,7 +3,7 @@
  * Plugin Name: TrustedLogin Support Plugin
  * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
- * Version: 0.11.0
+ * Version: 0.12.0
  * Requires PHP: 7.1
  * Author: Katz Web Services, Inc.
  * Author URI: https://www.trustedlogin.com
