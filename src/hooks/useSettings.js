@@ -313,6 +313,7 @@ export default function SettingsProvider({
     }
     if (
       window.tlVendor &&
+      window.tlVendor.accessKey &&
       window.tlVendor.accessKey.hasOwnProperty("ak_account_id")
     ) {
       let id = initialTeams.findIndex(
