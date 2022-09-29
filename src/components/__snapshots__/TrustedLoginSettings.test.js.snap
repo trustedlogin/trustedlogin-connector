@@ -71,7 +71,7 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                     <p
                       class="mt-2 mb-4 text-sm text-gray-500"
                     >
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ornare tortor in nisl fermentum.
+                      Each team supports a project in TrustedLogin.
                     </p>
                     <a
                       class="text-blue-tl text-sm"

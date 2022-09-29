@@ -51,10 +51,7 @@ exports[`AddTeam Renders & Matches snapshot 1`] = `
         </h2>
         <p
           class="mt-2 mb-4 text-sm text-gray-500"
-        >
-           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-ornare tortor in nisl fermentum.
-        </p>
+        />
         <a
           class="text-blue-tl text-sm"
           href="https://app.trustedlogin.com/settings#/teams"
@@ -214,7 +211,7 @@ ornare tortor in nisl fermentum.
                   selected=""
                   value="helpscout"
                 >
-                  Helpscout
+                  Help Scout
                 </option>
               </select>
             </div>
@@ -297,10 +294,7 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
         </h2>
         <p
           class="mt-2 mb-4 text-sm text-gray-500"
-        >
-           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-ornare tortor in nisl fermentum.
-        </p>
+        />
         <a
           class="text-blue-tl text-sm"
           href="https://app.trustedlogin.com/settings#/teams"
@@ -460,7 +454,7 @@ ornare tortor in nisl fermentum.
                   selected=""
                   value="helpscout"
                 >
-                  Helpscout
+                  Help Scout
                 </option>
               </select>
             </div>
@@ -518,7 +512,7 @@ exports[`HelpDeskSelect Renders & Matches snapshot 1`] = `
           selected=""
           value="helpscout"
         >
-          Helpscout
+          Help Scout
         </option>
       </select>
     </div>
