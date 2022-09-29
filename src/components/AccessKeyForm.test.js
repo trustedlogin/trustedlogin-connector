@@ -53,7 +53,7 @@ describe("Access Key Login Form", () => {
       <AccessKeyForm initialAccountId={team.account_id} />,
       { wrapper: Provider }
     );
-    expect(container.querySelectorAll(".tl-ak-site-button")).toHaveLength(2);
+    expect(container.querySelectorAll("button")).toHaveLength(2);
   });
 
   it("shows list of sites if multiple redirects", () => {
@@ -85,6 +85,6 @@ describe("Access Key Login Form", () => {
     //No form yet
     expect(container.querySelectorAll("form")).toHaveLength(0);
     //two buttons
-    expect(container.querySelectorAll(".tl-ak-site-button")).toHaveLength(2);
+    expect(container.querySelectorAll("button")).toHaveLength(2);
   });
 });

@@ -6,6 +6,7 @@ import { HorizontalLogo } from "./TrustedLoginLogo";
 import { SelectFieldArea, InputFieldArea } from "./teams/fields";
 import TitleDescriptionLink from "./TitleDescriptionLink";
 import { ToastError } from "./Errors";
+import { SecondaryButton } from "./Buttons";
 function collectFormData(form) {
   let data = {};
   const formData = new FormData(form);
@@ -28,7 +29,7 @@ const hasOnlyOneRedirectData = (redirectData) =>
   redirectData && 1 == Object.keys(redirectData).length;
 const firstRedirectData = (redirectData) =>
   redirectData && redirectData[Object.keys(redirectData)[0]];
-const Layout = ({ children, minimal }) => {
+const Layout = ({ children, minimal, title, description }) => {
   return (
     <>
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -38,13 +39,7 @@ const Layout = ({ children, minimal }) => {
           </div>
 
           {!minimal ? (
-            <TitleDescriptionLink
-              title={__("Log In Using Access Key", "trustedlogin-vendor")}
-              description={__(
-                "Paste the Access Key to log into the connected website.",
-                "trustedlogin-vendor"
-              )}
-            />
+            <TitleDescriptionLink title={title} description={description} />
           ) : null}
 
           <>{children}</>
@@ -222,22 +217,26 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
   //Have redirectData and not redirectSite, show select
   if (redirectData && !redirectSite) {
     return (
-      <Layout minimal={minimal}>
+      <Layout
+        minimal={minimal}
+        title={__("Select site to login to", "trustedlogin-vendor")}
+        description={__(
+          "There are multiple sites associated with this access key",
+          "trustedlogin-vendor"
+        )}>
         <>
-          <h2>{__("Select site to login to")}</h2>
           <div>
             <ul>
               {Object.keys(redirectData).map((id) => {
                 let site = redirectData[id];
                 return (
                   <li key={id}>
-                    <button
-                      className="tl-ak-site-button"
+                    <SecondaryButton
                       onClick={() => {
                         setRedirectSite(site);
                       }}>
                       {site.siteurl}
-                    </button>
+                    </SecondaryButton>
                   </li>
                 );
               })}
@@ -249,7 +248,13 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
   }
   return (
     <>
-      <Layout minimal={minimal}>
+      <Layout
+        minimal={minimal}
+        title={__("Log In Using Access Key", "trustedlogin-vendor")}
+        description={__(
+          "Paste the Access Key to log into the connected website.",
+          "trustedlogin-vendor"
+        )}>
         <>
           <form
             aria-label={__("Log In Using Access Key", "trustedlogin-vendor")}
