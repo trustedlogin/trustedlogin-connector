@@ -51,16 +51,39 @@ class TrustedLoginService
 	 *
 	 * @return void.
 	 */
-	public function handleMultipleSecrectIds($account_id, $secret_ids = array())
+	public function handleMultipleSecretIds($account_id, $secret_ids = array())
 	{
-
 		if (! is_array($secret_ids) || empty($secret_ids)) {
 			return;
 		}
 
+		$valid_secrets = $this->getValidSecrets( $secret_ids, $account_id );
+
+		if (1 === sizeof($valid_secrets)) {
+			reset( $valid_secrets );
+			$this->maybeRedirectSupport( $valid_secrets[0]['id'], $valid_secrets[0]['envelope'] );
+		}
+
 		$urls_output  = '';
 		$url_template = '<li><a href="%1$s" class="%2$s">%3$s</a></li>';
-		$valid_ids    = array();
+
+		foreach ( $valid_secrets as $valid_secret ) {
+			$urls_output .= sprintf(
+				$url_template,
+				esc_url($valid_secret['url_parts']['loginurl']),
+				esc_attr('trustedlogin-authlink'),
+				sprintf(esc_html__('Log in to %s', 'trustedlogin-vendor'), esc_html($url_parts['siteurl']))
+			);
+		}
+
+		if (empty($urls_output)) {
+			return;
+		}
+
+		add_action('admin_notices', function () use ($urls_output) {
+			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-vendor') . '</h3><ul>' . $urls_output . '</ul></div>';
+		});
+	}
 
 	/**
 	 * Ingests an array of secret IDs and returns an array of only valid IDs with extra data.
@@ -70,7 +93,7 @@ class TrustedLoginService
 	 * @param array $secret_ids
 	 * @param $account_id
 	 *
-	 * @return array
+	 * @return array{ id:string, url_parts:array, envelope:array }
 	 */
 	public function getValidSecrets( array $secret_ids, $account_id ) {
 
