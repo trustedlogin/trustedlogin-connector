@@ -62,62 +62,57 @@ class TrustedLoginService
 		$url_template = '<li><a href="%1$s" class="%2$s">%3$s</a></li>';
 		$valid_ids    = array();
 
+	/**
+	 * Ingests an array of secret IDs and returns an array of only valid IDs.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param array $secret_ids
+	 * @param $account_id
+	 *
+	 * @return array
+	 */
+	public function getValidSecretIds( array $secret_ids, $account_id ) {
+
+		$valid_ids = [];
+
 		foreach ($secret_ids as $secret_id) {
-			$envelope = $this->apiGetEnvelope($secret_id);
 
-			if (is_wp_error($envelope)) {
-				$this->log('Error: ' . $envelope->get_error_message(), __METHOD__, 'error');
+			$envelope = $this->apiGetEnvelope( $secret_id, $account_id );
+
+			$envelope = $this->verifyEnvelope( $envelope );
+
+			if ( is_wp_error( $envelope ) ) {
+				$this->log( 'Error: ' . $envelope->get_error_message(), __METHOD__, 'error' );
 				continue;
 			}
 
-			if (empty($envelope)) {
-				$this->log('$envelope is empty', __METHOD__, 'error');
-				continue;
-			}
-
-			$this->log('$envelope is not an error. Here\'s the envelope: ', __METHOD__, 'debug',[
+			$this->log( '$envelope is not an error. Here\'s the envelope: ', __METHOD__, 'debug', [
 				'envelope' => $envelope,
-			]);
+			] );
 
 			// TODO: Convert to shared (client/vendor) Envelope library
-			$url_parts = $this->envelopeToUrl($envelope, true);
+			$url_parts = $this->envelopeToUrl( $envelope, true );
 
-			if (is_wp_error($url_parts)) {
-				$this->log('Error: ' , __METHOD__, 'error',[
-					'error_messages'=>$url_parts->get_error_message()
-				]);
+			if ( is_wp_error( $url_parts ) ) {
+				$this->log( 'Error: ', __METHOD__, 'error', [
+					'error_messages' => $url_parts->get_error_message()
+				] );
 				continue;
 			}
 
-			if (empty($url_parts)) {
+			if ( empty( $url_parts ) ) {
 				continue;
 			}
-
-			$urls_output .= sprintf(
-				$url_template,
-				esc_url($url_parts['loginurl']),
-				esc_attr('trustedlogin-authlink'),
-				sprintf(esc_html__('Log in to %s', 'trustedlogin-vendor'), esc_html($url_parts['siteurl']))
-			);
 
 			$valid_ids[] = array(
-				'id' => $secret_id,
-				'envelope' => $envelope,
+				'id'        => $secret_id,
+				'url_parts' => $url_parts,
+				'envelope'  => $envelope,
 			);
 		}
 
-		if (1 === sizeof($valid_ids)) {
-			reset($valid_ids);
-			$this->maybeRedirectSupport($valid_ids[0]['id'], $valid_ids[0]['envelope']);
-		}
-
-		if (empty($urls_output)) {
-			return;
-		}
-
-		add_action('admin_notices', function () use ($urls_output) {
-			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-vendor') . '</h3><ul>' . $urls_output . '</ul></div>';
-		});
+		return $valid_ids;
 	}
 
 
