@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 // Exit if accessed directly
 
-define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.11.0' );
+define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.12.0' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
 if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
