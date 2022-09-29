@@ -63,7 +63,7 @@ class TrustedLoginService
 		$valid_ids    = array();
 
 	/**
-	 * Ingests an array of secret IDs and returns an array of only valid IDs.
+	 * Ingests an array of secret IDs and returns an array of only valid IDs with extra data.
 	 *
 	 * @since 0.12.0
 	 *
@@ -72,7 +72,7 @@ class TrustedLoginService
 	 *
 	 * @return array
 	 */
-	public function getValidSecretIds( array $secret_ids, $account_id ) {
+	public function getValidSecrets( array $secret_ids, $account_id ) {
 
 		$valid_ids = [];
 

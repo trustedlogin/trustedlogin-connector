@@ -148,11 +148,11 @@ class AccessKeyLogin
 			);
 		}
 
-		$valid_secret_ids = $tl->getValidSecretIds( $secret_ids, $account_id );
+		$valid_secrets = $tl->getValidSecrets( $secret_ids, $account_id );
 
-		$this->log( 'Valid secret IDs: ', __METHOD__, 'debug', $valid_secret_ids );
+		$this->log( 'Valid secrets: ', __METHOD__, 'debug', $valid_secrets );
 
-		if ( empty( $valid_secret_ids ) ) {
+		if ( empty( $valid_secrets ) ) {
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_valid_secret_ids',
@@ -160,7 +160,7 @@ class AccessKeyLogin
 			);
 		}
 
-		return $valid_secret_ids[0]['url_parts'];
+		return $valid_secrets[0]['url_parts'];
 	}
 
 	/**
