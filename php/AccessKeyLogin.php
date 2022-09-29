@@ -148,23 +148,19 @@ class AccessKeyLogin
 			);
 		}
 
-		foreach ($site_ids as $site_id) {
-			$envelope = $tl->apiGetEnvelope($site_id, $account_id);
-			//Not an error?
-			if( ! is_wp_error($envelope)){
-				//Break, we got one.
-				break;
-			}
+		$valid_secret_ids = $tl->getValidSecretIds( $secret_ids, $account_id );
+
+		$this->log( 'Valid secret IDs: ', __METHOD__, 'debug', $valid_secret_ids );
+
+		if ( empty( $valid_secret_ids ) ) {
+			return new \WP_Error(
+				self::ERROR_NO_SECRET_IDS_FOUND,
+				'no_valid_secret_ids',
+				'No secret ids found'
+			);
 		}
 
-		//Return the last error, if its an error
-		//@todo what about the other ones?
-		if (is_wp_error($envelope)) {
-			return $envelope;
-		}
-		//Try to get parts of the envelope,may return WP_Error
-		$parts = $tl->envelopeToUrl($envelope, true);
-		return $parts;
+		return $valid_secret_ids[0]['url_parts'];
 	}
 
 	/**
