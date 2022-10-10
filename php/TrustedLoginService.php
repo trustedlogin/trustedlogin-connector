@@ -407,10 +407,16 @@ class TrustedLoginService
 		$trustedlogin_encryption = $this->plugin->getEncryption();
 
 		try {
-			$this->log('Starting to decrypt envelope.', __METHOD__, 'debug',['envelope' => $envelope]);
-			$decrypted_identifier = $trustedlogin_encryption->decryptCryptoBox($envelope['identifier'], $envelope['nonce'], $envelope['publicKey']);
-			if (is_wp_error($decrypted_identifier)) {
-				$this->log('There was an error decrypting the envelope.', __METHOD__,['print_identifier' => $decrypted_identifier]);
+
+			$this->log( 'Starting to decrypt envelope.', __METHOD__, 'debug', [ 'envelope' => $envelope ] );
+
+			$decrypted_identifier = $trustedlogin_encryption->decryptCryptoBox( $envelope['identifier'], $envelope['nonce'], $envelope['publicKey'] );
+
+			if ( is_wp_error( $decrypted_identifier ) ) {
+				$this->log( 'There was an error decrypting the envelope:', __METHOD__, [
+					'error_code' => $decrypted_identifier->get_error_code(),
+					'error_message' => $decrypted_identifier->get_error_message(),
+				] );
 
 				return $decrypted_identifier;
 			}
