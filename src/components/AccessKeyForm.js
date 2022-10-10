@@ -144,6 +144,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
         data,
       })
         .catch((err) => {
+          console.log({ err });
           setIsLoading(false);
           if (
             err &&
@@ -158,7 +159,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           ) {
             setErrorMessage(err.data);
           } else {
-            setErrorMessage(__("An error happended."));
+            setErrorMessage(__("Unable to use access key."));
           }
         })
         .then((res) => {
