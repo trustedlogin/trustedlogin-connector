@@ -149,7 +149,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           if (
             err &&
             err.hasOwnProperty("message") &&
-            "message" === typeof err.message
+            "string" === typeof err.message
           ) {
             setErrorMessage(err.message);
           } else if (
