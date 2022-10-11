@@ -69,11 +69,9 @@ class MenuPage {
             return true;
         }
 
-        //
         if( in_array(
             //trustedlogin_page_trustedlogin_access_key_login
-            str_replace(
-                'trustedlogin_page_', '', $page), [
+            str_replace( 'trustedlogin_page_', '', $page ), [
             self::SLUG_TEAMS,
             self::SLUG_HELPDESKS,
             self::SLUG_SETTINGS,
