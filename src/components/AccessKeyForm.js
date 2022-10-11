@@ -158,7 +158,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           ) {
             setErrorMessage(err.message);
           } else {
-            setErrorMessage(__("Unable to use access key."));
+            setErrorMessage(__("There was an error processing the access key."));
           }
         })
         .then((res) => {
@@ -190,11 +190,11 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
             return;
           }
           setIsLoading(false);
-          setErrorMessage(__("An error happended."));
+          setErrorMessage(__("There was an error while logging in with the access key."));
         })
         .catch((err) => {
           setIsLoading(false);
-          setErrorMessage(__("An error happended."));
+          setErrorMessage(__("There was an error while logging in with the access key."));
         });
     }
   };
