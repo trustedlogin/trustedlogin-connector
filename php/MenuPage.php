@@ -128,7 +128,6 @@ class MenuPage {
         if( isset(
             $_REQUEST[MaybeRedirect::REDIRECT_KEY]
         ) ){
-            var_dump(2,$_REQUEST[MaybeRedirect::REDIRECT_KEY]);exit;
             return;
         }
         //Enqueue assets
