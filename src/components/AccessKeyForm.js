@@ -144,20 +144,19 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
         data,
       })
         .catch((err) => {
-          console.log({ err });
           setIsLoading(false);
           if (
-            err &&
-            err.hasOwnProperty("message") &&
-            "string" === typeof err.message
-          ) {
-            setErrorMessage(err.message);
-          } else if (
             err &&
             err.hasOwnProperty("data") &&
             "string" === typeof err.data
           ) {
             setErrorMessage(err.data);
+          } else if (
+            err &&
+            err.hasOwnProperty("message") &&
+            "string" === typeof err.message
+          ) {
+            setErrorMessage(err.message);
           } else {
             setErrorMessage(__("Unable to use access key."));
           }
