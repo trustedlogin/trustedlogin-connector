@@ -69,9 +69,11 @@ class MenuPage {
             return true;
         }
 
-
+        //
         if( in_array(
-            str_replace( 'trustedlogin-settings_page_', '', $page), [
+            //trustedlogin_page_trustedlogin_access_key_login
+            str_replace(
+                'trustedlogin_page_', '', $page), [
             self::SLUG_TEAMS,
             self::SLUG_HELPDESKS,
             self::SLUG_SETTINGS,
@@ -115,7 +117,7 @@ class MenuPage {
      * @uses "admin_enqueue_scripts"
      */
     public function enqueueAssets($hook){
-        //@todo make this work with submenu pages.
+        //@see https://github.com/trustedlogin/vendor/issues/116
         if (!$this->shouldEnqueueAssets($hook)) {
             return;
         }
@@ -126,6 +128,7 @@ class MenuPage {
         if( isset(
             $_REQUEST[MaybeRedirect::REDIRECT_KEY]
         ) ){
+            var_dump(2,$_REQUEST[MaybeRedirect::REDIRECT_KEY]);exit;
             return;
         }
         //Enqueue assets
