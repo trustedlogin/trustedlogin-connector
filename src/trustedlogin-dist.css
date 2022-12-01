@@ -1769,6 +1769,43 @@ body .hover\:text-navy-tl:hover {
   color: #233b6b;
 }
 
+@-webkit-keyframes tl-spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes tl-spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+body .spinner-dark-tl:before,
+body .spinner-light-tl:before {
+  content: '';
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  -webkit-animation: tl-spinner .6s linear infinite;
+          animation: tl-spinner .6s linear infinite;
+}
+
+body .spinner-dark-tl:before {
+  border: 2px solid rgba(35, 59, 107, 0.8);
+  border-top-color: #00aadd;
+}
+
+body .spinner-light-tl:before {
+  border: 2px solid rgba( 255, 255, 255, .7 );
+  border-top-color: rgba(35, 59, 107, 0.8);
+}
+
 body .border-blue-tl {
   border-color: #00aadd;
 }

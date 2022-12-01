@@ -347,7 +347,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
 
                   <>
                     {isLoading ? (
-                      <div className="spinner is-active inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
+                      <div className="spinner-light-tl inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
                     ) : (
                       <input
                         type="submit"
