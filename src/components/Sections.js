@@ -33,7 +33,7 @@ export const DangerZone = () => {
     <>
       {!isResetting ? (
         <SettingSection title={__("Danger Zone", "trustedlogin-vendor")}>
-          <div className="bg-white p-8 border border-red-700 rounded-lg">
+          <div className="bg-white p-8 border border-red-700 rounded-lg mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center justify-center h-12 w-12 bg-red-700 rounded-lg">
