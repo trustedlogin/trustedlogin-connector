@@ -6,7 +6,41 @@
 [![JavaScript Tests](https://github.com/trustedlogin/vendor/actions/workflows/test-js.yml/badge.svg)](https://github.com/trustedlogin/vendor/actions/workflows/test-js.yml)
 
 
-## Installation
+## Installation And Dev (new)
+
+-   Clone
+    - `git clone git@github.com:trustedlogin/vendor.git`
+- Install javascript dependencies
+    - `yarn`
+- Install php dependencies
+    - `composer install`
+    - `docker run --rm -it --volume "$(pwd)":/app
+prooph/composer:7.4 install`
+
+
+### Develop
+
+JS and CSS:
+
+- Start CSS watcher
+  - `yarn start:css`
+- Start JS watcher only
+  - `yarn start:js`
+- Test changed files
+  - `yarn test --watch`
+- Test all files once
+  - `yarn test`
+  - `yarn test --ci`
+- Lint JS
+  - `yarn lint`
+
+PHP:
+
+- Test
+
+## (old) Installation
+
+> This local dev with Docker was built to work with ngrok, which is not what we're doing now.
 
 Do not install in a directory that includes a space in the path, for example, one under "Local Sites". That will cause issues with wp.js.
 
