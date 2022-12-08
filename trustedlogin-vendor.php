@@ -3,7 +3,7 @@
  * Plugin Name: TrustedLogin Support Plugin
  * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
- * Version: 0.12.0
+ * Version: 0.13.0
  * Requires PHP: 7.1
  * Author: Katz Web Services, Inc.
  * Author URI: https://www.trustedlogin.com
@@ -15,13 +15,18 @@
 
 use TrustedLogin\Vendor\ErrorHandler;
 use TrustedLogin\Vendor\AccessKeyLogin;
+use TrustedLogin\Vendor\ConnectionService;
+use TrustedLogin\Vendor\Encryption;
+use TrustedLogin\Vendor\MaybeRedirect;
+use TrustedLogin\Vendor\Plugin;
+use TrustedLogin\Vendor\ReturnScreen;
 
 if (!defined('ABSPATH')) {
     exit;
 }
 // Exit if accessed directly
 
-define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.12.0' );
+define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.13.0' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
 if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
@@ -65,20 +70,20 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
     //Add REST API endpoints
 	add_action( 'rest_api_init', [$plugin, 'restApiInit']);
     //Handle access key login if requests.
-	add_action( 'template_redirect',[\TrustedLogin\Vendor\MaybeRedirect::class, 'handle']);
+	add_action( 'template_redirect',[MaybeRedirect::class, 'handle']);
 	//Handle the "Reset All" button in UI
-	add_action( 'admin_init',[\TrustedLogin\Vendor\MaybeRedirect::class, 'adminInit']);
+	add_action( 'admin_init',[MaybeRedirect::class, 'adminInit']);
 	if( file_exists(__DIR__. "/build/index.html")){
 		//Handle webhook/helpdesk return
 		add_action( 'admin_init',[
-			new \TrustedLogin\Vendor\ReturnScreen(
+			new ReturnScreen(
 				file_get_contents(__DIR__. "/build/index.html"),
 				trustedlogin_vendor()->getSettings()
 			),
 			'callback'
 		]);
 	}
-
+	add_action( 'admin_init',[ConnectionService::class, 'listen']);
 
 
 }else{
@@ -97,14 +102,14 @@ function trustedlogin_vendor_deactivate() {
 /**
  * Accesor for main plugin container
  *
- * @return \TrustedLogin\Vendor\Plugin;
+ * @return Plugin
  */
 function trustedlogin_vendor(){
-	/** @var \TrustedLogin\Vendor\Plugin */
+	/** @var Plugin */
 	static $trustedlogin_vendor;
 	if( ! $trustedlogin_vendor ){
-		$trustedlogin_vendor = new \TrustedLogin\Vendor\Plugin(
-			new \TrustedLogin\Vendor\Encryption()
+		$trustedlogin_vendor = new Plugin(
+			new Encryption()
 		);
 	}
 	return $trustedlogin_vendor;
@@ -131,6 +136,20 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
+
+		'connect' => [
+			'login' => esc_url_raw(
+				add_query_arg(
+					'redirect',
+					urlencode(ConnectionService::makeCallbackUrl()),
+					'https://tlmockapi.local/mock-server/login'
+				)
+			),
+			'tokens' => ConnectionService::savedTokens(),
+			'callback' => esc_url_raw(
+				ConnectionService::makeCallbackUrl()
+			),
+		]
 	];
 
 	//Check if we can preset redirectData in form

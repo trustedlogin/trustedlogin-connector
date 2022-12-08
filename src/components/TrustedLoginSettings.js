@@ -10,6 +10,7 @@ import TeamsSettings from "../components/teams/TeamsSettings";
 import GeneralSettings from "./GeneralSettings";
 import IntegrationSettings from "./IntegrationSettings";
 import { PageError } from "./Errors";
+import Connector from "./connect";
 /**
  * TrustedLogin Settings screen
  */
@@ -22,6 +23,16 @@ export default function TrustedLoginSettings() {
 
   //The non-default views here are those withOUT a TopBar
   switch (currentView) {
+    case "connect":
+      const hasTokens = tlVendor.connect.tokens.length > 0;
+      return (
+        <Connector
+          loginUrl={window.tlVendor.connect.login}
+          connected={hasTokens}
+          connectedAccounts={[]}
+          notConnectedAccounts={tlVendor.connect.tokens}
+        />
+      );
     case "onboarding":
       //For now, only show step 2
       return <OnboardingLayout step={2} singleStepMode={true} />;

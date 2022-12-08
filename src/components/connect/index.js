@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const CONNECTIION_SETTINGS = {
-  loginUrl: "https://login.trustedlogin.com",
+  loginUrl: "https://tlmockapi.local/mock-server/login",
 };
 const NotConnected = ({ loginUrl }) => {
   return (

@@ -25,10 +25,10 @@ class ApiSend implements SendsApiRequests
 	 * @param mixed $data Data to send as JSON-encoded request body
 	 * @param string $method HTTP request method (must be 'POST', 'PUT', 'GET', 'PUSH', or 'DELETE')
 	 * @param array $additional_headers Any additional headers to send in request (required for auth/etc)
-	 *
+	 * @param bool $ssl_verify Whether to verify SSL certificate. Default true. Only disable for local dev
 	 * @return array|false|WP_Error - wp_remote_post response, false if invalid HTTP method, WP_Error if request errors
 	 */
-	public function send($url, $data, $method, $additional_headers)
+	public function send($url, $data, $method, $additional_headers, $ssl_verify = true)
 	{
 
 		if (! in_array($method, array( 'POST', 'PUT', 'GET', 'PUSH', 'DELETE' ))) {
@@ -54,6 +54,7 @@ class ApiSend implements SendsApiRequests
 			'blocking'    => true,
 			'headers'     => $headers,
 			'cookies'     => array(),
+			'sslverify'   => $ssl_verify,
 		);
 
 		if ($data) {
