@@ -143,7 +143,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_secret_ids',
-				'No secret ids found'
+				esc_html__( 'No secret IDs found', 'trustedlogin-vendor' )
 			);
 		}
 
@@ -155,7 +155,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_valid_secret_ids',
-				'No secret ids found'
+				esc_html__( 'No secret IDs found', 'trustedlogin-vendor' )
 			);
 		}
 
