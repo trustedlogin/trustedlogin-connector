@@ -41,15 +41,24 @@ class AccessKeyLogin
 
 	const REDIRECT_ENDPOINT = 'trustedlogin';
 
-	const ERROR_NO_ACCOUNT_ID = 404;
-
+	/**
+	 * Error code when the current user isn't allowed to provide support.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+	 */
 	const ERROR_INVALID_ROLE = 403;
 
+	/**
+	 * Error code when the there is no account in TrustedLogin matching the specified account ID.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+	 */
+	const ERROR_NO_ACCOUNT_ID = 404;
+
 	/*
-	* Error for no secret ids founc
-	* @See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+	* Error for no secret ids found.
+	* @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
 	*/
 	const ERROR_NO_SECRET_IDS_FOUND = 406;
+
 	/**
 	 * Error code for no envelope found
 	 *
@@ -159,8 +168,10 @@ class AccessKeyLogin
 			);
 		}
 
-	  //Return all url parts, not just 0
-		//@see https://github.com/trustedlogin/vendor/issues/109
+	    /**
+	     * Return all url parts, not just 0
+	     * @see https://github.com/trustedlogin/vendor/issues/109
+	     */
 		return wp_list_pluck( $valid_secrets, 'url_parts' );
 	}
 
