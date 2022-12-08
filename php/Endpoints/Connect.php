@@ -46,14 +46,14 @@ class Connect extends Endpoint
 		$connectService = new ConnectionService(
 			\trustedlogin_vendor()
 		);
-		//Not ready to echchange yet
+		//Not ready to exhchange yet
 		if( ! $request->get_param('exchange') ){
 			//Get the account tokens
 			$data = $connectService->getAccountTokens(
 				$request->get_param('token')
 			);
 		} else {
-			//Exachne account token for account data
+			//Exchange account token for account data
 			$data = $connectService->getAccount(
 				$request->get_param('token')
 			);

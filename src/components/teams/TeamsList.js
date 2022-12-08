@@ -3,7 +3,7 @@ import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
 import { PrimaryButton, SubmitAndCanelButtons } from "../Buttons";
 import { ConfigureHelscout } from "../integrations/ConfigureIntegration";
-import { CenteredLayout, PageHeader } from "../Layout";
+import { CenteredLayout, PageHeader, SettingsPageLayout } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { __ } from "@wordpress/i18n";
 /**
@@ -82,7 +82,7 @@ const TeamsList = () => {
           </>
         </CenteredLayout>
       ) : (
-        <div className="flex flex-col px-5 py-6 sm:px-10">
+        <SettingsPageLayout>
           <PageHeader
             title={"Teams"}
             subTitle={"Manage your TrustedLogin settings"}
@@ -199,7 +199,7 @@ const TeamsList = () => {
               })}
             </ul>
           </div>
-        </div>
+        </SettingsPageLayout>
       )}
     </>
   );

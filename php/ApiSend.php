@@ -62,7 +62,6 @@ class ApiSend implements SendsApiRequests
 		}
 
 		$response = wp_remote_request($url, $request_atts);
-
 		if (is_wp_error($response)) {
 			$this->log(sprintf("%s - Something went wrong (%s): %s", __METHOD__,
 			 $response->get_error_code(), $response->get_error_message()), __METHOD__, 'error'

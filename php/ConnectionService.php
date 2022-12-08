@@ -83,6 +83,12 @@ class ConnectionService
 		);
 	}
 
+	public static function getExchangeRoute(){
+		return add_query_arg( [
+			'exchange' => true,
+		],rest_url('trustedlogin/v1/connect' ));
+	}
+
 	/**
 	 * Get the saved tokens
 	 *
@@ -110,13 +116,14 @@ class ConnectionService
 			$nonce = $_REQUEST[static::NONCE_QUERY_ARG];
 			$token = $_REQUEST[static::NONCE_QUERY_ARG];
 			$service = new static(\trustedlogin_vendor());
-			$tokens = $service->handleCallback($nonce, $token);
+			$gotTokens = $service->handleCallback($nonce, $token);
 			$returnUrl = \admin_url('admin.php?page=trustedlogin-connect');
-			if( ! is_array($tokens)){
-				$service->log('Error getting account tokens',
-					__METHOD__,
+			if( !$gotTokens ){
+				$service->log('Error getting account tokens in listen',
+				__METHOD__,
+					'error',
 					[
-						'error' => true
+						'gotTokens' => $gotTokens
 					]
 				);
 				\wp_redirect(add_query_arg('error', 'token', $returnUrl));
@@ -125,13 +132,13 @@ class ConnectionService
 
 			$service->log('Got tokens',
 				__METHOD__,
+				'info',
 				[
-					'tokens' => $tokens
+					'gotTokens' => $gotTokens
+
 				]
 			);
-			$service->log('Redirecting to admin',
-				__METHOD__
-			);
+
 			\wp_redirect(add_query_arg([
 				'success' => true,
 				'error' => false,
@@ -153,16 +160,18 @@ class ConnectionService
 					'nonce' => $nonce
 				]
 			);
+
 			return new \WP_Error('invalid_nonce', __('Invalid nonce', 'trustedlogin-vendor'));
 		}
 		$tokens = $this->getAccountTokens($token);
 		if( ! is_array($tokens)){
 			$this->log('Error getting account tokens',
-				__METHOD__,
-				[
+			__METHOD__ . __LINE__,
+			[
 
 				]
 			);
+			var_dump(__LINE__,$tokens);exit;
 			return new \WP_Error('invalid_token', __('Invalid token', 'trustedlogin-vendor'));
 		}
 		//Save tokens
@@ -198,40 +207,64 @@ class ConnectionService
 				[],
 				! $this->isDev
 			);
+
 		if( \is_wp_error($response) ){
 			$this->log('Error getting account tokens',
-				__METHOD__,
-				[
-					'error' => $response->get_error_message()
-				]
+				__METHOD__ . __LINE__,
+				'error',
+				$response->get_error_message()
 			);
 			return false;
 
 		}
 		$tokens = json_decode($response['body'], true);
+
+		$this->log('Decoded tokens body',
+				__METHOD__,
+				'info',
+				$tokens
+			);
 		$tokens =  is_array($tokens) && isset($tokens['tokens']) ? $tokens['tokens'] : false;
+
+		$this->log('return tokens',
+				__METHOD__,
+				'info',
+				$tokens
+			);
 		return $tokens;
 	}
 
 	public function getAccount(string $token){
-		$account = $this->plugin
-			->apiSender
+
+
+		$response = $this->plugin
+			->getApiSender()
 			->send(
-				$this->apiUrl('/token/exchange'),
-				[
-					'token' => $token
-				],
+				$this->apiUrl('/token/exchange?token=' . $token),
+				[],
 				'POST',
+				[],
+				! $this->isDev
 			);
-		if( \is_wp_error($account) ){
+
+
+		if( \is_wp_error($response) ){
 			$this->log('Error getting account',
 				__METHOD__,
+				'error',
 				[
-					'error' => $account->get_error_message()
+					'error' => $response->get_error_message()
 				]
 			);
-			return $account;
+			return false;
 		}
+		$account = wp_remote_retrieve_body($response);
+		if( $account['success'] ){
+			return $account;
+
+		}
+		return false;
+
 	}
 
 	public function apiUrl(string $endpoint = ''){

@@ -122,7 +122,7 @@ function trustedlogin_vendor(){
 function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $settingsApi){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
-
+	$connectTokens = ConnectionService::savedTokens();
 	$data = [
 		'resetAction' => esc_url_raw(\TrustedLogin\Vendor\Reset::actionUrl()),
 		'roles' => wp_roles()->get_names(),
@@ -136,7 +136,6 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
-
 		'connect' => [
 			'login' => esc_url_raw(
 				add_query_arg(
@@ -145,10 +144,11 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 					'https://tlmockapi.local/mock-server/login'
 				)
 			),
-			'tokens' => ConnectionService::savedTokens(),
+			'tokens' => $connectTokens,
 			'callback' => esc_url_raw(
 				ConnectionService::makeCallbackUrl()
 			),
+			'exchange' => ConnectionService::getExchangeRoute(),
 		]
 	];
 

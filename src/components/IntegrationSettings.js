@@ -1,12 +1,11 @@
 import { Fragment } from "react";
 import { __ } from "@wordpress/i18n";
-import { PageHeader } from "./Layout";
+import { SettingsPageLayout } from "./Layout";
 import { IntegrationHelpscout } from "./integrations/Integration";
 
 const IntegrationSettings = () => {
   return (
-    <div className="flex flex-col px-5 py-6 sm:px-10">
-      <PageHeader title={"Integrations"} subTitle={"Manage Integrations"} />
+    <SettingsPageLayout title={"Integrations"} subTitle={"Manage Integrations"}>
       <div className="flex flex-col justify-center w-full bg-white rounded-lg shadow p-8">
         <ul
           role="list"
@@ -16,7 +15,7 @@ const IntegrationSettings = () => {
           </Fragment>
         </ul>
       </div>
-    </div>
+    </SettingsPageLayout>
   );
 };
 export default IntegrationSettings;
