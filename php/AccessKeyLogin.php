@@ -130,7 +130,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_INVALID_ROLE,
 				'invalid_user_role',
-				esc_html__( 'User does not have a role that provides support, as defined in the TrustedLogin team settings.', 'trustedlogin-vendor' )
+				esc_html__( 'You do not have a role that is allowed to provide support for this team.', 'trustedlogin-vendor' )
 			);
 		}
 
