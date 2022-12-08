@@ -116,14 +116,13 @@ class AccessKeyLogin
 				$e->getMessage()
 			);
 		}
-		if ($this->verifyUserRole($teamSettings)) {
-			/** YOLO!
+
+		if ( ! $this->verifyUserRole($teamSettings) ) {
 			return new \WP_Error(
 				self::ERROR_INVALID_ROLE,
 				'invalid_user_role',
-				'User does not have the correct role'
+				esc_html__( 'User does not have a role that provides support, as defined in the TrustedLogin team settings.', 'trustedlogin-vendor' )
 			);
-			*/
 		}
 
 		$tl = new TrustedLoginService(
