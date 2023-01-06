@@ -18,6 +18,7 @@ class Reset {
     public function resetAll(Plugin $plugin){
        $plugin->getSettings()->reset()->save();
        Onboarding::reset();
+       ConnectionService::deleteSavedTokens();
        $plugin->getEncryption()->deleteKeys();
        return $plugin;
     }

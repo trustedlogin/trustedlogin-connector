@@ -15,42 +15,42 @@ class ConnectionService
 
 	/**
 	 * Nonce action for the callback
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	const NONCE_ACTION = 'tl_connect';
 
 	/**
 	 * Cache key for the tokens
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	const CACHE_KEY = 'tl_connect_tokens';
 
 	/**
 	 * Query arg for the nonce
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	const NONCE_QUERY_ARG = 'tl_connect_nonce';
 
 	/**
 	 * Query arg for the token
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	const TOKEN_QUERY_ARG = 'tl_connect_token';
 	/**
 	 * @var Plugin
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	protected $plugin;
 
 	/**
 	 * @var string
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	protected $apiUrl;
 
 	/**
 	 * @var bool
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 * @todo base this on a constant
 	 */
 	protected $isDev = true;
@@ -59,18 +59,20 @@ class ConnectionService
 	 * ConnectionService constructor.
 	 *
 	 * @param Plugin $plugin
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	public function __construct(Plugin $plugin)
 	{
 		$this->plugin = $plugin;
-		$this->apiUrl = 'https://tlmockapi.local/mock-server';
+		//No slash at end!
+		$this->apiUrl = 'https://https://php8.trustedlogin.dev';
+		//TRUSTEDLOGIN_API_URL;
 	}
 
 	/**
 	 * Get the URL for the redirect to callback
 	 *
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 *
 	 * @return string
 	 */
@@ -92,7 +94,7 @@ class ConnectionService
 	/**
 	 * Get the saved tokens
 	 *
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 * @return array|false
 	 */
 	public static function savedTokens(){
@@ -105,10 +107,21 @@ class ConnectionService
 	}
 
 	/**
+	 * Delete the saved tokens
+	 * @since 0.18.0
+	 */
+	 public static function deleteSavedTokens(){
+		 \delete_option(static::CACHE_KEY);
+	 }
+
+	/**
+	 * Delete the saved token
+	 */
+	/**
 	 * Save the tokens to the database on callback from the API
 	 *
 	 * @uses "admin_init" hook
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 *
 	 */
 	public static function listen(){
@@ -150,7 +163,7 @@ class ConnectionService
 	/**
 	 * Handle the callback from the API
 	 *
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 */
 	public function handleCallback(string $nonce, string $token){
 		if( ! \wp_verify_nonce($nonce, static::NONCE_ACTION) ){
@@ -171,7 +184,6 @@ class ConnectionService
 
 				]
 			);
-			var_dump(__LINE__,$tokens);exit;
 			return new \WP_Error('invalid_token', __('Invalid token', 'trustedlogin-vendor'));
 		}
 		//Save tokens
@@ -182,7 +194,7 @@ class ConnectionService
 	/**
 	 * Get the URL for login
 	 *
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 * @return string
 	 */
 	public function getLoginUrl(){
@@ -192,7 +204,7 @@ class ConnectionService
 	/**
 	 * Get the URL to the API
 	 *
-	 * @since 0.13.0
+	 * @since 0.18.0
 	 * @return array
 	 */
 	public function getAccountTokens(string $token){
@@ -234,6 +246,7 @@ class ConnectionService
 		return $tokens;
 	}
 
+
 	public function getAccount(string $token){
 
 
@@ -241,7 +254,9 @@ class ConnectionService
 			->getApiSender()
 			->send(
 				$this->apiUrl('/token/exchange?token=' . $token),
-				[],
+				[
+					'token' => $token,
+				],
 				'POST',
 				[],
 				! $this->isDev
