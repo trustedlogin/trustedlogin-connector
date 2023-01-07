@@ -123,6 +123,7 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$connectTokens = ConnectionService::savedTokens();
+	$connectNonce = ConnectionService::makeNonce();
 	$data = [
 		'resetAction' => esc_url_raw(\TrustedLogin\Vendor\Reset::actionUrl()),
 		'roles' => wp_roles()->get_names(),
@@ -140,8 +141,8 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 			'login' => esc_url_raw(
 				add_query_arg(
 					'redirect',
-					urlencode(ConnectionService::makeCallbackUrl()),
-					'https://tlmockapi.local/mock-server/login'
+					urlencode(ConnectionService::makeCallbackUrl($connectNonce)),
+					sprintf('https://php8.trustedlogin.dev/connect/%s', $connectNonce)
 				)
 			),
 			'tokens' => $connectTokens,

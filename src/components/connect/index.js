@@ -4,7 +4,7 @@ import { PrimaryButtonLookingLink, SecondaryButton } from "../Buttons";
 import { SettingsPageLayout } from "../Layout";
 
 const CONNECTIION_SETTINGS = {
-  loginUrl: "https://tlmockapi.local/mock-server/login",
+  loginUrl: "https://php8.trustedlogin.dev/login",
 };
 const Login = ({ loginUrl }) => {
   return (

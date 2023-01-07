@@ -65,7 +65,7 @@ class ConnectionService
 	{
 		$this->plugin = $plugin;
 		//No slash at end!
-		$this->apiUrl = 'https://https://php8.trustedlogin.dev';
+		$this->apiUrl = 'https://php8.trustedlogin.dev';
 		//TRUSTEDLOGIN_API_URL;
 	}
 
@@ -76,15 +76,28 @@ class ConnectionService
 	 *
 	 * @return string
 	 */
-	public static function makeCallbackUrl(){
+	public static function makeCallbackUrl(string $nonce = null ){
+		if( is_null($nonce)){
+			$nonce = static::makeNonce();
+		}
 		return \add_query_arg(
 			[
-				static::NONCE_QUERY_ARG => \wp_create_nonce(static::NONCE_ACTION),
+				static::NONCE_QUERY_ARG => $nonce,
 			],
 			\admin_url()
 		);
 	}
 
+	/**
+	 * Create nonce
+	 *
+	 * @since 0.18.0
+	 *
+	 * @return string
+	 */
+	public static function makeNonce(){
+		return wp_create_nonce(static::NONCE_ACTION);
+	}
 	public static function getExchangeRoute(){
 		return add_query_arg( [
 			'exchange' => true,
@@ -125,9 +138,12 @@ class ConnectionService
 	 *
 	 */
 	public static function listen(){
-		if( isset($_REQUEST[static::NONCE_QUERY_ARG], $_REQUEST[static::TOKEN_QUERY_ARG])){
+
+
+		if( isset($_REQUEST[static::NONCE_QUERY_ARG]) && isset( $_REQUEST[static::TOKEN_QUERY_ARG])){
 			$nonce = $_REQUEST[static::NONCE_QUERY_ARG];
 			$token = $_REQUEST[static::NONCE_QUERY_ARG];
+
 			$service = new static(\trustedlogin_vendor());
 			$gotTokens = $service->handleCallback($nonce, $token);
 			$returnUrl = \admin_url('admin.php?page=trustedlogin-connect');
@@ -166,6 +182,7 @@ class ConnectionService
 	 * @since 0.18.0
 	 */
 	public function handleCallback(string $nonce, string $token){
+
 		if( ! \wp_verify_nonce($nonce, static::NONCE_ACTION) ){
 			$this->log('Invalid nonce',
 				__METHOD__,
@@ -173,10 +190,10 @@ class ConnectionService
 					'nonce' => $nonce
 				]
 			);
-
 			return new \WP_Error('invalid_nonce', __('Invalid nonce', 'trustedlogin-vendor'));
 		}
-		$tokens = $this->getAccountTokens($token);
+		$tokens = $this->getAccountTokens($token,$nonce);
+		var_dump($tokens);exit;
 		if( ! is_array($tokens)){
 			$this->log('Error getting account tokens',
 			__METHOD__ . __LINE__,
@@ -198,7 +215,7 @@ class ConnectionService
 	 * @return string
 	 */
 	public function getLoginUrl(){
-		return $this->apiUrl('/login');
+		return $this->apiUrl('/connect/token');
 	}
 
 	/**
@@ -207,19 +224,24 @@ class ConnectionService
 	 * @since 0.18.0
 	 * @return array
 	 */
-	public function getAccountTokens(string $token){
+	public function getAccountTokens(string $token,string $nonce){
 		$response = $this->plugin
 			->getApiSender()
 			->send(
-				$this->apiUrl('/token'),
+				$this->apiUrl('/api/v1/token'),
 				[
-					'token' => $token
+					'token' => $token,
+					'nonce' => $nonce,
 				],
 				'POST',
-				[],
+				[
+					'Authorization' => 'Bearer ' .  hash('sha256', $token),
+					'Content-Type' => 'application/json',
+					'Accept' => 'application/json'
+				],
 				! $this->isDev
 			);
-
+			var_dump($response);exit;
 		if( \is_wp_error($response) ){
 			$this->log('Error getting account tokens',
 				__METHOD__ . __LINE__,
@@ -253,7 +275,7 @@ class ConnectionService
 		$response = $this->plugin
 			->getApiSender()
 			->send(
-				$this->apiUrl('/token/exchange?token=' . $token),
+				$this->apiUrl('/api/v1/token/exchange?token=' . $token),
 				[
 					'token' => $token,
 				],
