@@ -51,11 +51,15 @@ export const resetEncryptionKeys = async () => {
   return r;
 };
 
-export const exchangeToken = async (token) => {
+export const exchangeTeamToken = async ({ teamToken, token }) => {
+  console.log({ teamToken, token });
   let r = await apiFetch({
     path: `${connectPath}`,
     method: "POST",
-    data: { token, exchange: true },
+    data: { token, exchange: teamToken },
+    headers: {
+      "Content-Type": "application/json UTF-8",
+    },
   });
   return r;
 };
@@ -65,5 +69,5 @@ export default {
   getSettings,
   resetTeamIntegrations,
   resetEncryptionKeys,
-  exchangeToken,
+  exchangeTeamToken,
 };

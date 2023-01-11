@@ -85,7 +85,6 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	}
 	add_action( 'admin_init',[ConnectionService::class, 'listen']);
 
-
 }else{
 	throw new \Exception('Autoloader not found.');
 }
@@ -123,6 +122,7 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$connectTokens = ConnectionService::savedTokens();
+	$exchangeToken = ConnectionService::savedExchangeToken();
 	$connectNonce = ConnectionService::makeNonce();
 	$data = [
 		'resetAction' => esc_url_raw(\TrustedLogin\Vendor\Reset::actionUrl()),
@@ -145,6 +145,7 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 					sprintf('https://php8.trustedlogin.dev/connect/%s', $connectNonce)
 				)
 			),
+			'exchangeToken' => $exchangeToken,
 			'tokens' => $connectTokens,
 			'callback' => esc_url_raw(
 				ConnectionService::makeCallbackUrl()
