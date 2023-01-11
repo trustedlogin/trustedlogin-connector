@@ -71,7 +71,8 @@ class Connect extends Endpoint
 				//Save team settings
 				$team = new TeamSettings([
 					'account_id'       => $data['id'],
-					'private_key'      => $data['privateKey'],
+					//apiToken is the private key
+					'private_key'      => $data['apiToken'],
 					'public_key'       => $data['publicKey'],
 					'name' => $data['name'],
 				]);
