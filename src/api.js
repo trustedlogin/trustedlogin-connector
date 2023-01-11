@@ -1,6 +1,7 @@
 import apiFetch from "@wordpress/api-fetch";
 
 const path = "/trustedlogin/v1/settings";
+const connectPath = "/trustedlogin/v1/connect";
 export const getSettings = async () => {
   let settings = await apiFetch({ path }).catch((e) => console.log(e));
   if (settings.teams) {
@@ -50,9 +51,23 @@ export const resetEncryptionKeys = async () => {
   return r;
 };
 
+export const exchangeTeamToken = async ({ teamToken, token }) => {
+  console.log({ teamToken, token });
+  let r = await apiFetch({
+    path: `${connectPath}`,
+    method: "POST",
+    data: { token, exchange: teamToken },
+    headers: {
+      "Content-Type": "application/json UTF-8",
+    },
+  });
+  return r;
+};
+
 export default {
   updateSettings,
   getSettings,
   resetTeamIntegrations,
   resetEncryptionKeys,
+  exchangeTeamToken,
 };

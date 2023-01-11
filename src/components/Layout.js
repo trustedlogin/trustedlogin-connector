@@ -95,6 +95,17 @@ const Layout = ({ children }) => {
   return <div className="h-full overflow-hidden">{children}</div>;
 };
 
+export const SettingsPageLayout = ({ title, subTitle, children, Button }) => {
+  return (
+    <div className="flex flex-col px-5 py-6 sm:px-10">
+      {title ? (
+        <PageHeader title={title} subTitle={subTitle} Button={Button} />
+      ) : null}
+      {children}
+    </div>
+  );
+};
+
 export const CenteredLayout = ({
   children,
   Icon = null,
@@ -110,9 +121,7 @@ export const CenteredLayout = ({
           <h2 className="mt-4 text-2xl text-gray-900">{title}</h2>
         ) : null}
         {subTitle ? (
-          <p className="mt-2 mb-8 text-sm text-gray-500">
-            {subTitle}
-          </p>
+          <p className="mt-2 mb-8 text-sm text-gray-500">{subTitle}</p>
         ) : null}
         {children}
       </div>

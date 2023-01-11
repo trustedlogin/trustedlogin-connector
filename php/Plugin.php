@@ -3,6 +3,7 @@
 namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Contracts\SendsApiRequests as ApiSend;
+use TrustedLogin\Vendor\Endpoints\Connect;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\Traits\Logger;
 use TrustedLogin\Vendor\TeamSettings;
@@ -57,6 +58,8 @@ class Plugin
 		(new \TrustedLogin\Vendor\Endpoints\ResetEncryption())
 			->register(true, false);
 		(new \TrustedLogin\Vendor\Endpoints\AccessKey())
+			->register(true, false);
+		(new Connect())
 			->register(true, false);
 	}
 
@@ -167,6 +170,16 @@ class Plugin
 	{
 		$this->apiSender = $apiSender;
 		return $this;
+	}
+
+	/**
+	 * Get the apiSender instance
+	 *
+	 * @return ApiSend $apiSender
+	 */
+	public function getApiSender()
+	{
+		return $this->apiSender;
 	}
 
 	public function getAccessKeyActions()

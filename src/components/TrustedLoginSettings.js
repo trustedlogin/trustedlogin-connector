@@ -10,6 +10,29 @@ import TeamsSettings from "../components/teams/TeamsSettings";
 import GeneralSettings from "./GeneralSettings";
 import IntegrationSettings from "./IntegrationSettings";
 import { PageError } from "./Errors";
+import Connector from "./connect";
+
+const PrimaryArea = ({ currentView = "" }) => {
+  if (currentView.startsWith("teams")) {
+    return <TeamsSettings />;
+  }
+
+  switch (currentView) {
+    case "connect":
+      const hasConnectTokens = tlVendor.connect.tokens.length > 0;
+
+      return (
+        <Connector
+          loginUrl={tlVendor.connect.login}
+          connected={!hasConnectTokens}
+        />
+      );
+    case "integrations":
+      return <IntegrationSettings />;
+    default:
+      return <GeneralSettings />;
+  }
+};
 /**
  * TrustedLogin Settings screen
  */
@@ -58,18 +81,9 @@ export default function TrustedLoginSettings() {
             />
           ) : (
             <>
-              {"string" === typeof currentView &&
-              currentView.startsWith("teams") ? (
-                <TeamsSettings />
-              ) : (
-                <>
-                  {"integrations" === currentView ? (
-                    <IntegrationSettings />
-                  ) : (
-                    <GeneralSettings />
-                  )}
-                </>
-              )}
+              <PrimaryArea
+                currentView={"string" === typeof currentView ? currentView : ""}
+              />
             </>
           )}
         </Layout>

@@ -91,6 +91,13 @@ add_action('init', function () {
     new MenuPage(
         //Do not pass args, would make it a child page.
     );
+    //Add connect always for now
+    //@todo: Only add if not connected
+    new MenuPage(
+        MenuPage::SLUG_CONNECT,
+        __('Connect', 'trustedlogin-vendor'),
+        'connect'
+    );
 
     /**
      * Add (sub)menu pages

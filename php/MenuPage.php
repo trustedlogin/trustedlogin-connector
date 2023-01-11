@@ -23,6 +23,9 @@ class MenuPage {
 
     const SLUG_HELPDESKS = 'trustedlogin-helpdesks';
 
+    const SLUG_CONNECT = 'trustedlogin-connect';
+
+
     const ASSET_HANDLE = 'trustedlogin-settings';
 
     /**
@@ -88,6 +91,7 @@ class MenuPage {
             self::SLUG_SETTINGS,
             self::SLUG_ACCESS_KEY,
             self::PARENT_MENU_SLUG,
+            self::SLUG_CONNECT
         ])){
             return true;
         }
@@ -185,8 +189,6 @@ class MenuPage {
      * Render callback for admin page
      */
     public function renderPage(){
-
-
         if( $this->initialView){
             printf(
                 '<script>window.tlInitialView = "%s"</script>',
