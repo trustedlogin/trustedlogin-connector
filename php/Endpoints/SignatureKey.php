@@ -1,7 +1,6 @@
 <?php
 namespace TrustedLogin\Vendor\Endpoints;
 
-use TrustedLogin\Vendor\SettingsApi;
 
 class SignatureKey extends Endpoint
 {

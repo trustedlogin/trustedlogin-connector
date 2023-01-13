@@ -20,8 +20,6 @@ class RemoteSession
 	 */
 	const NONCE_ACTION = 'tl_session';
 
-
-
 	/**
 	 * Query arg for the nonce
 	 * @since 0.18.0
@@ -80,6 +78,20 @@ class RemoteSession
 	}
 
 	/**
+	 * Get the app token from cookies
+	 */
+	public function getAppToken(){
+		//check if set, return WP_Error if not
+		if( ! $this->hasAppToken() ){
+			return new \WP_Error(
+				'tl_no_app_token',
+				__('No app token found', 'trustedlogin')
+			);
+		}
+		return $_COOKIE[static::COOKIE_APP_TOKEN];
+	}
+
+	/**
 	 * To array of data to send to React app for session
 	 *
 	 * @since 0.18.0
@@ -87,9 +99,8 @@ class RemoteSession
 	public function toArray(){
 		return [
 			'hasAppToken' => $this->hasAppToken(),
-			'nonce' =>$this->makeNonce(),
 			'loginUrl' => $this->getLoginUrl(),
-			'logoutUrl' => $this->getLogoutUrl(),
+			'logoutUrl' => $this->getLogoutUrl(true),
 		];
 	}
 
@@ -123,6 +134,63 @@ class RemoteSession
 		return wp_create_nonce(static::NONCE_ACTION);
 	}
 
+	/**
+	 * Take Laravel token and wp nonce and encrypt them
+	 *
+	 * @since 0.18.0
+	 * @param string $nonce
+	 * @param string $token
+	 * @return string
+	 */
+	public function encryptToken(string $nonce,string $token ){
+		$encoded = json_encode([
+			'nonce' => $nonce,
+			'token' => $token,
+			'salt' => WP_SALT,
+		]);
+		$encrypted = $this->plugin->getEncryption()->encrypt($encoded);
+
+		return $encrypted;
+	}
+
+	/**
+	 * Decrypt token from app then: validate nonce, set cookie
+	 *
+	 * @since 0.18.0
+	 * @param string $encrypted
+	 * @param string $nonce
+	 * @return true|\WP_Error True if succesful, WP_Error if not.
+	 */
+	public function validate(string $encrypted,string $nonce){
+		try {
+			//decrypt
+			$decrypted = $this->plugin->getEncryption()->decrypt($encrypted);
+			//decode
+			try {
+				$decoded = json_decode($decrypted,true);
+				//Check has nonce, token, salt
+				if( !isset($decoded['nonce']) || !isset($decoded['token']) || !isset($decoded['salt'])){
+					return new \WP_Error('invalid_decrypted_data','Invalid decrypted data');
+				}
+				//Is it the same nonce we originally set
+				if( ! hash_equals($nonce,$decoded['nonce'])){
+					return new \WP_Error('invalid_nonce','Invalid nonce');
+				}
+				//Validate nonce
+				if( !wp_verify_nonce($decoded['nonce'],static::NONCE_ACTION)){
+					return new \WP_Error('invalid_nonce','Invalid nonce');
+				}
+				//Put token in a cookie
+				\setcookie(static::COOKIE_APP_TOKEN,$decoded['token'],time() + (86400 * 30),"/");
+				return true;
+			} catch (\Throwable $th) {
+				//throw $th;
+			}
+		} catch (\Throwable $th) {
+			//throw $th;
+		}
+		$decrypted = $this->plugin->getEncryption()->decrypt($encrypted);
+	}
 	/**
 	 *
 	 *
@@ -166,9 +234,26 @@ class RemoteSession
 	 * @return string
 	 */
 	public function getLoginUrl(){
-		return $this->apiUrl('/login');
+		$nonce = RemoteSession::makeNonce();
+		$redirect = $this->getReturnUrl($nonce);
+		return \add_query_arg(
+			[
+				static::NONCE_QUERY_ARG => $nonce,
+				'redirect' => urlencode($redirect),
+			],
+			$this->apiUrl('/login')
+		);
 	}
 
+	protected function getReturnUrl(string $nonce){
+		return \add_query_arg(
+			[
+				static::NONCE_QUERY_ARG => $nonce,
+				'redirect' => admin_url('admin.php?page=trustedlogin-teams'),
+			],
+			\admin_url()
+		);
+	}
 	/**
 	 * Get the URL for logout
 	 *
@@ -176,7 +261,15 @@ class RemoteSession
 	 * @return string
 	 */
 	public function getLogoutUrl(){
-		return $this->apiUrl('/logout');
+		$nonce = static::makeNonce();
+		$redirect = $this->getReturnUrl($nonce);
+		return \add_query_arg(
+			[
+				static::NONCE_QUERY_ARG => static::makeNonce(),
+				'redirect' => urlencode($redirect),
+			],
+			$this->apiUrl('/logout')
+		);
 	}
 
 
