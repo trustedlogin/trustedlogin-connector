@@ -5,6 +5,7 @@ use TrustedLogin\Vendor\SettingsApi;
 
 use TrustedLogin\Vendor\AccessKeyLogin;
 use TrustedLogin\Vendor\ConnectionService;
+use TrustedLogin\Vendor\Status\Onboarding;
 use TrustedLogin\Vendor\TeamSettings;
 use TrustedLogin\Vendor\Traits\Logger;
 
@@ -68,6 +69,21 @@ class Connect extends Endpoint
 				if( is_string($data) ){
 					$data = json_decode($data,true);
 				}
+				$keys = [
+					'apiToken',
+					'publicKey',
+					'id',
+					'name',
+				];
+				//Make sure we have all the data we need
+				foreach($keys as $key){
+					if( ! isset($data[$key]) ){
+						return new \WP_REST_Response([
+							'success' => false,
+							'error' => "Missing key: $key",
+						], 200);
+					}
+				}
 				//Save team settings
 				$team = new TeamSettings([
 					'account_id'       => $data['id'],
@@ -77,7 +93,14 @@ class Connect extends Endpoint
 					'name' => $data['name'],
 				]);
 				SettingsApi::fromSaved()
-					->addSetting($team);
+					->addSetting($team)
+					->save();
+				//If they want to connect another team
+				//Start over
+				$connectService->deleteSavedTokens();
+				//Mark onboaring complete
+				//So we can see all screens
+				Onboarding::setHasOnboarded();
 				//Return name and id to the client
 				return new \WP_REST_Response([
 					'success' => true,

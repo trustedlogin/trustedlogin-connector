@@ -11,16 +11,66 @@ class MenuPage {
     //@todo make this just "trustedlogin"
     const PARENT_MENU_SLUG= 'trustedlogin-settings';
 
+    /**
+     * Access key page
+     */
     const SLUG_ACCESS_KEY = 'trustedlogin_access_key_login';
 
+    /**
+     * General settings page
+     */
+    const SLUG_SETTINGS = 'trustedlogin-settings';
+    /**
+     * Teams page
+     * @see https://gist.github.com/zackkatz/49f1a636a2dc80cb1e98fba83810ac1a#3-teams
+     */
     const SLUG_TEAMS = 'trustedlogin-teams';
 
-    const SLUG_SETTINGS = 'trustedlogin-settings';
-
+   /**
+    * Helpdesks page
+    */
     const SLUG_HELPDESKS = 'trustedlogin-helpdesks';
 
+    /**
+     * Connect page
+     *
+     * Possibly not needed...
+     */
     const SLUG_CONNECT = 'trustedlogin-connect';
 
+    /**
+     * Getting started page
+     *
+     * @see https://gist.github.com/zackkatz/49f1a636a2dc80cb1e98fba83810ac1a#1-getting-started
+     */
+    const SLUG_GETTING_STARTED = 'trustedlogin-getting-started';
+    /**
+     * Login or logout to TrustedLogin page
+     *
+     * @see https://gist.github.com/zackkatz/49f1a636a2dc80cb1e98fba83810ac1a#11-sign-in-screen
+     */
+    const SLUG_SESSION = 'trustedlogin-session';
+
+    /**
+     * Account page
+     *
+     * @see https://gist.github.com/zackkatz/49f1a636a2dc80cb1e98fba83810ac1a#2-account-management
+     */
+    const SLUG_ACCOUNT = 'trustedlogin-account';
+
+    /**
+     * Team members page
+     *
+     * @see https://gist.github.com/zackkatz/49f1a636a2dc80cb1e98fba83810ac1a#3-teams
+     */
+    const SLUG_TEAM_MEMBERS = 'trustedlogin-team-members';
+
+    /**
+     * Activity log page
+     *
+     * @see https://gist.github.com/zackkatz/49f1a636a2dc80cb1e98fba83810ac1a#4-activity-log
+     */
+    const SLUG_ACTIVITY_LOG = 'trustedlogin-activity-log';
 
     const ASSET_HANDLE = 'trustedlogin-settings';
 
@@ -36,6 +86,11 @@ class MenuPage {
      */
     protected $name;
 
+    /**
+     * @var string
+     *
+     */
+    protected $childName;
     /**
      * @var string
      */
@@ -80,6 +135,8 @@ class MenuPage {
             self::SLUG_SETTINGS,
             self::SLUG_ACCESS_KEY,
             self::PARENT_MENU_SLUG,
+            self::SLUG_SESSION,
+            self::SLUG_ACTIVITY_LOG,
             self::SLUG_CONNECT
         ])){
             return true;

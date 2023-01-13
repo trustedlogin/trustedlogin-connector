@@ -20,6 +20,7 @@ use TrustedLogin\Vendor\Encryption;
 use TrustedLogin\Vendor\MaybeRedirect;
 use TrustedLogin\Vendor\Plugin;
 use TrustedLogin\Vendor\ReturnScreen;
+use TrustedLogin\Vendor\SettingsApi;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -118,7 +119,7 @@ function trustedlogin_vendor(){
 /**
  * Get data to set window.tlVendor in client with
  */
-function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $settingsApi){
+function trusted_login_vendor_prepare_data(SettingsApi $settingsApi){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$connectTokens = ConnectionService::savedTokens();
