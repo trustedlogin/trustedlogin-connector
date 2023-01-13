@@ -34,6 +34,8 @@ class RemoteSession
 	 */
 	const TOKEN_QUERY_ARG = 'tl_session_token';
 
+	const COOKIE_APP_TOKEN = 'tl_app_token';
+
 	/**
 	 * @var Plugin
 	 * @since 0.18.0
@@ -65,6 +67,30 @@ class RemoteSession
 		//No slash at end!
 		$this->apiUrl = 'https://php8.trustedlogin.dev';
 		//TRUSTEDLOGIN_API_URL;
+	}
+
+	/**
+	 * Check if app token in cookies
+	 *
+	 * @since 0.18.0
+	 * @return bool
+	 */
+	public function hasAppToken(){
+		return isset($_COOKIE[static::COOKIE_APP_TOKEN]);
+	}
+
+	/**
+	 * To array of data to send to React app for session
+	 *
+	 * @since 0.18.0
+	 */
+	public function toArray(){
+		return [
+			'hasAppToken' => $this->hasAppToken(),
+			'nonce' =>$this->makeNonce(),
+			'loginUrl' => $this->getLoginUrl(),
+			'logoutUrl' => $this->getLogoutUrl(),
+		];
 	}
 
 	/**

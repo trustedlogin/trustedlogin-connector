@@ -189,6 +189,7 @@ class MenuPage {
         ) ){
             return;
         }
+        $this->setupData();
         //Enqueue assets
         wp_enqueue_script(MenuPage::ASSET_HANDLE);
         wp_enqueue_style(MenuPage::ASSET_HANDLE);
@@ -206,6 +207,62 @@ class MenuPage {
         }
         //React root
         printf( '<div id="%s"></div>',self::REACT_ROOT_ID)  ;
+    }
+
+    /**
+     * Setup data for React app, passed to tlVendor global
+     */
+    protected function setupData(){
+        $settingsApi = SettingsApi::fromSaved();
+        $data = trusted_login_vendor_prepare_data($settingsApi,$this->initialView);
+        $accessKey = isset($data[AccessKeyLogin::ACCESS_KEY_INPUT_NAME])
+        ? sanitize_text_field($data[AccessKeyLogin::ACCESS_KEY_INPUT_NAME]) : '';
+        $accountId = isset($data[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME]) ? sanitize_text_field($data[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME]) : '';
+        //Check if we can preset redirectData in form
+        if( ! empty($accessKey) && ! empty($accountId) ){
+            $handler = new AccessKeyLogin();
+            //Check if request is authorized
+            if( $handler->verifyGrantAccessRequest(false) ){
+                $parts = $handler->handle([
+                    AccessKeyLogin::ACCOUNT_ID_INPUT_NAME => $accountId,
+                    AccessKeyLogin::ACCESS_KEY_INPUT_NAME => $accessKey,
+                ]);
+                if( ! is_wp_error($parts) ){
+                    //Send redirectData to AccessKeyForm.js
+                    $data['redirectData'] = $parts;
+                }
+                //Please do not set $data['redirectData'] otherwise.
+            }
+
+        }
+
+        if( isset($_GET['error'])){
+            $error = sanitize_text_field($_GET['error']);
+            switch($error){
+                case 'nonce':
+                    $error = __('Nonce is invalid', 'trustedlogin-vendor');
+                break;
+                case AccessKeyLogin::ERROR_NO_ACCOUNT_ID:
+                    $error = __('No account matching that ID found', 'trustedlogin-vendor');
+                    break;
+                case 'invalid_secret_keys':
+                    $error = __('Invalid secret keys', 'trustedlogin-vendor');
+                    break;
+
+                case AccessKeyLogin::ERROR_NO_SECRET_IDS_FOUND :
+                    $error = __('No secret keys found', 'trustedlogin-vendor');
+                    break;
+                default:
+                    $error = str_replace('_', ' ', $error);
+                    $error = ucwords($error);
+                    break;
+
+            }
+            $data['errorMessage'] = $error;
+        }
+
+        wp_localize_script(MenuPage::ASSET_HANDLE,'tlVendor', $data);
+
     }
 
 }

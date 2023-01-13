@@ -11,7 +11,7 @@ const defaultSettings = {
   },
   //Has the token for account managment
   //Generally, this is not needed.
-  hasAppToken: false,
+  session: { hasAppToken: false },
   //These are older ways of doing things. We should remove them.
   isConnected: false,
   hasOnboarded: true,
@@ -276,7 +276,7 @@ export default function SettingsProvider({
   children,
   initialTeams = null,
   initialIntegrationSettings = null,
-  hasAppToken = false,
+  session = { hasAppToken: false },
 }) {
   const [settings, setSettings] = useState(() => {
     //Load supplied intial state, if supplied,
@@ -341,7 +341,7 @@ export default function SettingsProvider({
         setSettings,
         hasOnboarded,
         api,
-        hasAppToken,
+        session,
       }}>
       <ViewProvider initialTeam={initialTeam}>{children}</ViewProvider>
     </SettingsContext.Provider>

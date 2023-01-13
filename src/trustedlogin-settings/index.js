@@ -10,6 +10,7 @@ import {
   hasOnboarded,
   initialTeams,
   initialIntegrationSettings,
+  session,
 } from "./setupVars";
 
 /**
@@ -33,6 +34,7 @@ window.addEventListener("load", function () {
         hasOnboarded,
         initialTeams,
         initialIntegrationSettings,
+        session,
       }}
     />,
     document.getElementById("trustedlogin-settings")

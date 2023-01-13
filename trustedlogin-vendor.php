@@ -20,6 +20,7 @@ use TrustedLogin\Vendor\Encryption;
 use TrustedLogin\Vendor\MaybeRedirect;
 use TrustedLogin\Vendor\Plugin;
 use TrustedLogin\Vendor\ReturnScreen;
+use TrustedLogin\Vendor\Services\RemoteSession;
 use TrustedLogin\Vendor\SettingsApi;
 
 if (!defined('ABSPATH')) {
@@ -119,7 +120,7 @@ function trustedlogin_vendor(){
 /**
  * Get data to set window.tlVendor in client with
  */
-function trusted_login_vendor_prepare_data(SettingsApi $settingsApi){
+function trusted_login_vendor_prepare_data(SettingsApi $settingsApi,$initalView = null){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$connectTokens = ConnectionService::savedTokens();
@@ -171,6 +172,19 @@ function trusted_login_vendor_prepare_data(SettingsApi $settingsApi){
 			//Please do not set $data['redirectData'] otherwise.
 		}
 
+	}
+
+	//Add data by intialView
+	//This is new, need to use this for more views
+	switch ($initalView) {
+		case 'session':
+			$service = new RemoteSession(trustedlogin_vendor());
+			$data['session'] = $service->toArray();
+			break;
+
+		default:
+			# code...
+			break;
 	}
 	return $data;
 }
