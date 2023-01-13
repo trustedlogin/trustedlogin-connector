@@ -2,13 +2,10 @@
 //Register assets for TrustedLogin Settings
 
 use TrustedLogin\Vendor\Status\Onboarding;
-use TrustedLogin\Vendor\Reset;
 use TrustedLogin\Vendor\MenuPage;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\AccessKeyLogin;
-use TrustedLogin\Vendor\ReturnScreen;
 
-use TrustedLogin\Vendor\Webhooks\Factory;
 
 add_action('init', function () {
     $hasOnboarded = Onboarding::hasOnboarded();
@@ -130,13 +127,40 @@ add_action('init', function () {
             __('Access Key Log-In', 'trustedlogin-vendor'),
             'teams/access_key'
         );
+
+        //Activity log
+        new MenuPage(
+            MenuPage::SLUG_ACTIVITY_LOG,
+            __('Activity Log', 'trustedlogin-vendor'),
+            'activity_log'
+        );
+
+        //Account page
+        new MenuPage(
+            MenuPage::SLUG_ACCOUNT,
+            __('Account', 'trustedlogin-vendor'),
+            'account'
+        );
     }else{
+        //Getting Started
+          new MenuPage(
+            MenuPage::SLUG_GETTING_STARTED,
+            __('Getting Started', 'trustedlogin-vendor'),
+            'getting_started'
+        );
         //Add onboarding submenu page
         new MenuPage(
             MenuPage::SLUG_SETTINGS,
             __('Onboarding', 'trustedlogin-vendor'),
             'onboarding'
         );
+
     }
+    //session page
+    new MenuPage(
+        MenuPage::SLUG_SESSION,
+        __('Login or Logout', 'trustedlogin-vendor'),
+        'session'
+    );
 
 });

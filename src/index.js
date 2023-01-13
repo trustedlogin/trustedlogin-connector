@@ -1,5 +1,8 @@
 /**
  * This is the entry point for the webhook/integration return page
+ *
+ * Everything else is here:
+ * @see src\trustedlogin-settings\index.js
  */
 
 import React from "react";
@@ -14,6 +17,7 @@ import SettingsProvider from "./hooks/useSettings";
 import AccessKeyForm from "./components/AccessKeyForm";
 import { useView } from "./hooks/useView";
 
+//Only access key in this mode.
 window.tlInitialView = "teams/access_key";
 
 const App = () => {

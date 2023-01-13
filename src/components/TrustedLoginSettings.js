@@ -11,13 +11,16 @@ import GeneralSettings from "./GeneralSettings";
 import IntegrationSettings from "./IntegrationSettings";
 import { PageError } from "./Errors";
 import Connector from "./connect";
+import SessionPage from "./pages/SessionPage";
 
 const PrimaryArea = ({ currentView = "" }) => {
   if (currentView.startsWith("teams")) {
     return <TeamsSettings />;
   }
-
   switch (currentView) {
+    case "session": {
+      return <SessionPage />;
+    }
     case "connect":
       const hasConnectTokens = tlVendor.connect.tokens.length > 0;
 
