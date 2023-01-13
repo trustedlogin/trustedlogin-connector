@@ -17,13 +17,6 @@ const Login = ({ loginUrl }) => {
   );
 };
 
-const handleConnect = (token, teamToken, setErrors) => {
-  return exchangeTeamToken({ teamToken, token }).then((account) => {
-    console.log({ account });
-    return account;
-  });
-};
-
 const ConnectTeam = ({
   name,
   teamToken,
@@ -32,15 +25,15 @@ const ConnectTeam = ({
   onTeamConnected,
 }) => {
   const handler = () => {
-    handleConnect(exchangeToken, teamToken, setErrors)
+    exchangeTeamToken({ teamToken, token: exchangeToken })
+      .then((account) => {
+        console.log({ account });
+        onTeamConnected({ teamToken, id: account.id, name: account.name });
+        return true;
+      })
       .catch((e) => {
         setErrors(e);
-      })
-      .then((r) => {
-        onTeamConnected({
-          ...r,
-          teamToken,
-        });
+        return false;
       });
   };
   return (
@@ -68,9 +61,11 @@ export default function Connector({
 
   const onTeamConnected = ({ teamToken, id, name }) => {
     const predicate = (account) => account.token === teamToken;
+    console.log({ teamToken, id, name }, connectionState.notConnectedAccounts);
     //Find unConnected account with teamToken
     const teamIndex = connectionState.notConnectedAccounts.findIndex(predicate);
-    if (!teamIndex) {
+    //throw if teamIndex is less than 0
+    if (teamIndex < 0) {
       console.log({ teamToken, connectionState });
       throw new Error("Could not find team with token");
     }

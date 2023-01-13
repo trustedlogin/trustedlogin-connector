@@ -6,6 +6,8 @@ namespace TrustedLogin\Vendor\Status;
 
 /**
  * Track onboarding status
+ *
+ * IMPORTANT: This class was developed BEFORE REFACTOR.
  */
 class Onboarding {
     /**

@@ -19,6 +19,7 @@ export const InputFieldArea = ({ id, label, children }) => (
     <div className="mt-2 relative rounded-lg">{children}</div>
   </div>
 );
+
 export const InputField = ({
   id,
   name,
@@ -54,3 +55,23 @@ export const SelectField = ({ id, name, label, children, defaultValue }) => {
     </SelectFieldArea>
   );
 };
+
+export const SubmitField = ({ value }) => {
+  return (
+    <input
+      type="submit"
+      className="inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
+      value={value}
+    />
+  );
+};
+
+export const SubmitFieldArea = ({ value, isLoading = false }) => (
+  <>
+    {isLoading ? (
+      <div className="spinner-light-tl inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
+    ) : (
+      <SubmitField value={value} />
+    )}
+  </>
+);

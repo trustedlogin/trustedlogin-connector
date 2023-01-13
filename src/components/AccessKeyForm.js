@@ -3,10 +3,15 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useSettings } from "../hooks/useSettings";
 import { HorizontalLogo } from "./TrustedLoginLogo";
-import { SelectFieldArea, InputFieldArea } from "./teams/fields";
+import {
+  SelectFieldArea,
+  InputFieldArea,
+  SubmitFieldArea,
+} from "./teams/fields";
 import TitleDescriptionLink from "./TitleDescriptionLink";
 import { ToastError } from "./Errors";
 import { SecondaryButton } from "./Buttons";
+import { NarrowFormLayout } from "./Layout";
 function collectFormData(form) {
   let data = {};
   const formData = new FormData(form);
@@ -29,25 +34,7 @@ const hasOnlyOneRedirectData = (redirectData) =>
   redirectData && 1 == Object.keys(redirectData).length;
 const firstRedirectData = (redirectData) =>
   redirectData && redirectData[Object.keys(redirectData)[0]];
-const Layout = ({ children, minimal, title, description }) => {
-  return (
-    <>
-      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto bg-white rounded-lg px-8 py-3 text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:px-14 sm:py-8">
-          <div className="w-full p-8 text-center">
-            <HorizontalLogo />
-          </div>
 
-          {!minimal ? (
-            <TitleDescriptionLink title={title} description={description} />
-          ) : null}
-
-          <>{children}</>
-        </div>
-      </div>
-    </>
-  );
-};
 const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
   //State for access key in form or url
   //May be preset in window.tlVendor.accessKey.ak
@@ -217,7 +204,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
   //Have redirectData and not redirectSite, show select
   if (redirectData && !redirectSite) {
     return (
-      <Layout
+      <NarrowFormLayout
         minimal={minimal}
         title={__("Select site to log into.", "trustedlogin-vendor")}
         description={__(
@@ -243,12 +230,12 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
             </ul>
           </div>
         </>
-      </Layout>
+      </NarrowFormLayout>
     );
   }
   return (
     <>
-      <Layout
+      <NarrowFormLayout
         minimal={minimal}
         title={__("Log In Using Access Key", "trustedlogin-vendor")}
         description={__(
@@ -345,24 +332,17 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                     </InputFieldArea>
                   </div>
 
-                  <>
-                    {isLoading ? (
-                      <div className="spinner-light-tl inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
-                    ) : (
-                      <input
-                        type="submit"
-                        className="inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
-                        value={__("Log In", "trustedlogin-vendor")}
-                      />
-                    )}
-                  </>
+                  <SubmitFieldArea
+                    isLoading={isLoading}
+                    value={__("Log In", "trustedlogin-vendor")}
+                  />
                 </>
               )}
             </>
           </form>
           {errorMessage && <ToastError heading={errorMessage} />}
         </>
-      </Layout>
+      </NarrowFormLayout>
     </>
   );
 };

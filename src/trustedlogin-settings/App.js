@@ -11,6 +11,7 @@ export default function App({
   hasOnboarded,
   initialTeams = null,
   initialIntegrationSettings = null,
+  hasAppToken = false,
 }) {
   return (
     <StrictMode>
@@ -23,7 +24,8 @@ export default function App({
           updateSettings,
           resetTeamIntegrations,
           resetEncryptionKeys,
-        }}>
+        }}
+        hasAppToken={hasAppToken}>
         <>
           <TrustedLoginSettings />
         </>

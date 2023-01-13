@@ -3,6 +3,7 @@ import { HorizontalLogo } from "./TrustedLoginLogo";
 import { useState, useMemo } from "react";
 import { useView } from "../hooks/useView";
 import StatusMenu, { StatusMenuButton } from "./StatusMenu";
+import TitleDescriptionLink from "./TitleDescriptionLink";
 export const TopBar = ({ status }) => {
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [isHelpMenuOpen, setIsHelpMenuOpen] = useState(false);
@@ -88,6 +89,26 @@ export const PageHeader = ({ title, subTitle, Button }) => {
         )}
       </div>
     </div>
+  );
+};
+
+export const NarrowFormLayout = ({ children, minimal, title, description }) => {
+  return (
+    <>
+      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto bg-white rounded-lg px-8 py-3 text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:px-14 sm:py-8">
+          <div className="w-full p-8 text-center">
+            <HorizontalLogo />
+          </div>
+
+          {!minimal ? (
+            <TitleDescriptionLink title={title} description={description} />
+          ) : null}
+
+          <>{children}</>
+        </div>
+      </div>
+    </>
   );
 };
 
