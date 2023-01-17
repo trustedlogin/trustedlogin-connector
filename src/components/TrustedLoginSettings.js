@@ -12,6 +12,7 @@ import IntegrationSettings from "./IntegrationSettings";
 import { PageError } from "./Errors";
 import Connector from "./connect";
 import SessionPage from "./pages/SessionPage";
+import AccountManagment from "./pages/AccountManagment";
 
 const PrimaryArea = ({ currentView = "" }) => {
   if (currentView.startsWith("teams")) {
@@ -30,6 +31,8 @@ const PrimaryArea = ({ currentView = "" }) => {
           connected={!hasConnectTokens}
         />
       );
+    case "account":
+      return <AccountManagment />;
     case "integrations":
       return <IntegrationSettings />;
     default:

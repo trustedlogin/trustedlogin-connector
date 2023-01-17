@@ -137,7 +137,8 @@ class MenuPage {
             self::PARENT_MENU_SLUG,
             self::SLUG_SESSION,
             self::SLUG_ACTIVITY_LOG,
-            self::SLUG_CONNECT
+            self::SLUG_CONNECT,
+            self::SLUG_ACCOUNT,
         ])){
             return true;
         }

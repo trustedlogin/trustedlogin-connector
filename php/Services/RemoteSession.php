@@ -1,6 +1,7 @@
 <?php
 namespace TrustedLogin\Vendor\Services;
 
+use TrustedLogin\Vendor\MenuPage;
 use TrustedLogin\Vendor\Traits\Logger;
 use TrustedLogin\Vendor\Plugin;
 use TrustedLogin\Vendor\Traits\VerifyUser;
@@ -30,7 +31,7 @@ class RemoteSession
 	 * Query arg for the token
 	 * @since 0.18.0
 	 */
-	const TOKEN_QUERY_ARG = 'tl_session_token';
+	const TOKEN_QUERY_ARG = 'tl_account_token';
 
 	const COOKIE_APP_TOKEN = 'tl_app_token';
 
@@ -97,31 +98,19 @@ class RemoteSession
 	 * @since 0.18.0
 	 */
 	public function toArray(){
+		$nonce = $this->makeNonce();
 		return [
 			'hasAppToken' => $this->hasAppToken(),
-			'loginUrl' => $this->getLoginUrl(),
-			'logoutUrl' => $this->getLogoutUrl(true),
+			'loginUrl' => add_query_arg([
+				static::NONCE_QUERY_ARG => $nonce,
+			], $this->apiUrl('/login')),
+			'logoutUrl' => $this->apiUrl('/logout/remote'),
+			'callbackUrl' => urlencode($this->getCallbackUrl($nonce)),
+			'nonce' => $nonce,
 		];
 	}
 
-	/**
-	 * Get the URL for the redirect to callback
-	 *
-	 * @since 0.18.0
-	 *
-	 * @return string
-	 */
-	public static function makeCallbackUrl(string $nonce = null ){
-		if( is_null($nonce)){
-			$nonce = static::makeNonce();
-		}
-		return \add_query_arg(
-			[
-				static::NONCE_QUERY_ARG => $nonce,
-			],
-			\admin_url()
-		);
-	}
+
 
 	/**
 	 * Create nonce
@@ -181,7 +170,7 @@ class RemoteSession
 					return new \WP_Error('invalid_nonce','Invalid nonce');
 				}
 				//Put token in a cookie
-				\setcookie(static::COOKIE_APP_TOKEN,$decoded['token'],time() + (86400 * 30),"/");
+				$this->setCookie($decoded['token']);
 				return true;
 			} catch (\Throwable $th) {
 				//throw $th;
@@ -190,6 +179,10 @@ class RemoteSession
 			//throw $th;
 		}
 		$decrypted = $this->plugin->getEncryption()->decrypt($encrypted);
+	}
+
+	public function setCookie(string $value){
+		\setcookie(static::COOKIE_APP_TOKEN,$value,time() + (86400 * 30));
 	}
 	/**
 	 *
@@ -200,12 +193,17 @@ class RemoteSession
 	 */
 	public static function listen(){
 
-
+		//@todo can we use POST to prevent logging?
 		if( isset($_REQUEST[static::NONCE_QUERY_ARG]) && isset( $_REQUEST[static::TOKEN_QUERY_ARG])){
-			$nonce = $_REQUEST[static::NONCE_QUERY_ARG];
-			$token = $_REQUEST[static::TOKEN_QUERY_ARG];
+			$nonce = sanitize_text_field( $_REQUEST[static::NONCE_QUERY_ARG]);
+			$token = sanitize_text_field( $_REQUEST[static::TOKEN_QUERY_ARG]);
 
 			$service = new static(\trustedlogin_vendor());
+			if( ! wp_verify_nonce($nonce,static::NONCE_ACTION)){
+				wp_die('Invalid nonce');
+			}
+			//Not doing token encoding yet, this is simpler.
+			$service->setCookie($token);
 			//What should happen is:
 			//1. User clicks button
 			//2. User is redirected to tl app
@@ -214,7 +212,7 @@ class RemoteSession
 			//{nonce,token,WP_SALT}
 			//5. tl app redirects back with nonce and encyrpted token.
 			//6. tl vendor decrypts token and puts it in  a cookie, after validating nonce.
-			$returnUrl = \admin_url('admin.php?page=trustedlogin-teams');
+			$returnUrl = \admin_url('admin.php?page=trustedlogin-account');
 
 
 			\wp_redirect(add_query_arg([
@@ -225,52 +223,22 @@ class RemoteSession
 		}
 	}
 
-
-
 	/**
-	 * Get the URL for login
+	 * Get the URL for remote app to return to
 	 *
 	 * @since 0.18.0
 	 * @return string
 	 */
-	public function getLoginUrl(){
-		$nonce = RemoteSession::makeNonce();
-		$redirect = $this->getReturnUrl($nonce);
+	protected function getCallbackUrl(string $nonce){
 		return \add_query_arg(
 			[
 				static::NONCE_QUERY_ARG => $nonce,
-				'redirect' => urlencode($redirect),
+				'page' => MenuPage::SLUG_SESSION,
 			],
-			$this->apiUrl('/login')
+			\admin_url('admin.php')
 		);
 	}
 
-	protected function getReturnUrl(string $nonce){
-		return \add_query_arg(
-			[
-				static::NONCE_QUERY_ARG => $nonce,
-				'redirect' => admin_url('admin.php?page=trustedlogin-teams'),
-			],
-			\admin_url()
-		);
-	}
-	/**
-	 * Get the URL for logout
-	 *
-	 * @since 0.18.0
-	 * @return string
-	 */
-	public function getLogoutUrl(){
-		$nonce = static::makeNonce();
-		$redirect = $this->getReturnUrl($nonce);
-		return \add_query_arg(
-			[
-				static::NONCE_QUERY_ARG => static::makeNonce(),
-				'redirect' => urlencode($redirect),
-			],
-			$this->apiUrl('/logout')
-		);
-	}
 
 
 	public function apiUrl(string $endpoint = ''){

@@ -54,7 +54,7 @@ export const useSettings = () => {
     return null;
   });
 
-  const { settings, setSettings, api, hasOnboarded, hasAppToken } =
+  const { settings, setSettings, api, hasOnboarded, session } =
     useContext(SettingsContext);
 
   const _updateTeams = (teams, integrations = null) => {
@@ -266,7 +266,7 @@ export const useSettings = () => {
     setNotice,
     errorMessage,
     setErrorMessage,
-    hasAppToken,
+    session,
   };
 };
 

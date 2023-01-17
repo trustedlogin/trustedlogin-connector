@@ -86,6 +86,7 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 		]);
 	}
 	add_action( 'admin_init',[ConnectionService::class, 'listen']);
+	add_action('admin_init', [RemoteSession::class, 'listen']);
 
 }else{
 	throw new \Exception('Autoloader not found.');
@@ -121,6 +122,7 @@ function trustedlogin_vendor(){
  * Get data to set window.tlVendor in client with
  */
 function trusted_login_vendor_prepare_data(SettingsApi $settingsApi,$initalView = null){
+
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$connectTokens = ConnectionService::savedTokens();
@@ -181,7 +183,10 @@ function trusted_login_vendor_prepare_data(SettingsApi $settingsApi,$initalView 
 			$service = new RemoteSession(trustedlogin_vendor());
 			$data['session'] = $service->toArray();
 			break;
-
+		case 'account':
+			$service = new RemoteSession(trustedlogin_vendor());
+			$data['hasToken'] = $service->hasAppToken();
+			break;
 		default:
 			# code...
 			break;
