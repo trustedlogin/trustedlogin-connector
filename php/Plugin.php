@@ -64,6 +64,8 @@ class Plugin
 			->register(true, false);
 		(new EncryptRemoteToken())
 			->register(true, false);
+		(new \TrustedLogin\Vendor\Endpoints\Proxy())
+			->addRoutes();
 	}
 
 	/**

@@ -4,6 +4,7 @@ namespace TrustedLogin\Vendor\Endpoints;
 use TrustedLogin\Vendor\SettingsApi;
 
 use TrustedLogin\Vendor\Encryption;
+use TrustedLogin\Vendor\Services\ProxyRoutes;
 use TrustedLogin\Vendor\Services\RemoteSession;
 
 class Proxy {
@@ -14,11 +15,12 @@ class Proxy {
 	protected $apiUrl;
 
 
+    protected ProxyRoutes $proxyRoutes;
 	public function __construct()
 	{
 		//No slash at end!
 		$this->apiUrl = 'https://php8.trustedlogin.dev';
-		//TRUSTEDLOGIN_API_URL;
+		$this->proxyRoutes = new ProxyRoutes();
 	}
 
 
@@ -33,63 +35,118 @@ class Proxy {
                 'required' => true
             ],
         ];
+        $types = [
+            'users',
+            'teams'
+        ];
         register_rest_route(
             Endpoint::NAMESPACE,
             '/remote/teams',
             [
-                'methods'             => [],
+                'methods'             => $this->proxyRoutes->getMethods('teams'),
                 'callback'            => [ $this, 'handleTeams' ],
                 'permission_callback' => [$this, 'authorize'],
-                'args' => $args
+                'args' => array_merge($args,[
+                    'team' => [
+                        'type' => 'integer',
+                        'required' => true
+                    ],
+                ])
             ]
         );
         register_rest_route(
             Endpoint::NAMESPACE,
-            '/remote/user',
+            '/remote/users',
             [
-                'methods'             => [],
+                'methods'             => $this->proxyRoutes->getMethods('users'),
                 'callback'            => [ $this, 'handleUsers' ],
                 'permission_callback' => [$this, 'authorize'],
-                'args' => $args
+                'args'  => array_merge($args,[
+                    'user' => [
+                        'type' => 'integer',
+                        'required' => true
+                    ],
+                ])
             ]
         );
     }
 
-    public function makeRemoteUrl(string $route):string{
-        return sprintf(
-            '%s%s',
-            $this->apiUrl,
-            $route
-        );
 
-    }
 
     protected function getHeaders(){
         $token = $_COOKIE[RemoteSession::COOKIE_APP_TOKEN] ?? null;
         return [
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->getCookie()
+            'Authorization' => 'Bearer ' . $token
         ];
     }
     public function handleUsers($request){
         $data = $request->get_param('tl_data');
-        $route = $request->get_param('tl_route');
-        $response = wp_remote_post( $this->makeRemoteUrl($route), [
-            'method' => 'POST',//??get from request
-            'body' => $data,
-            'headers' => $this->getHeaders(),
-        ] );
+        $routeName = $request->get_param('tl_route');
+        $route = $this->proxyRoutes->getRoute(
+            $routeName,
+            'users'
+        );
+        if( empty($route) ){
+            return new \WP_Error(
+                'invalid_route',
+                'Invalid route',
+                [
+                    'routeName' => $routeName
+                ]
+            );
+        }
+
+        $response = $this->proxyRoutes->makeProxyRequest(
+            $route,
+            $data,
+            $this->getHeaders()
+        );
         return $response;
     }
 
     public function handleTeams($request ){
         $data = $request->get_param('tl_data');
-        $route = $request->get_param('tl_route');
-        $response = wp_remote_post( $this->makeRemoteUrl($route), [
-            'method' => 'POST',//??get from request
-            'body' => $data,
-            'headers' => $this->getHeaders(),
-        ] );
+        $routeName = $request->get_param('tl_route');
+        $route = $this->proxyRoutes->getRoute(
+            $routeName,
+            'teams'
+        );
+        if( empty($route) ){
+            return new \WP_Error(
+                'invalid_route',
+                'Invalid route',
+                [
+                    'routeName' => $routeName
+                ]
+            );
+        }
+        $dynamicParts = $this->proxyRoutes->getDynamicParts($route);
+        if( ! empty($dynamicParts) ){
+            //Replace dynamic parts of url with data from request
+            foreach($dynamicParts as $part){
+                if( ! isset($data[$part])){
+                    return new \WP_Error(
+                        'invalid_data',
+                        'Invalid data',
+                        [
+                            'routeName' => $routeName,
+                            'missing' => $part
+                        ]
+                    );
+                }
+                $route['uri'] = str_replace(
+                    '{' . $part . '}',
+                    $data[$part],
+                    $route
+                );
+            }
+        }
+        $response = $this->proxyRoutes->makeProxyRequest(
+            $route,
+            $data,
+            $this->getHeaders()
+        );
         return $response;
     }
 

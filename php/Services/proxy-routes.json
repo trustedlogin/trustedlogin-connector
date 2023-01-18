@@ -1,0 +1,80 @@
+{
+    "teams": {
+        "routes": [
+            {
+                "name": "api.teams.create",
+                "uri": "api\/v1\/teams",
+                "method": "PUT"
+            },
+            {
+                "name": "api.teams.update",
+                "uri": "api\/v1\/teams\/{team}",
+                "method": "POST"
+            },
+            {
+                "name": "api.teams.delete",
+                "uri": "api\/v1\/teams\/{team}",
+                "method": "DELETE"
+            },
+            {
+                "name": "api.teams.pause",
+                "uri": "api\/v1\/teams\/{team}\/pause",
+                "method": "POST"
+            },
+            {
+                "name": "api.teams.invite",
+                "uri": "api\/v1\/teams\/{team}\/members",
+                "method": "POST"
+            },
+            {
+                "name": "api.teams.removeTeamMember",
+                "uri": "api\/v1\/teams\/{team}\/members\/{user}",
+                "method": "DELETE"
+            },
+            {
+                "name": "api.teams.acceptTeamInvitation",
+                "uri": "api\/v1\/teams\/accept\/{invitation}",
+                "method": "POST"
+            },
+            {
+                "name": "api.teams.cycleTokens",
+                "uri": "api\/v1\/teams\/{team}\/cycle-keys",
+                "method": "POST"
+            },
+            {
+                "name": "api.teams.changeRole",
+                "uri": "api\/v1\/teams\/{team}\/members\/{user}\/change-role",
+                "method": "POST"
+            }
+        ],
+        "methods": [
+            "PUT",
+            "POST",
+            "DELETE"
+        ]
+    },
+    "users": {
+        "routes": [
+            {
+                "name": "api.users.update",
+                "uri": "api\/v1\/users",
+                "method": "POST"
+            },
+            {
+                "name": "api.users.delete",
+                "uri": "api\/v1\/users",
+                "method": "DELETE"
+            },
+            {
+                "name": "api.users.create",
+                "uri": "api\/v1\/users",
+                "method": "PUT"
+            }
+        ],
+        "methods": [
+            "POST",
+            "DELETE",
+            "PUT"
+        ]
+    }
+}
