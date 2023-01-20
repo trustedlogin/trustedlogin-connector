@@ -7,6 +7,11 @@
                 "method": "PUT"
             },
             {
+                "name": "api.teams.get",
+                "uri": "api\/v1\/teams\/{team}",
+                "method": "GET"
+            },
+            {
                 "name": "api.teams.update",
                 "uri": "api\/v1\/teams\/{team}",
                 "method": "POST"
@@ -20,6 +25,16 @@
                 "name": "api.teams.pause",
                 "uri": "api\/v1\/teams\/{team}\/pause",
                 "method": "POST"
+            },
+            {
+                "name": "api.teams.members",
+                "uri": "api\/v1\/teams\/{team}\/members",
+                "method": "GET"
+            },
+            {
+                "name": "api.teams.members",
+                "uri": "api\/v1\/teams\/{team}\/members",
+                "method": "GET"
             },
             {
                 "name": "api.teams.invite",
@@ -49,6 +64,8 @@
         ],
         "methods": [
             "PUT",
+            "GET",
+            "HEAD",
             "POST",
             "DELETE"
         ]

@@ -27,7 +27,7 @@ const LoginOrLogout = () => {
       onSubmit={handler}
       id={hasAppToken ? "logout-form" : "login-form"}
       method={"GET"}
-      action={hasAppToken ? session?.logoutUrl : session?.loginUrl}
+      action={hasAppToken ? session?.startLogout : session?.loginUrl}
       className="flex flex-col py-6 space-y-6 justify-center">
       <input
         type="hidden"

@@ -35,6 +35,8 @@ class RemoteSession
 
 	const COOKIE_APP_TOKEN = 'tl_app_token';
 
+	const LOGOUT_QUERY_ARG = 'tl_logout';
+
 	/**
 	 * @var Plugin
 	 * @since 0.18.0
@@ -66,6 +68,62 @@ class RemoteSession
 		//No slash at end!
 		$this->apiUrl = 'https://php8.trustedlogin.dev';
 		//TRUSTEDLOGIN_API_URL;
+	}
+
+	/**
+	 *
+	 *
+	 * @uses "admin_init" hook
+	 * @since 0.18.0
+	 *
+	 */
+	public static function listen(){
+
+		//@todo can we use POST to prevent logging?
+		if( isset($_REQUEST[static::NONCE_QUERY_ARG]) && isset( $_REQUEST[static::TOKEN_QUERY_ARG])){
+			$nonce = sanitize_text_field( $_REQUEST[static::NONCE_QUERY_ARG]);
+			$token = sanitize_text_field( $_REQUEST[static::TOKEN_QUERY_ARG]);
+
+			$service = new static(\trustedlogin_vendor());
+			if( ! wp_verify_nonce($nonce,static::NONCE_ACTION)){
+				wp_die('Invalid nonce');
+			}
+			//Not doing token encoding yet, this is simpler.
+			$service->setCookie($token);
+			//What should happen is:
+			//1. User clicks button
+			//2. User is redirected to tl app
+			//3. User logs in
+			//4. tl app makes API call to tl vendor rest api validates nonce and returns encrypted:
+			//{nonce,token,WP_SALT}
+			//5. tl app redirects back with nonce and encyrpted token.
+			//6. tl vendor decrypts token and puts it in  a cookie, after validating nonce.
+			$returnUrl = \admin_url('admin.php?page=trustedlogin-account');
+
+
+			\wp_redirect(add_query_arg([
+				'success' => true,
+				'error' => false,
+			], $returnUrl));
+			exit;
+		}
+		//listen for logout
+		if( isset($_REQUEST[static::LOGOUT_QUERY_ARG])){
+			$service = new static(\trustedlogin_vendor());
+			$service->clearCookie();
+			wp_remote_get(
+				$service->apiUrl('/logout/remote'),
+				[
+					'blocking' => true,
+					'headers' => [
+						'content-type' => 'application/json',
+						'Authorization' => 'Bearer ' . $service->getAppToken(),
+					],
+				]
+			);
+			wp_safe_redirect(admin_url('admin.php?page=trustedlogin-account'));
+			exit;
+		}
 	}
 
 	/**
@@ -104,6 +162,10 @@ class RemoteSession
 			'loginUrl' => add_query_arg([
 				static::NONCE_QUERY_ARG => $nonce,
 			], $this->apiUrl('/login')),
+			'startLogout' => add_query_arg([
+				static::LOGOUT_QUERY_ARG => true,
+				static::NONCE_QUERY_ARG => $nonce,
+			], admin_url('admin.php?page=trustedlogin-account')),
 			'logoutUrl' => $this->apiUrl('/logout/remote'),
 			'callbackUrl' => urlencode($this->getCallbackUrl($nonce)),
 			'nonce' => $nonce,
@@ -181,47 +243,26 @@ class RemoteSession
 		$decrypted = $this->plugin->getEncryption()->decrypt($encrypted);
 	}
 
+
+	/**
+	 * Set the app token in cookies
+	 *
+	 * @since 0.18.0
+	 * @param string $value
+	 */
 	public function setCookie(string $value){
 		\setcookie(static::COOKIE_APP_TOKEN,$value,time() + (86400 * 30));
 	}
+
 	/**
+	 * Clear the app token from cookies
 	 *
-	 *
-	 * @uses "admin_init" hook
 	 * @since 0.18.0
-	 *
 	 */
-	public static function listen(){
-
-		//@todo can we use POST to prevent logging?
-		if( isset($_REQUEST[static::NONCE_QUERY_ARG]) && isset( $_REQUEST[static::TOKEN_QUERY_ARG])){
-			$nonce = sanitize_text_field( $_REQUEST[static::NONCE_QUERY_ARG]);
-			$token = sanitize_text_field( $_REQUEST[static::TOKEN_QUERY_ARG]);
-
-			$service = new static(\trustedlogin_vendor());
-			if( ! wp_verify_nonce($nonce,static::NONCE_ACTION)){
-				wp_die('Invalid nonce');
-			}
-			//Not doing token encoding yet, this is simpler.
-			$service->setCookie($token);
-			//What should happen is:
-			//1. User clicks button
-			//2. User is redirected to tl app
-			//3. User logs in
-			//4. tl app makes API call to tl vendor rest api validates nonce and returns encrypted:
-			//{nonce,token,WP_SALT}
-			//5. tl app redirects back with nonce and encyrpted token.
-			//6. tl vendor decrypts token and puts it in  a cookie, after validating nonce.
-			$returnUrl = \admin_url('admin.php?page=trustedlogin-account');
-
-
-			\wp_redirect(add_query_arg([
-				'success' => true,
-				'error' => false,
-			], $returnUrl));
-			exit;
-		}
+	public function clearCookie(){
+		\setcookie(static::COOKIE_APP_TOKEN,'',time() - 3600);
 	}
+
 
 	/**
 	 * Get the URL for remote app to return to
