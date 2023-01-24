@@ -95,7 +95,11 @@ const AddTeam = () => {
   const Inside = useMemo(() => {
     return () => {
       if ("create" === addType) {
-        return <>Put admin login and create UI here</>;
+        return (
+          <>
+            <CreateTeam />
+          </>
+        );
       }
       if ("connect" === addType) {
         return <>Put connect UI here</>;
