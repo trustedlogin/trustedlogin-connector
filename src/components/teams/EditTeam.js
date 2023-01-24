@@ -10,6 +10,16 @@ import RoleMultiSelect from "../RoleMultiSelect";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { useSettings } from "../../hooks/useSettings";
 
+export const TeamFormRows = ({ Left, Right }) => (
+  <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">
+    <div className="flex flex-col space-y-6 sm:flex-1">
+      <Left />
+    </div>
+    <div className="flex flex-col space-y-6 sm:flex-1">
+      <Right />
+    </div>
+  </div>
+);
 //HelpDesk select
 export const HelpDeskSelect = ({ defaultValue, options = null }) => {
   const { getEnabledHelpDeskOptions } = useSettings();
@@ -99,50 +109,55 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
             link={"https://app.trustedlogin.com/settings#/teams"}
           />
 
-          <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">
-            <div className="flex flex-col space-y-6 sm:flex-1">
-              <InputField
-                type="text"
-                name={teamFields.account_id.id}
-                id={teamFields.account_id.id}
-                label={teamFields.account_id.label}
-                defaultValue={team?.account_id}
-                required={true}
-              />
-              <InputField
-                type="text"
-                name={teamFields.public_key.id}
-                id={teamFields.public_key.id}
-                label={teamFields.public_key.label}
-                defaultValue={team?.public_key}
-                required={true}
-              />
-              <InputField
-                type="text"
-                name={teamFields.private_key.id}
-                id={teamFields.private_key.id}
-                label={teamFields.private_key.label}
-                defaultValue={team?.private_key}
-                required={true}
-              />
-            </div>
-            <div className="flex flex-col space-y-6 sm:flex-1">
-              <SelectFieldArea
-                id={teamFields.approved_roles.id}
-                label={teamFields.approved_roles.label}>
-                <RoleMultiSelect
-                  onChange={(roles) => set_approved_roles(roles)}
-                  approvedRoles={team?.approved_roles || []}
-                  id={teamFields.approved_roles.id}
+          <TeamFormRows
+            Left={() => (
+              <>
+                <InputField
+                  type="text"
+                  name={teamFields.account_id.id}
+                  id={teamFields.account_id.id}
+                  label={teamFields.account_id.label}
+                  defaultValue={team?.account_id}
+                  required={true}
                 />
-              </SelectFieldArea>
-              <HelpDeskSelect
-                defaultValue={
-                  team ? team.help : teamFields.helpdesk.defaultValue
-                }
-              />
-            </div>
-          </div>
+                <InputField
+                  type="text"
+                  name={teamFields.public_key.id}
+                  id={teamFields.public_key.id}
+                  label={teamFields.public_key.label}
+                  defaultValue={team?.public_key}
+                  required={true}
+                />
+                <InputField
+                  type="text"
+                  name={teamFields.private_key.id}
+                  id={teamFields.private_key.id}
+                  label={teamFields.private_key.label}
+                  defaultValue={team?.private_key}
+                  required={true}
+                />
+              </>
+            )}
+            Right={() => (
+              <>
+                <SelectFieldArea
+                  id={teamFields.approved_roles.id}
+                  label={teamFields.approved_roles.label}>
+                  <RoleMultiSelect
+                    onChange={(roles) => set_approved_roles(roles)}
+                    approvedRoles={team?.approved_roles || []}
+                    id={teamFields.approved_roles.id}
+                  />
+                </SelectFieldArea>
+                <HelpDeskSelect
+                  defaultValue={
+                    team ? team.help : teamFields.helpdesk.defaultValue
+                  }
+                />
+              </>
+            )}
+          />
+
           <SubmitAndCanelButtons
             onSubmit={handleSave}
             submitText={formTitle}

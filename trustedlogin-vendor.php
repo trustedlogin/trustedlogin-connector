@@ -178,18 +178,12 @@ function trusted_login_vendor_prepare_data(SettingsApi $settingsApi,$initalView 
 
 	//Add data by intialView
 	//This is new, need to use this for more views
-	switch ($initalView) {
-		case 'session':
-			$service = new RemoteSession(trustedlogin_vendor());
-			$data['session'] = $service->toArray();
-			break;
-		case 'account':
-			$service = new RemoteSession(trustedlogin_vendor());
-			$data['hasToken'] = $service->hasAppToken();
-			break;
-		default:
-			# code...
-			break;
+	if( in_array($initalView, ['session','teams','account'])){
+		$service = new RemoteSession(trustedlogin_vendor());
+		$data['session'] = $service->toArray();
+		$service = new RemoteSession(trustedlogin_vendor());
+		$data['hasToken'] = $service->hasAppToken();
 	}
+
 	return $data;
 }

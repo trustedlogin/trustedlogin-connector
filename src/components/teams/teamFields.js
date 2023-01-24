@@ -27,5 +27,9 @@ const teamFields = {
     id: "approved_roles",
     type: "array",
   },
+  name: {
+    label: __("Team Name", "trustedlogin-vendor"),
+    id: "name",
+  },
 };
 export default teamFields;
