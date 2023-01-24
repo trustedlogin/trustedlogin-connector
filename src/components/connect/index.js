@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { exchangeTeamToken } from "../../api";
 import { PrimaryButtonLookingLink, SecondaryButton } from "../Buttons";
 import { SettingsPageLayout } from "../Layout";
+import TitleDescriptionLink from "../TitleDescriptionLink";
 
 const CONNECTIION_SETTINGS = {
   loginUrl: "https://php8.trustedlogin.dev/login",
@@ -96,7 +97,11 @@ export default function Connector({
     //return <div>No exchange token</div>;
   }
   return (
-    <SettingsPageLayout title={title} subTitle={"Connect With Trusted Login"}>
+    <>
+      <TitleDescriptionLink
+        title={title}
+        subTitle={"Connect With Trusted Login"}
+      />
       {connectionState.connected ? (
         <>
           <div>
@@ -139,6 +144,6 @@ export default function Connector({
       ) : (
         <Login loginUrl={loginUrl} />
       )}
-    </SettingsPageLayout>
+    </>
   );
 }

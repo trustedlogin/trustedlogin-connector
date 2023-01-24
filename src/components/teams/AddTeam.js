@@ -10,6 +10,7 @@ import useRemoteSession, {
 import LoginOrLogout from "../LoginLogout";
 import { InputField } from "./fields";
 import teamFields from "./teamFields";
+import Connector from "../connect/index";
 
 const CreateTeam = () => {
   const { hasAppToken, session } = useRemoteSession();
@@ -102,7 +103,11 @@ const AddTeam = () => {
         );
       }
       if ("connect" === addType) {
-        return <>Put connect UI here</>;
+        return (
+          <>
+            <Connector />
+          </>
+        );
       }
       return (
         <TeamFormRows
