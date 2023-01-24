@@ -42,20 +42,23 @@ export const HelpscoutTeamDetails = ({ team }) => {
 
   //https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
   function copyToClipboard(value) {
-    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-      if (result.state === "granted" || result.state === "prompt") {
-        navigator.clipboard.writeText(value).then(
-          function () {
-            /* clipboard successfully set */
-          },
-          function () {
-            /* clipboard write failed */
-          }
-        );
-      }
-    }).catch((err) => {
-      console.error( { err, value } );
-    });
+    navigator.permissions
+      .query({ name: "clipboard-write" })
+      .then((result) => {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.clipboard.writeText(value).then(
+            function () {
+              /* clipboard successfully set */
+            },
+            function () {
+              /* clipboard write failed */
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        console.error({ err, value });
+      });
   }
 
   return (
@@ -173,7 +176,10 @@ export function ConfigureHelscout({ isOpen, setIsOpen, team }) {
         "trustedlogin-vendor"
       )}
       goLink={"https://secure.helpscout.net/apps/custom/"}
-      goLinkText={__("Create a Custom App in Help Scout", "trustedlogin-vendor")}>
+      goLinkText={__(
+        "Create a Custom App in Help Scout",
+        "trustedlogin-vendor"
+      )}>
       <>
         <HelpscoutTeamDetails team={team} />
       </>

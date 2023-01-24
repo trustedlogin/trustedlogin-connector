@@ -6,6 +6,7 @@ import { ConfigureHelscout } from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader, SettingsPageLayout } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { __ } from "@wordpress/i18n";
+import TablePage from "../TablePage";
 /**
  * Show list of teams
  *
@@ -54,6 +55,22 @@ const TeamsList = () => {
     setCurrentView("teams/access_key");
   }
 
+  /**
+   * Prepares the items to be displayed in the table
+   */
+  const items = useMemo(() => {
+    if (!teams.length) {
+      return [];
+    }
+    return teams.map((team) => {
+      return {
+        ...team,
+        id: team.account_id,
+        name: team.name,
+      };
+    });
+  }, [teams]);
+
   return (
     <>
       <>
@@ -82,124 +99,92 @@ const TeamsList = () => {
           </>
         </CenteredLayout>
       ) : (
-        <SettingsPageLayout>
-          <PageHeader
-            title={"Teams"}
-            subTitle={"Manage your TrustedLogin settings"}
-            Button={() => (
-              <>
-                <div>
-                  <label htmlFor="search" className="sr-only">
-                    Search
-                  </label>
-                  <div className="relative h-full">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg
-                        className="h-5 w-5 text-gray-400"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true">
-                        <path
-                          fillRule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      id="search"
-                      name="search"
-                      className="block w-full h-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
-                      placeholder="Search..."
-                      type="search"
-                    />
-                  </div>
-                </div>
-                <PrimaryButton onClick={() => setCurrentView("teams/new")}>
-                  <>
+        <TablePage
+          title={"Teams"}
+          subTitle={"Manage your TrustedLogin settings"}
+          items={items}
+          SearchArea={() => (
+            <>
+              <div>
+                <label htmlFor="search" className="sr-only">
+                  Search
+                </label>
+                <div className="relative h-full">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="mr-1"
+                      className="h-5 w-5 text-gray-400"
                       xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24">
-                      <g fill="none">
-                        <path
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          stroke="#FFFFFF"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"></path>
-                      </g>
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true">
+                      <path
+                        fillRule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clipRule="evenodd"
+                      />
                     </svg>
-                    Add Team
-                  </>
-                </PrimaryButton>
-              </>
-            )}
-          />
-          <div className="flex flex-col justify-center w-full bg-white rounded-lg shadow">
-            <ul role="list" className="divide-y divide-gray-200 px-5 sm:px-8">
-              {teams.map((team) => {
-                return (
-                  <li
-                    key={team.id}
-                    className="py-5 flex flex-col items-center justify-between sm:py-8 sm:flex-row">
-                    <div className="flex w-full items-center space-x-5 sm:w-auto">
-                      <button
-                        onClick={() => goToAccessKey(team.id)}
-                        className="flex-shrink-0 flex items-center justify-center h-12 w-12 bg-purple-600 text-white text-sm font-medium rounded-lg">
-                        {team.name ? team.name.substring(0, 2) : "TL"}
-                      </button>
-                      <div className="flex flex-row space-x-16 items-center w-full justify-between sm:justify-start">
-                        <div className="flex flex-col max-w-[10rem] sm:max-w-[8rem] md:max-w-none">
-                          <p
-                            className="text-lg font-medium text-gray-900 leading-tight min-w-[6rem]"
-                            id="team-option-1-label">
-                            {team.name ? team.name : team.account_id}
-                          </p>
-                          <p
-                            className="text-sm text-gray-500"
-                            id="team-option-1-description">
-                            {team.account_id}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-5 w-full mt-4 justify-between sm:w-auto sm:mt-0">
-                      <div className="flex items-center space-x-6">
-                        {shouldShowConfigureButton(team) ? (
-                          <button
-                            onClick={() => {
-                              setModalTeam(team.id);
-                            }}
-                            className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                            Configure
-                          </button>
-                        ) : null}
+                  </div>
+                  <input
+                    id="search"
+                    name="search"
+                    className="block w-full h-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
+                    placeholder="Search..."
+                    type="search"
+                  />
+                </div>
+              </div>
+              <PrimaryButton onClick={() => setCurrentView("teams/new")}>
+                <>
+                  <svg
+                    className="mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24">
+                    <g fill="none">
+                      <path
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        stroke="#FFFFFF"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"></path>
+                    </g>
+                  </svg>
+                  Add Team
+                </>
+              </PrimaryButton>
+            </>
+          )}
+          ActionArea={({ id, item }) => {
+            const team = item;
+            return (
+              <Fragment key={id}>
+                {shouldShowConfigureButton(team) ? (
+                  <button
+                    onClick={() => {
+                      setModalTeam(team.id);
+                    }}
+                    className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                    Configure
+                  </button>
+                ) : null}
 
-                        <button
-                          onClick={() => {
-                            setCurrentView("teams/edit");
-                            setCurrentTeam(team.id);
-                          }}
-                          className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => startDelete(team.id)}
-                          className="text-sm text-red-500 hover:text-red-800 p-2">
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </SettingsPageLayout>
+                <button
+                  onClick={() => {
+                    setCurrentView("teams/edit");
+                    setCurrentTeam(team.id);
+                  }}
+                  className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                  Edit
+                </button>
+                <button
+                  onClick={() => startDelete(team.id)}
+                  className="text-sm text-red-500 hover:text-red-800 p-2">
+                  Delete
+                </button>
+              </Fragment>
+            );
+          }}></TablePage>
       )}
     </>
   );
