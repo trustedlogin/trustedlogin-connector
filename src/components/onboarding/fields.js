@@ -4,12 +4,14 @@ export const Label = ({ id, children }) => (
   </label>
 );
 
-export const OnboardingSelectFieldArea = ({ id, label, children }) => (
-  <div>
-    <Label id={id}>{label}</Label>
-    <div className="mt-2">{children}</div>
-  </div>
-);
+export const OnboardingSelectFieldArea = ({ id, label, children }) => {
+  return (
+    <div>
+      <Label id={id}>{label}</Label>
+      <div className="mt-2">{children}</div>
+    </div>
+  );
+};
 
 export const SelectField = ({ id, label, children }) => {
   return (

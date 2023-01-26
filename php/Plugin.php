@@ -5,6 +5,8 @@ namespace TrustedLogin\Vendor;
 use TrustedLogin\Vendor\Contracts\SendsApiRequests as ApiSend;
 use TrustedLogin\Vendor\Endpoints\Connect;
 use TrustedLogin\Vendor\Endpoints\EncryptRemoteToken;
+use TrustedLogin\Vendor\Endpoints\Proxy;
+use TrustedLogin\Vendor\Services\RemoteSession;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\Traits\Logger;
 use TrustedLogin\Vendor\TeamSettings;
@@ -62,9 +64,10 @@ class Plugin
 			->register(true, false);
 		(new Connect())
 			->register(true, false);
+		$remoteSession = new RemoteSession($this);
 		(new EncryptRemoteToken())
 			->register(true, false);
-		(new \TrustedLogin\Vendor\Endpoints\Proxy())
+		(new Proxy($remoteSession))
 			->addRoutes();
 	}
 

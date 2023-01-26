@@ -8,6 +8,7 @@ export const ReloadIfNoSessionData = () => {
       window.location.reload();
     }
   });
+  return null;
 };
 /**
  *

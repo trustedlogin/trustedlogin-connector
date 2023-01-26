@@ -1,8 +1,12 @@
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
-import { SecondaryButton } from "../Buttons";
+import {
+  PrimaryButton,
+  SecondaryButton,
+  SubmitAndCanelButtons,
+} from "../Buttons";
 import EditTeam, { TeamFormRows } from "./EditTeam";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import useRemoteSession, {
   ReloadIfNoSessionData,
@@ -11,8 +15,9 @@ import LoginOrLogout from "../LoginLogout";
 import { InputField } from "./fields";
 import teamFields from "./teamFields";
 import Connector from "../connect/index";
-
-const CreateTeam = () => {
+import collectTeam from "./collectTeam";
+import { fetchWithProxyRoute } from "../../api";
+const CreateTeam = ({ onCancel }) => {
   const { hasAppToken, session } = useRemoteSession();
   const formRef = useRef(null);
   if (!hasAppToken) {
@@ -22,7 +27,8 @@ const CreateTeam = () => {
       </>
     );
   }
-  const handler = (e) => {
+  //When form is submitted, collect the data and pass it to onClickSave
+  const handleSave = (e) => {
     //Check if form input is valid
     if (!formRef.current.checkValidity()) {
       //If not, return, allowing browser's native validation errors to show
@@ -31,13 +37,23 @@ const CreateTeam = () => {
     //Now, prevent default form submission.
     //Can not do this before checkValidity, because that will prevent the browser's native validation errors from showing.
     e.preventDefault();
-    const formData = new FormData(formRef.current);
-    const data = Object.fromEntries(formData);
-    console.log(data);
+    //Collect the data and save it
+    let data = collectTeam(formRef.current);
+    console.log("team", data);
+    fetchWithProxyRoute({
+      data,
+      proxyRoute: "api.teams.create",
+      method: "PUT",
+      type: "teams",
+    });
+  };
+  const cancelHandler = (e) => {
+    e.preventDefault();
+    onCancel();
   };
   return (
     <>
-      <form formRef={formRef} onSubmit={handler}>
+      <form ref={formRef} onSubmit={handleSave} method="POST">
         <InputField
           type="text"
           name={teamFields.name.id}
@@ -46,15 +62,24 @@ const CreateTeam = () => {
           defaultValue={""}
           required={true}
         />
+        <SubmitAndCanelButtons
+          onSubmit={handleSave}
+          submitText={"Create Team"}
+          onCancel={cancelHandler}
+        />
       </form>
     </>
   );
 };
+
 const AddTeam = () => {
   const { addTeam } = useSettings();
+
   const { setCurrentView } = useView();
   //null|create|connect
   const [addType, setAddType] = useState(null);
+  //reset addType to null
+  const resetAddType = () => addType(null);
 
   const title = useMemo(() => {
     if ("create" === addType) {
@@ -98,7 +123,7 @@ const AddTeam = () => {
       if ("create" === addType) {
         return (
           <>
-            <CreateTeam />
+            <CreateTeam onCancel={resetAddType} />
           </>
         );
       }

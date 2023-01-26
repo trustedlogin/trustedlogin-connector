@@ -1,7 +1,8 @@
 import apiFetch from "@wordpress/api-fetch";
 
-const path = "/trustedlogin/v1/settings";
-const connectPath = "/trustedlogin/v1/connect";
+const namespace = "/trustedlogin/v1";
+const path = `${namespace}/settings`;
+const connectPath = `${namespace}/connect`;
 export const getSettings = async () => {
   let settings = await apiFetch({ path }).catch((e) => console.log(e));
   if (settings.teams) {
@@ -64,6 +65,37 @@ export const exchangeTeamToken = async ({ teamToken, token }) => {
   return r;
 };
 
+/**
+ * Make call using new proxy routes
+ */
+export const fetchWithProxyRoute = ({
+  data,
+  proxyRoute,
+  method,
+  type = "teams",
+}) => {
+  let route = "";
+  switch (type) {
+    case "teams":
+      route = "remote/teams";
+      break;
+    case "users":
+      route = "remote/users";
+      break;
+
+    default:
+      throw new Error("Invalid type for proxy route");
+      break;
+  }
+  return apiFetch({
+    path: `${namespace}/${route}`,
+    method,
+    data: {
+      tl_route: proxyRoute,
+      tl_data: data,
+    },
+  });
+};
 export default {
   updateSettings,
   getSettings,

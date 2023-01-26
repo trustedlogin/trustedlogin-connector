@@ -1,9 +1,7 @@
 <?php
 namespace TrustedLogin\Vendor\Endpoints;
 
-use TrustedLogin\Vendor\SettingsApi;
 
-use TrustedLogin\Vendor\Encryption;
 use TrustedLogin\Vendor\Services\ProxyRoutes;
 use TrustedLogin\Vendor\Services\RemoteSession;
 
@@ -16,11 +14,13 @@ class Proxy {
 
 
     protected ProxyRoutes $proxyRoutes;
-	public function __construct()
+	public function __construct(RemoteSession $remoteSession)
 	{
 		//No slash at end!
 		$this->apiUrl = 'https://php8.trustedlogin.dev';
-		$this->proxyRoutes = new ProxyRoutes();
+		$this->proxyRoutes = new ProxyRoutes(
+            $remoteSession
+        );
 	}
 
 
@@ -43,15 +43,15 @@ class Proxy {
             Endpoint::NAMESPACE,
             '/remote/teams',
             [
-                'methods'             => $this->proxyRoutes->getMethods('teams'),
+                'methods'             => [
+                    'GET',
+                    'POST',
+                    'PUT',
+                    'DELETE'
+                ],//$this->proxyRoutes->getMethods('teams'),
                 'callback'            => [ $this, 'handleTeams' ],
                 'permission_callback' => [$this, 'authorize'],
-                'args' => array_merge($args,[
-                    'team' => [
-                        'type' => 'integer',
-                        'required' => true
-                    ],
-                ])
+                'args' =>$args,
             ]
         );
         register_rest_route(
