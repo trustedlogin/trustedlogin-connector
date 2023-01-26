@@ -35,6 +35,7 @@
     "@wordpress/element": "^3",
     "@wordpress/i18n": "^4",
     "autoprefixer": "^10.4.2",
+    "caniuse-lite": "^1.0.30001448",
     "dotenv": "^16.0.0",
     "multiselect-react-dropdown": "^2.0.7",
     "postcss": "^8.4.5",
