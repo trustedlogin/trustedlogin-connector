@@ -15,12 +15,15 @@ export const ReloadIfNoSessionData = () => {
  * Hook for managing remote session
  */
 const useRemoteSession = () => {
-  const { session } = useSettings();
+  const { session, settings, setSettings } = useSettings();
   const hasAppToken = useMemo(() => {
     return session?.hasAppToken ? true : false;
   }, [session]);
 
-  return { hasAppToken, session };
+  const setNoToken = () =>
+    setSettings({ ...settings, session: { ...session, hasAppToken: false } });
+
+  return { hasAppToken, session, setNoToken };
 };
 
 export default useRemoteSession;

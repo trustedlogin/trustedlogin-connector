@@ -123,11 +123,11 @@ class ProxyRoutes
     public function makeProxyRequest(array $route, array $data){
         $routeName = $route['name'];
         $dynamicParts = $this->getDynamicParts($route['uri']);
+
         if( ! empty($dynamicParts) ){
             //Replace dynamic parts of url with data from request
             foreach($dynamicParts as $part){
                 if( ! isset($data[$part])){
-                    var_dump($part);exit;
                     return new \WP_Error(
                         'invalid_data',
                         'Invalid data',

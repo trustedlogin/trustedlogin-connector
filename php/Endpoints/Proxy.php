@@ -14,12 +14,14 @@ class Proxy {
 
 
     protected ProxyRoutes $proxyRoutes;
+    protected RemoteSession $remoteSession;
 	public function __construct(RemoteSession $remoteSession)
 	{
 		//No slash at end!
 		$this->apiUrl = 'https://php8.trustedlogin.dev';
+        $this->remoteSession = $remoteSession;
 		$this->proxyRoutes = new ProxyRoutes(
-            $remoteSession
+            $this->remoteSession
         );
 	}
 
@@ -35,20 +37,18 @@ class Proxy {
                 'required' => true
             ],
         ];
-        $types = [
-            'users',
-            'teams'
+        $methods = [
+            'GET',
+            'POST',
+            'PUT',
+            'DELETE'
         ];
+
         register_rest_route(
             Endpoint::NAMESPACE,
             '/remote/teams',
             [
-                'methods'             => [
-                    'GET',
-                    'POST',
-                    'PUT',
-                    'DELETE'
-                ],//$this->proxyRoutes->getMethods('teams'),
+                'methods'             => $methods,
                 'callback'            => [ $this, 'handleTeams' ],
                 'permission_callback' => [$this, 'authorize'],
                 'args' =>$args,
@@ -61,12 +61,7 @@ class Proxy {
                 'methods'             => $this->proxyRoutes->getMethods('users'),
                 'callback'            => [ $this, 'handleUsers' ],
                 'permission_callback' => [$this, 'authorize'],
-                'args'  => array_merge($args,[
-                    'user' => [
-                        'type' => 'integer',
-                        'required' => true
-                    ],
-                ])
+                'args'  => $args
             ]
         );
     }
@@ -106,6 +101,18 @@ class Proxy {
     }
 
     public function handleTeams($request ){
+        if( ! $this->remoteSession->hasAppToken()){
+
+            return new \WP_REST_Response(
+                [
+                    'success' => false,
+                    'message' => __('No app token'),
+                    'tl_remote' => 'do_login',
+                ],
+                400
+            );
+        }
+
         $data = $request->get_param('tl_data');
         $routeName = $request->get_param('tl_route');
         $route = $this->proxyRoutes->getRoute(
@@ -121,32 +128,13 @@ class Proxy {
                 ]
             );
         }
-        $dynamicParts = $this->proxyRoutes->getDynamicParts($route);
-        if( ! empty($dynamicParts) ){
-            //Replace dynamic parts of url with data from request
-            foreach($dynamicParts as $part){
-                if( ! isset($data[$part])){
-                    return new \WP_Error(
-                        'invalid_data',
-                        'Invalid data',
-                        [
-                            'routeName' => $routeName,
-                            'missing' => $part
-                        ]
-                    );
-                }
-                $route['uri'] = str_replace(
-                    '{' . $part . '}',
-                    $data[$part],
-                    $route
-                );
-            }
-        }
+
         $response = $this->proxyRoutes->makeProxyRequest(
             $route,
             $data,
             $this->getHeaders()
         );
+        var_dump($response);exit;
         return $response;
     }
 

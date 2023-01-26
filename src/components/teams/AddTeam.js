@@ -1,11 +1,7 @@
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
-import {
-  PrimaryButton,
-  SecondaryButton,
-  SubmitAndCanelButtons,
-} from "../Buttons";
-import EditTeam, { TeamFormRows } from "./EditTeam";
+import { SecondaryButton, SubmitAndCanelButtons } from "../Buttons";
+import { TeamFormRows } from "./EditTeam";
 import { useMemo, useState, useRef } from "react";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import useRemoteSession, {
@@ -18,7 +14,9 @@ import Connector from "../connect/index";
 import collectTeam from "./collectTeam";
 import { fetchWithProxyRoute } from "../../api";
 const CreateTeam = ({ onCancel }) => {
-  const { hasAppToken, session } = useRemoteSession();
+  const { hasAppToken, setNoToken } = useRemoteSession();
+  //track error state
+  const [error, setError] = useState(null);
   const formRef = useRef(null);
   if (!hasAppToken) {
     return (
@@ -40,11 +38,18 @@ const CreateTeam = ({ onCancel }) => {
     //Collect the data and save it
     let data = collectTeam(formRef.current);
     console.log("team", data);
+    setError(null);
     fetchWithProxyRoute({
       data,
       proxyRoute: "api.teams.create",
       method: "PUT",
       type: "teams",
+    }).catch((e) => {
+      if (e.tl_remote) {
+        setNoToken();
+        console.log("Remote Error", e);
+        setError(e.message);
+      }
     });
   };
   const cancelHandler = (e) => {
