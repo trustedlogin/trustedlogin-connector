@@ -181,6 +181,7 @@ class MenuPage {
         if (!$this->shouldEnqueueAssets($hook)) {
             return;
         }
+
         //Remove admin notices added correctly
         //see: https://github.com/trustedlogin/vendor/issues/35
         remove_all_actions('admin_notices');
@@ -200,6 +201,7 @@ class MenuPage {
      * Render callback for admin page
      */
     public function renderPage(){
+
         if( $this->initialView){
             printf(
                 '<script>window.tlInitialView = "%s"</script>',
@@ -262,7 +264,12 @@ class MenuPage {
             $data['errorMessage'] = $error;
         }
 
-        wp_localize_script(MenuPage::ASSET_HANDLE,'tlVendor', $data);
+        wp_localize_script(
+            MenuPage::ASSET_HANDLE,
+            'tlVendor',
+            $data
+        );
+
 
     }
 

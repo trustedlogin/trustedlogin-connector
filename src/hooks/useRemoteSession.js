@@ -1,5 +1,4 @@
-import { useEffect } from "@wordpress/element/build-types";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useSettings } from "../hooks/useSettings";
 
 //Componet that refreshes page if session isn't in tl.vendor

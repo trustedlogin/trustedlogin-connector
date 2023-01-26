@@ -18,7 +18,11 @@ add_action('init', function () {
         $jsUrl = plugins_url("/wpbuild/admin-page-trustedlogin-settings.js", dirname(__FILE__, 2));
         $cssUrl = plugins_url("/trustedlogin-dist.css", dirname(__FILE__, 1));
         $dependencies = $assets['dependencies'];
-
+        //if any $dependencies start with 'wp-' and end with 'build-types'
+        //remove
+        $dependencies = array_filter($dependencies, function($dependency){
+            return !preg_match('/^wp-.*build-types$/', $dependency);
+        });
         wp_register_script(
             MenuPage::ASSET_HANDLE,
             $jsUrl,
