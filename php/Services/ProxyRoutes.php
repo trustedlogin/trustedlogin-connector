@@ -146,9 +146,29 @@ class ProxyRoutes
         }
         $response = wp_remote_post( $this->makeRemoteUrl($route['uri']), [
             'method' =>$route['method'],
-            'body' => $data,
+            'body' => json_encode($data),
             'headers' => $this->getHeaders(),
         ] );
-        var_dump($response);exit;
+        if( \is_wp_error($response) ){
+            return $response;
+        }
+        if(  ! in_array(
+            $response['response']['code'],
+            [200, 201, 204]
+        ) ){
+            return new \WP_Error(
+                'invalid_response',
+                'Invalid response',
+                [
+                    'routeName' => $routeName,
+                    'response' => wp_remote_retrieve_body($response)
+                ]
+            );
+        }
+        return [
+            'data' => wp_remote_retrieve_body($response),
+            'code' => $response['response']['code'],
+            'success' => true
+        ];
     }
 }

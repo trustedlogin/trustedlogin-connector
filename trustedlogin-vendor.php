@@ -183,6 +183,7 @@ function trusted_login_vendor_prepare_data(SettingsApi $settingsApi,$initalView 
 		$data['session'] = $service->toArray();
 		$service = new RemoteSession(trustedlogin_vendor());
 		$data['hasToken'] = $service->hasAppToken();
+		setcookie( 'tl_test2', 'tl_test_value2', 600000 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true );
 	}
 
 	return $data;

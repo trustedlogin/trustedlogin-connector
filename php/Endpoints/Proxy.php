@@ -101,6 +101,7 @@ class Proxy {
     }
 
     public function handleTeams($request ){
+
         if( ! $this->remoteSession->hasAppToken()){
 
             return new \WP_REST_Response(
@@ -108,6 +109,7 @@ class Proxy {
                     'success' => false,
                     'message' => __('No app token'),
                     'tl_remote' => 'do_login',
+                    'cookies' => $_COOKIE
                 ],
                 400
             );
@@ -134,7 +136,6 @@ class Proxy {
             $data,
             $this->getHeaders()
         );
-        var_dump($response);exit;
         return $response;
     }
 

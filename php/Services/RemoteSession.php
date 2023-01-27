@@ -33,7 +33,7 @@ class RemoteSession
 	 */
 	const TOKEN_QUERY_ARG = 'tl_account_token';
 
-	const COOKIE_APP_TOKEN = 'tl_app_token';
+	const COOKIE_APP_TOKEN = 'tl_remote_token';
 
 	const LOGOUT_QUERY_ARG = 'tl_logout';
 
@@ -251,7 +251,15 @@ class RemoteSession
 	 * @param string $value
 	 */
 	public function setCookie(string $value){
-		\setcookie(static::COOKIE_APP_TOKEN,$value,time() + (86400 * 30));
+		\setcookie(
+			static::COOKIE_APP_TOKEN,
+			$value,
+			time() + (86400 * 30),
+			COOKIEPATH,
+			COOKIE_DOMAIN,
+			true,
+			true
+		);
 	}
 
 	/**
@@ -260,7 +268,15 @@ class RemoteSession
 	 * @since 0.18.0
 	 */
 	public function clearCookie(){
-		\setcookie(static::COOKIE_APP_TOKEN,'',time() - 3600);
+		\setcookie(
+			static::COOKIE_APP_TOKEN,
+			'',
+			time() - 3600,
+			COOKIEPATH,
+			COOKIE_DOMAIN,
+			true,
+			true
+		);
 	}
 
 
