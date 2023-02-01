@@ -101,13 +101,12 @@ class RemoteSession
 			//{nonce,token,WP_SALT}
 			//5. tl app redirects back with nonce and encyrpted token.
 			//6. tl vendor decrypts token and puts it in  a cookie, after validating nonce.
-			$returnUrl = \admin_url('admin.php?page=trustedlogin-account');
-
 
 			\wp_redirect(add_query_arg([
 				'success' => true,
 				'error' => false,
-			], $returnUrl));
+				'page' => MenuPage::SLUG_ACCOUNT
+			], \admin_url('admin.php')));
 			exit;
 		}
 		//listen for logout
@@ -124,7 +123,10 @@ class RemoteSession
 					],
 				]
 			);
-			wp_safe_redirect(admin_url('admin.php?page=trustedlogin-account'));
+
+			wp_safe_redirect(add_query_arg([
+				'page' => MenuPage::SLUG_ACCOUNT
+			], \admin_url('admin.php')));
 			exit;
 		}
 	}
@@ -164,11 +166,12 @@ class RemoteSession
 			'hasAppToken' => $this->hasAppToken(),
 			'loginUrl' => add_query_arg([
 				static::NONCE_QUERY_ARG => $nonce,
+				'tl_login' => true,
 			], $this->apiUrl('/login')),
 			'startLogout' => add_query_arg([
 				static::LOGOUT_QUERY_ARG => true,
 				static::NONCE_QUERY_ARG => $nonce,
-				'page' => 'trustedlogin-account',
+				'page' => MenuPage::SLUG_ACCOUNT,
 			], admin_url('admin.php')),
 			'logoutUrl' => $this->apiUrl('/logout/remote'),
 			'callbackUrl' => urlencode($this->getCallbackUrl($nonce)),
