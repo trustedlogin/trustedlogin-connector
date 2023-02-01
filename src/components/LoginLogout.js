@@ -21,12 +21,13 @@ const LoginOrLogout = () => {
       alert("Did not redirect");
     }, 5000);
   };
+  //METHOD is GET for login and POST for logout
   return (
     <form
       aria-label={__("Log In To Trusted Login", "trustedlogin-vendor")}
       onSubmit={handler}
       id={hasAppToken ? "logout-form" : "login-form"}
-      method={"POST"}
+      method={hasAppToken ? "POST" : "GET"}
       action={hasAppToken ? session?.startLogout : session?.loginUrl}
       className="flex flex-col py-6 space-y-6 justify-center">
       <input
