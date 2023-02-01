@@ -26,7 +26,7 @@ const LoginOrLogout = () => {
       aria-label={__("Log In To Trusted Login", "trustedlogin-vendor")}
       onSubmit={handler}
       id={hasAppToken ? "logout-form" : "login-form"}
-      method={"GET"}
+      method={"POST"}
       action={hasAppToken ? session?.startLogout : session?.loginUrl}
       className="flex flex-col py-6 space-y-6 justify-center">
       <input

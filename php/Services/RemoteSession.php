@@ -165,7 +165,8 @@ class RemoteSession
 			'startLogout' => add_query_arg([
 				static::LOGOUT_QUERY_ARG => true,
 				static::NONCE_QUERY_ARG => $nonce,
-			], admin_url('admin.php?page=trustedlogin-account')),
+				'page' => 'trustedlogin-account',
+			], admin_url('admin.php')),
 			'logoutUrl' => $this->apiUrl('/logout/remote'),
 			'callbackUrl' => urlencode($this->getCallbackUrl($nonce)),
 			'nonce' => $nonce,
