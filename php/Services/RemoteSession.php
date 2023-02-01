@@ -86,7 +86,10 @@ class RemoteSession
 
 			$service = new static(\trustedlogin_vendor());
 			if( ! wp_verify_nonce($nonce,static::NONCE_ACTION)){
-				wp_die('Invalid nonce');
+				wp_die(__('Invalid nonce', 'trustedlogin-vendor'));
+			}
+			if( $service->hasAppToken()){
+				$service->clearCookie();
 			}
 			//Not doing token encoding yet, this is simpler.
 			$service->setCookie($token);
