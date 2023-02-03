@@ -296,6 +296,8 @@ class RemoteSession
 	protected function getCallbackUrl(string $nonce){
 		return \add_query_arg(
 			[
+				'success' => true,
+				'error' => false,
 				static::NONCE_QUERY_ARG => $nonce,
 				'page' => MenuPage::SLUG_SESSION,
 			],

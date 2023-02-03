@@ -165,8 +165,13 @@ class ProxyRoutes
                 ]
             );
         }
+        $body = wp_remote_retrieve_body($response);
+        if( is_string($body) && ! empty($body) ){
+            $_body = json_decode($body, true);
+            $body = $_body ? $_body : $body;
+        }
         return [
-            'data' => wp_remote_retrieve_body($response),
+            'data' => $body,
             'code' => $response['response']['code'],
             'success' => true
         ];
