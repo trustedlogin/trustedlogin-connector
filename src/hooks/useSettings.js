@@ -79,15 +79,12 @@ export const useSettings = () => {
    * Add a team to settings
    */
   const addTeam = (team, save = false, callback = null) => {
-    //It used to be that we didn't know team ID before saving.
-    //now we do
-    if (!team.id) {
-      //backwards compat for now
-      team = Object.assign(emptyTeam, {
-        ...team,
-        id: settings.teams.length + 1,
-      });
-    }
+    //Put a blank team in settings
+    //Save fills in the rest server-side
+    team = Object.assign(emptyTeam, {
+      ...team, //just need {name:string,account_id:int}
+      id: settings.teams.length + 1,
+    });
     console.log({ addTeam: team });
     const teams = [...settings.teams, team];
     console.log({ addTeam: teams });

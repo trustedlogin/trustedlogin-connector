@@ -48,9 +48,20 @@ const CreateTeam = ({ onCancel }) => {
       type: "teams",
     }).then((response) => {
       if (response.data) {
-        //This data is wrong though. It's not the team data, we need
-        addTeam(response.data);
-        //setCurrentView("teams");
+        //It's not the team data, we need in WordPress
+        addTeam(
+          {
+            account_id: response.data.id,
+            name: response.data.name,
+          },
+          //Save to get the rest of the team data
+          //Also save it in WordPress
+          true,
+          (newTeam) => {
+            console.log({ newTeam });
+            setCurrentView(`teams`);
+          }
+        );
       }
     });
   };
@@ -80,8 +91,6 @@ const CreateTeam = ({ onCancel }) => {
 };
 
 const AddTeam = () => {
-  const { addTeam } = useSettings();
-
   const { setCurrentView } = useView();
   //null|create|connect
   const [addType, setAddType] = useState(null);
