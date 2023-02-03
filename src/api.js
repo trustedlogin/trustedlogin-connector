@@ -1,10 +1,12 @@
 import apiFetch from "@wordpress/api-fetch";
 
-const namespace = "/trustedlogin/v1";
-const path = `${namespace}/settings`;
-const connectPath = `${namespace}/connect`;
+export const API_NAMESPACE = "/trustedlogin/v1";
+export const API_SETTINGS_PATH = `${API_NAMESPACE}/settings`;
+export const API_CONNECT_PATH = `${API_NAMESPACE}/connect`;
 export const getSettings = async () => {
-  let settings = await apiFetch({ path }).catch((e) => console.log(e));
+  let settings = await apiFetch({ path: API_SETTINGS_PATH }).catch((e) =>
+    console.log(e)
+  );
   if (settings.teams) {
     settings.teams = settings.teams.map((team, id) => {
       if (!team.helpdesk) {
@@ -28,7 +30,7 @@ export const updateSettings = async ({ teams = null, integrations = null }) => {
     data.integrations = integrations;
   }
   let r = await apiFetch({
-    path: data.integrations ? `${path}/global` : path,
+    path: data.integrations ? `${API_SETTINGS_PATH}/global` : API_SETTINGS_PATH,
     method: "POST",
     data,
   });
@@ -37,7 +39,7 @@ export const updateSettings = async ({ teams = null, integrations = null }) => {
 
 export const resetTeamIntegrations = async (accountId, integration) => {
   let r = await apiFetch({
-    path: `${path}/team/reset`,
+    path: `${API_SETTINGS_PATH}/team/reset`,
     method: "POST",
     data: { integration, accountId },
   });
@@ -46,7 +48,7 @@ export const resetTeamIntegrations = async (accountId, integration) => {
 
 export const resetEncryptionKeys = async () => {
   let r = await apiFetch({
-    path: `${path}/encryption/reset`,
+    path: `${API_SETTINGS_PATH}/encryption/reset`,
     method: "POST",
   });
   return r;
@@ -55,7 +57,7 @@ export const resetEncryptionKeys = async () => {
 export const exchangeTeamToken = async ({ teamToken, token }) => {
   console.log({ teamToken, token });
   let r = await apiFetch({
-    path: `${connectPath}`,
+    path: `${API_CONNECT_PATH}`,
     method: "POST",
     data: { token, exchange: teamToken },
     headers: {
@@ -88,7 +90,7 @@ export const fetchWithProxyRoute = ({
       break;
   }
   return apiFetch({
-    path: `${namespace}/${route}`,
+    path: `${API_NAMESPACE}/${route}`,
     method,
     headers: {
       "Content-Type": "application/json UTF-8",
