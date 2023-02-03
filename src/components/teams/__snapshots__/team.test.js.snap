@@ -385,47 +385,42 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
             <div
               class="mt-2"
             >
-              <div
-                class="multiselect-container multiSelectContainer "
-                id="approved_roles"
-              >
+              <div>
                 <div
-                  class="search-wrapper searchWrapper "
+                  class="multiselect-container multiSelectContainer  "
+                  id="approved_roles"
                 >
-                  <input
-                    autocomplete="off"
-                    class="searchBox"
-                    id="approved_roles_input"
-                    placeholder="Select"
-                    type="text"
-                    value=""
-                  />
-                </div>
-                <div
-                  class="optionListContainer displayNone"
-                >
-                  <ul
-                    class="optionContainer"
+                  <div
+                    class="search-wrapper searchWrapper "
                   >
-                    <li
-                      class="
-              highlightOption highlight 
-              false 
-              false option
-            "
+                    <input
+                      autocomplete="off"
+                      class="searchBox "
+                      id="approved_roles_input"
+                      name="search_name_input"
+                      placeholder="Select"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="optionListContainer displayNone"
+                  >
+                    <ul
+                      class="optionContainer"
                     >
-                      Administrator
-                    </li>
-                    <li
-                      class="
-               
-              false 
-              false option
-            "
-                    >
-                      Editor
-                    </li>
-                  </ul>
+                      <li
+                        class="option  highlightOption highlight  "
+                      >
+                        Administrator
+                      </li>
+                      <li
+                        class="option    "
+                      >
+                        Editor
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

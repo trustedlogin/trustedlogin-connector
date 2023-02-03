@@ -14,11 +14,34 @@ module.exports = {
   ...defaultConfig,
   module: {
     ...defaultConfig.module,
-    rules: [...defaultConfig.module.rules],
+    rules: [
+      ...defaultConfig.module.rules,
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              configFile: "tsconfig.json",
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   entry,
   output: {
     filename: "[name].js",
     path: path.join(__dirname, "./wpbuild"),
+  },
+  resolve: {
+    extensions: [
+      ".ts",
+      ".tsx",
+      ...(defaultConfig.resolve
+        ? defaultConfig.resolve.extensions || [".js", ".jsx"]
+        : []),
+    ],
   },
 };
