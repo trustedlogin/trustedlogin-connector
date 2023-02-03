@@ -90,6 +90,11 @@ export const fetchWithProxyRoute = ({
   return apiFetch({
     path: `${namespace}/${route}`,
     method,
+    headers: {
+      "Content-Type": "application/json UTF-8",
+      //expect JSON response
+      Accept: "application/json",
+    },
     data: {
       tl_route: proxyRoute,
       tl_data: data,

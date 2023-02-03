@@ -13,7 +13,9 @@ import teamFields from "./teamFields";
 import Connector from "../connect/index";
 import collectTeam from "./collectTeam";
 import { fetchWithProxyRoute } from "../../api";
+import ErrorBoundary from "../ErrorBoundry";
 const CreateTeam = ({ onCancel }) => {
+  const { addTeam, setCurrentView } = useSettings();
   const { hasAppToken, setNoToken } = useRemoteSession();
   //track error state
   const [error, setError] = useState(null);
@@ -44,11 +46,11 @@ const CreateTeam = ({ onCancel }) => {
       proxyRoute: "api.teams.create",
       method: "PUT",
       type: "teams",
-    }).catch((e) => {
-      if (e.tl_remote) {
-        setNoToken();
-        console.log("Remote Error", e);
-        setError(e.message);
+    }).then((response) => {
+      if (response.data) {
+        //This data is wrong though. It's not the team data, we need
+        addTeam(response.data);
+        //setCurrentView("teams");
       }
     });
   };
@@ -127,16 +129,16 @@ const AddTeam = () => {
     return () => {
       if ("create" === addType) {
         return (
-          <>
+          <ErrorBoundary>
             <CreateTeam onCancel={resetAddType} />
-          </>
+          </ErrorBoundary>
         );
       }
       if ("connect" === addType) {
         return (
-          <>
+          <ErrorBoundary>
             <Connector />
-          </>
+          </ErrorBoundary>
         );
       }
       return (

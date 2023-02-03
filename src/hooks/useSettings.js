@@ -79,8 +79,18 @@ export const useSettings = () => {
    * Add a team to settings
    */
   const addTeam = (team, save = false, callback = null) => {
-    team = Object.assign(emptyTeam, { ...team, id: settings.teams.length + 1 });
+    //It used to be that we didn't know team ID before saving.
+    //now we do
+    if (!team.id) {
+      //backwards compat for now
+      team = Object.assign(emptyTeam, {
+        ...team,
+        id: settings.teams.length + 1,
+      });
+    }
+    console.log({ addTeam: team });
     const teams = [...settings.teams, team];
+    console.log({ addTeam: teams });
 
     if (!save) {
       setSettings({ ...settings, teams });
