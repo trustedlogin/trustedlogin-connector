@@ -15,7 +15,9 @@ import collectTeam from "./collectTeam";
 import { fetchWithProxyRoute } from "../../api";
 import ErrorBoundary from "../ErrorBoundry";
 const CreateTeam = ({ onCancel }) => {
-  const { addTeam, setCurrentView } = useSettings();
+  const { addTeam } = useSettings();
+  const { setCurrentView } = useView();
+
   const { hasAppToken, setNoToken } = useRemoteSession();
   //track error state
   const [error, setError] = useState(null);

@@ -178,6 +178,14 @@ const TeamsList = () => {
                   Edit
                 </button>
                 <button
+                  onClick={() => {
+                    setCurrentView("teams/admin");
+                    setCurrentTeam(team.id);
+                  }}
+                  className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                  {__("Admin Team")}
+                </button>
+                <button
                   onClick={() => startDelete(team.id)}
                   className="text-sm text-red-500 hover:text-red-800 p-2">
                   Delete

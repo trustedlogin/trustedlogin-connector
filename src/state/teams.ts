@@ -54,7 +54,6 @@ const store = createReduxStore( 'tl.teams', {
     reducer( state = DEFAULT_STATE, action:Action ) {
         switch ( action.type ) {
             case 'ADD_TEAM':
-
                 return {
                     ...state,
                     teams: [

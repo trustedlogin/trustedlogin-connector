@@ -5,6 +5,7 @@ import EditTeam from "../teams/EditTeam";
 
 import TeamsList from "./TeamsList";
 import AccessKeyForm from "../AccessKeyForm";
+import AdminTeam from "./AdminTeam";
 const TeamsSettings = () => {
   const { currentView, setCurrentView, currentTeam } = useView();
   const { setTeam, settings, getTeam } = useSettings();
@@ -35,6 +36,10 @@ const TeamsSettings = () => {
         }}
       />
     );
+  }
+
+  if ("teams/admin" === currentView) {
+    return <AdminTeam />;
   }
 
   if ("teams/access_key" === currentView) {
