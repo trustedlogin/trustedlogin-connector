@@ -89,18 +89,45 @@ export const fetchWithProxyRoute = ({
       throw new Error("Invalid type for proxy route");
       break;
   }
+  let requestData = {
+    tl_route: proxyRoute,
+  };
+  if (data.hasOwnProperty("team")) {
+    requestData.team = data.team;
+    delete data.team;
+  }
+  if (data.hasOwnProperty("user")) {
+    requestData.user = data.user;
+    delete data.user;
+  }
+  //data has more than 0 keys
+  if (Object.keys(data).length > 0) {
+    requestData.tl_data = data;
+  }
+  const path = `${API_NAMESPACE}/${route}`;
+
+  if ("GET" === method) {
+    return fetch(
+      `/wp-json${path}?` + new URLSearchParams(requestData).toString(),
+      {
+        method: "GET",
+        headers: { "X-WP-NONCE": wp.apiFetch.nonceMiddleware.nonce },
+      }
+    )
+      .then((r) => r.json())
+      .then((r) => {
+        return r;
+      });
+  }
   return apiFetch({
-    path: `${API_NAMESPACE}/${route}`,
+    path,
     method,
     headers: {
       "Content-Type": "application/json UTF-8",
       //expect JSON response
       Accept: "application/json",
     },
-    data: {
-      tl_route: proxyRoute,
-      tl_data: data,
-    },
+    data: requestData,
   });
 };
 export default {

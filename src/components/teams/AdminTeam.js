@@ -1,25 +1,39 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import TablePage from "../TablePage";
 import { useView } from "../../hooks/useView";
 import { fetchWithProxyRoute } from "../../api";
 export default function AdminTeam() {
   const { currentTeam } = useView();
+
+  const [members, setMembers] = useState([]);
   const items = useMemo(() => {
+    if (members.length > 0) {
+      return members.map((member) => {
+        return {
+          id: member.id,
+          name: member.name,
+          email: member.email,
+          role: member.role,
+        };
+      });
+    }
     return [];
-  });
+  }, [members]);
 
   useEffect(() => {
+    if (currentTeam < 1) return;
     fetchWithProxyRoute({
-      proxyRoute: "api.teams.get",
+      proxyRoute: "api.teams.members",
       method: "GET",
       data: {
         team: currentTeam,
       },
-      type: "users",
+      type: "teams",
     })
       .then((r) => {
         console.log({ r });
+        setMembers(r.data);
       })
       .catch((e) => {
         console.log({ e });

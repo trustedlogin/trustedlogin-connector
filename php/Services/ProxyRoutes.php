@@ -144,11 +144,18 @@ class ProxyRoutes
                 );
             }
         }
-        $response = wp_remote_post( $this->makeRemoteUrl($route['uri']), [
-            'method' =>$route['method'],
-            'body' => json_encode($data),
-            'headers' => $this->getHeaders(),
-        ] );
+        if( 'GET' === $route['method'] ){
+            $response = wp_remote_get( $this->makeRemoteUrl($route['uri']), [
+                'headers' => $this->getHeaders(),
+            ] );
+        }else{
+            $response = wp_remote_post( $this->makeRemoteUrl($route['uri']), [
+                'method' =>$route['method'],
+                'body' => json_encode($data),
+                'headers' => $this->getHeaders(),
+            ] );
+        }
+
         if( \is_wp_error($response) ){
             return $response;
         }

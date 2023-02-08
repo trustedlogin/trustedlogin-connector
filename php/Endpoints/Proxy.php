@@ -34,8 +34,9 @@ class Proxy {
             ],
             'tl_data' => [
                 'type' => 'object',
-                'required' => true
+                'required' => false,
             ],
+
         ];
         $methods = [
             'GET',
@@ -51,14 +52,21 @@ class Proxy {
                 'methods'             => $methods,
                 'callback'            => [ $this, 'handleTeams' ],
                 'permission_callback' => [$this, 'authorize'],
-                'args' =>$args,
+                'args' =>array_merge(
+                    [
+                        'team' => [
+                            'type' => 'number',
+                            'required' => false,
+                        ],
+                    ]
+                ),
             ]
         );
         register_rest_route(
             Endpoint::NAMESPACE,
             '/remote/users',
             [
-                'methods'             => $this->proxyRoutes->getMethods('users'),
+                'methods'             => $methods,
                 'callback'            => [ $this, 'handleUsers' ],
                 'permission_callback' => [$this, 'authorize'],
                 'args'  => $args
@@ -102,6 +110,7 @@ class Proxy {
 
     public function handleTeams($request ){
 
+
         if( ! $this->remoteSession->hasAppToken()){
 
             return new \WP_REST_Response(
@@ -116,11 +125,14 @@ class Proxy {
         }
 
         $data = $request->get_param('tl_data');
+        $data['team'] = $request->get_param('team');
         $routeName = $request->get_param('tl_route');
+
         $route = $this->proxyRoutes->getRoute(
             $routeName,
             'teams'
         );
+
         if( empty($route) ){
             return new \WP_Error(
                 'invalid_route',
@@ -128,6 +140,18 @@ class Proxy {
                 [
                     'routeName' => $routeName
                 ]
+            );
+        }
+        try{
+            $response = $this->proxyRoutes->makeProxyRequest(
+                $route,
+                $data,
+                $this->getHeaders()
+            );
+        }catch(\Exception $e){
+            return new \WP_Error(
+                $e->getCode(),
+                $e->getMessage(),
             );
         }
 
