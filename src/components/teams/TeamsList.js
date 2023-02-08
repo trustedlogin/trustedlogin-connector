@@ -6,7 +6,7 @@ import { ConfigureHelscout } from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader, SettingsPageLayout } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { __ } from "@wordpress/i18n";
-import TablePage from "../TablePage";
+import TablePage, { ActionItemButton } from "../TablePage";
 /**
  * Show list of teams
  *
@@ -22,6 +22,9 @@ const TeamsList = () => {
   const teams = useMemo(() => settings.teams, [settings]);
   const [modalTeam, setModalTeam] = useState(null);
   const shouldShowConfigureButton = (team) => {
+    if (!team) {
+      return;
+    }
     return team.helpdesk && team.helpdesk.includes("helpscout");
   };
 
@@ -67,6 +70,7 @@ const TeamsList = () => {
         ...team,
         id: team.account_id,
         name: team.name,
+        subTitle: team.id,
       };
     });
   }, [teams]);
@@ -160,31 +164,31 @@ const TeamsList = () => {
             return (
               <Fragment key={id}>
                 {shouldShowConfigureButton(team) ? (
-                  <button
+                  <ActionItemButton
+                    isRed={false}
                     onClick={() => {
                       setModalTeam(team.id);
-                    }}
-                    className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                    }}>
                     Configure
-                  </button>
+                  </ActionItemButton>
                 ) : null}
 
-                <button
+                <ActionItemButton
+                  isRed={false}
                   onClick={() => {
                     setCurrentView("teams/edit");
                     setCurrentTeam(team.id);
-                  }}
-                  className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                  }}>
                   Edit
-                </button>
-                <button
+                </ActionItemButton>
+                <ActionItemButton
+                  isRed={true}
                   onClick={() => {
                     setCurrentView("teams/admin");
                     setCurrentTeam(team.id);
-                  }}
-                  className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                  }}>
                   {__("Admin Team")}
-                </button>
+                </ActionItemButton>
                 <button
                   onClick={() => startDelete(team.id)}
                   className="text-sm text-red-500 hover:text-red-800 p-2">

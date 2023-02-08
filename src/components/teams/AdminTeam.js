@@ -1,8 +1,11 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { useSettings } from "../../hooks/useSettings";
-import TablePage from "../TablePage";
+import TablePage, { ActionItemButton } from "../TablePage";
 import { useView } from "../../hooks/useView";
 import { fetchWithProxyRoute } from "../../api";
+import { Fragment } from "@wordpress/element/build-types";
+import { CenteredLayout } from "../Layout";
+import TitleDescriptionLink from "../TitleDescriptionLink";
 export default function AdminTeam() {
   const { currentTeam } = useView();
 
@@ -15,6 +18,7 @@ export default function AdminTeam() {
           name: member.name,
           email: member.email,
           role: member.role,
+          subTitle: `Role: ${member.role}`,
         };
       });
     }
@@ -41,14 +45,25 @@ export default function AdminTeam() {
   }, [currentTeam]);
   return (
     <>
-      {items.length === 0 && <div>No Data</div>}
-      <TablePage
-        title={"Admin Team"}
-        subTitle={"Manage your team"}
-        items={items}
-        SearchArea={() => <></>}
-        ActionArea={(item) => <div className="flex flex-row">Actions</div>}
-      />
+      {items.length > 0 ? (
+        <CenteredLayout>
+          <>
+            <TitleDescriptionLink title={__("No Data")} />
+          </>
+        </CenteredLayout>
+      ) : (
+        <TablePage
+          title={"Admin Team"}
+          subTitle={"Manage your team"}
+          items={items}
+          SearchArea={() => <></>}
+          ActionArea={(item) => (
+            <Fragment key={item.id}>
+              <ActionItemButton></ActionItemButton>
+            </Fragment>
+          )}
+        />
+      )}
     </>
   );
 }

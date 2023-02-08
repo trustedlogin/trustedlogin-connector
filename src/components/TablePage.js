@@ -7,6 +7,7 @@ export const TableItem = ({
   item,
   logoOnClick,
   ActionArea,
+  subTitle,
   prefix = "team-",
 }) => {
   return (
@@ -27,7 +28,7 @@ export const TableItem = ({
             <p
               className="text-sm text-gray-500"
               id={`${prefix}option-1-description`}>
-              {id}
+              {subTitle}
             </p>
           </div>
         </div>
@@ -68,6 +69,7 @@ export default function TablePage({
                   id={item.id}
                   name={item.name}
                   prefix={prefix}
+                  subTitle={item.subTitle || item.id}
                 />
               </Fragment>
             );
@@ -77,3 +79,17 @@ export default function TablePage({
     </SettingsPageLayout>
   );
 }
+
+export const ActionItemButton = ({ onClick, isRed, children }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`${
+        isRed
+          ? "text-red-500 hover:text-red-800"
+          : "text-blue-tl hover:text-navy-tl"
+      } text-sm p-2`}>
+      {children}
+    </button>
+  );
+};
