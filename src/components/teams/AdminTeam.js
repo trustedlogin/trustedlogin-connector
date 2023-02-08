@@ -6,9 +6,12 @@ import { fetchWithProxyRoute } from "../../api";
 import { Fragment } from "@wordpress/element/build-types";
 import { CenteredLayout } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
+import { PrimaryButton } from "../Buttons";
+import { __ } from "@wordpress/i18n";
 export default function AdminTeam() {
   const { currentTeam } = useView();
-
+  //track state for modal open/close
+  const [modalOpen, setModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const items = useMemo(() => {
     if (members.length > 0) {
@@ -56,7 +59,13 @@ export default function AdminTeam() {
           title={"Admin Team"}
           subTitle={"Manage your team"}
           items={items}
-          SearchArea={() => <></>}
+          SearchArea={() => (
+            <Fragment>
+              <PrimaryButton onClick={() => setModalOpen(true)}>
+                {__("Invite Team Member")}
+              </PrimaryButton>
+            </Fragment>
+          )}
           ActionArea={(item) => (
             <Fragment key={item.id}>
               <ActionItemButton></ActionItemButton>
