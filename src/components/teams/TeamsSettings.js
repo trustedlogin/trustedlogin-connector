@@ -38,7 +38,7 @@ const TeamsSettings = () => {
     );
   }
 
-  if ("teams/admin" === currentView) {
+  if (currentView.startsWith("teams/admin")) {
     return <AdminTeam />;
   }
 

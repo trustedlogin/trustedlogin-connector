@@ -1,9 +1,7 @@
-import React, { useMemo, useEffect, useState } from "react";
-import { useSettings } from "../../hooks/useSettings";
+import React, { useMemo, useEffect, useState, Fragment } from "react";
 import TablePage, { ActionItemButton } from "../TablePage";
 import { useView } from "../../hooks/useView";
 import { fetchWithProxyRoute } from "../../api";
-import { Fragment } from "@wordpress/element/build-types";
 import { CenteredLayout } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { PrimaryButton } from "../Buttons";
@@ -47,32 +45,36 @@ export default function AdminTeam() {
       });
   }, [currentTeam]);
   return (
-    <>
-      {items.length > 0 ? (
-        <CenteredLayout>
-          <>
-            <TitleDescriptionLink title={__("No Data")} />
-          </>
-        </CenteredLayout>
+    <section>
+      {items.length <= 0 ? (
+        <div>
+          <CenteredLayout>
+            <>
+              <TitleDescriptionLink title={__("No Data")} />
+            </>
+          </CenteredLayout>
+        </div>
       ) : (
-        <TablePage
-          title={"Admin Team"}
-          subTitle={"Manage your team"}
-          items={items}
-          SearchArea={() => (
-            <Fragment>
-              <PrimaryButton onClick={() => setModalOpen(true)}>
-                {__("Invite Team Member")}
-              </PrimaryButton>
-            </Fragment>
-          )}
-          ActionArea={(item) => (
-            <Fragment key={item.id}>
-              <ActionItemButton></ActionItemButton>
-            </Fragment>
-          )}
-        />
+        <div>
+          <TablePage
+            title={"Admin Team"}
+            subTitle={"Manage your team"}
+            items={items}
+            SearchArea={() => (
+              <Fragment>
+                <PrimaryButton onClick={() => setModalOpen(true)}>
+                  {__("Invite Team Member")}
+                </PrimaryButton>
+              </Fragment>
+            )}
+            ActionArea={(item) => (
+              <Fragment key={item.id}>
+                <ActionItemButton isRed={false}>Button</ActionItemButton>
+              </Fragment>
+            )}
+          />
+        </div>
       )}
-    </>
+    </section>
   );
 }

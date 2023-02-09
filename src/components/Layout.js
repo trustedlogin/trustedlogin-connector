@@ -1,3 +1,4 @@
+import React from "react";
 import { SecondaryButton } from "./Buttons";
 import { HorizontalLogo } from "./TrustedLoginLogo";
 import { useState, useMemo } from "react";
