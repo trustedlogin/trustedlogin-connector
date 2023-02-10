@@ -207,7 +207,7 @@ export default function ConfigureIntegration({
     <Dialog
       open={isOpen}
       onClose={() => setIsOpen(false)}
-      className="fixed z-10 inset-0 overflow-y-auto">
+      className="fixed z-10 inset-0 overflow-y-auto tl-modal">
       <div className="flex items-center justify-center min-h-screen">
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <div className="relative bg-white rounded max-w-sm mx-auto">

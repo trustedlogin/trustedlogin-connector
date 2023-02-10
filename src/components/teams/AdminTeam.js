@@ -8,6 +8,11 @@ import { PrimaryButton } from "../Buttons";
 import { __ } from "@wordpress/i18n";
 
 const InviteMember = () => {
+  const handler = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    console.log({ email });
+  };
   return (
     <NarrowFormLayout
       minimal={minimal}

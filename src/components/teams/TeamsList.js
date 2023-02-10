@@ -77,7 +77,19 @@ const TeamsList = () => {
 
   return (
     <>
-      <>memo</>
+      {teams.map((team) => (
+        <Fragment key={team.id}>
+          {parseInt(team.account_id, 10) === 0 ? null : (
+            <ConfigureHelscout
+              isOpen={parseInt(modalTeam, 10) === parseInt(team.account_id, 10)}
+              setIsOpen={() => {
+                setModalTeam(null);
+              }}
+              team={team}
+            />
+          )}
+        </Fragment>
+      ))}
       {isDeleting ? (
         <CenteredLayout>
           <>
@@ -155,6 +167,7 @@ const TeamsList = () => {
                   <ActionItemButton
                     isRed={false}
                     onClick={() => {
+                      console.log("team", team.id);
                       setModalTeam(team.id);
                     }}>
                     Configure
