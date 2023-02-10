@@ -1,4 +1,4 @@
-import { useMemo, useState, Fragment } from "react";
+import { useMemo, useState, Fragment, memo } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
 import { PrimaryButton, SubmitAndCanelButtons } from "../Buttons";
@@ -77,19 +77,7 @@ const TeamsList = () => {
 
   return (
     <>
-      <>
-        {teams.map((team) => (
-          <Fragment key={team.id}>
-            <ConfigureHelscout
-              isOpen={modalTeam === team.id}
-              setIsOpen={() => {
-                setModalTeam(null);
-              }}
-              team={team}
-            />
-          </Fragment>
-        ))}
-      </>
+      <>memo</>
       {isDeleting ? (
         <CenteredLayout>
           <>

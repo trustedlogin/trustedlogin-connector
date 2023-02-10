@@ -2,10 +2,30 @@ import React, { useMemo, useEffect, useState, Fragment } from "react";
 import TablePage, { ActionItemButton } from "../TablePage";
 import { useView } from "../../hooks/useView";
 import { fetchWithProxyRoute } from "../../api";
-import { CenteredLayout } from "../Layout";
+import { CenteredLayout, NarrowFormLayout } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { PrimaryButton } from "../Buttons";
 import { __ } from "@wordpress/i18n";
+
+const InviteMember = () => {
+  return (
+    <NarrowFormLayout
+      minimal={minimal}
+      title={__("Invite New Team Member", "trustedlogin-vendor")}
+      description={__("Lorem Ipsum", "trustedlogin-vendor")}>
+      <>
+        <form
+          aria-label={__("Invite New Team Member", "trustedlogin-vendor")}
+          className="flex flex-col py-6 space-y-6 justify-center">
+          <input name={"email"} type={"email"} placeholder={"Email Address"} />
+          <PrimaryButton type={"submit"}>
+            {__("Invite", "trustedlogin-vendor")}
+          </PrimaryButton>
+        </form>
+      </>
+    </NarrowFormLayout>
+  );
+};
 export default function AdminTeam() {
   const { currentTeam } = useView();
   //track state for modal open/close
