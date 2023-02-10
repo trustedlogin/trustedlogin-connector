@@ -167,7 +167,6 @@ const TeamsList = () => {
                   <ActionItemButton
                     isRed={false}
                     onClick={() => {
-                      console.log("team", team.id);
                       setModalTeam(team.id);
                     }}>
                     Configure
