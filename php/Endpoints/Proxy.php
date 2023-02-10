@@ -148,19 +148,16 @@ class Proxy {
                 $data,
                 $this->getHeaders()
             );
+            return new \WP_REST_Response(
+                $response,
+                (int)$response['code']
+            );
         }catch(\Exception $e){
             return new \WP_Error(
                 $e->getCode(),
                 $e->getMessage(),
             );
         }
-
-        $response = $this->proxyRoutes->makeProxyRequest(
-            $route,
-            $data,
-            $this->getHeaders()
-        );
-        return $response;
     }
 
     /**

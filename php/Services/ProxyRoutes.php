@@ -163,24 +163,24 @@ class ProxyRoutes
             $response['response']['code'],
             [200, 201, 204]
         ) ){
-            return new \WP_Error(
-                'invalid_response',
-                'Invalid response',
-                [
-                    'routeName' => $routeName,
-                    'response' => wp_remote_retrieve_body($response)
-                ]
-            );
+            return $this->responseData($response,true);
         }
+
+        return $this->responseData($response,true);
+    }
+
+    protected function responseData($response,bool $success = true){
         $body = wp_remote_retrieve_body($response);
-        if( is_string($body) && ! empty($body) ){
-            $_body = json_decode($body, true);
-            $body = $_body ? $_body : $body;
+        if( empty($body) ){
+            return [];
         }
+
         return [
-            'data' => $body,
+            'data' => json_decode($body, true),
             'code' => $response['response']['code'],
-            'success' => true
+            'success' => $success
         ];
+
+
     }
 }
