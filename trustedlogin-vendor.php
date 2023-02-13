@@ -55,9 +55,9 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	include_once dirname( __FILE__ ) . '/src/trustedlogin-settings/init.php';
 
 	//Maybe register error handler
-	if( TRUSTEDLOGIN_DEBUG ){
+	//if( TRUSTEDLOGIN_DEBUG ){
 		\TrustedLogin\Vendor\ErrorHandler::register();
-	}
+	//}
 
 	//This will initialize the plugin
 	$plugin = trustedlogin_vendor();

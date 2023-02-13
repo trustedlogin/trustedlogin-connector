@@ -68,7 +68,19 @@ export const exchangeTeamToken = async ({ teamToken, token }) => {
 };
 
 /**
- * Make call using new proxy routes
+ * Make call to remote application, using proxy routes.
+ *
+ * Uses these endpoints in WordPress:
+ * /wp-json/trustedlogin/v1/remote/teams
+ * /wp-json/trustedlogin/v1/remote/users
+ *
+ * data: object - Data to send to proxy route
+ *  - If type is "teams", data must have a "team" key
+ *  - If type is "users", data must have a "user" key
+ * proxyRoute: string - Name of Laravel route
+ *  - Must be in php\Services\proxy-routes.json
+ * method: string - GET, POST, PUT, DELETE
+ * type: string - teams, users
  */
 export const fetchWithProxyRoute = ({
   data,

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, Fragment } from "react";
+import React, { useMemo, useEffect, useRef, useState, Fragment } from "react";
 import TablePage, { ActionItemButton } from "../TablePage";
 import { useView } from "../../hooks/useView";
 import { fetchWithProxyRoute } from "../../api";
@@ -8,21 +8,56 @@ import { PrimaryButton } from "../Buttons";
 import { __ } from "@wordpress/i18n";
 import Modal from "../Modal";
 import LoginOrLogout from "../LoginLogout";
+import { InputField } from "./fields";
 
-const InviteMember = ({ team }) => {
+const InviteMember = ({ teamId }) => {
+  const formRef = useRef(null);
   const handler = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    console.log({ email, team: team.account_id });
+
+    const email = formRef.current.email.value;
+    const name = formRef.current.name.value;
+    const data = {
+      team: teamId,
+      email,
+      name,
+    };
+    console.log({ data });
+    fetchWithProxyRoute({
+      proxyRoute: "api.teams.invite",
+      method: "POST",
+      data,
+      type: "teams",
+    })
+      .then((response) => {
+        console.log({ response });
+      })
+      .catch((e) => {
+        console.log({ e });
+      });
   };
   return (
     <>
       <>
         <form
+          ref={formRef}
           onSubmit={handler}
           aria-label={__("Invite New Team Member", "trustedlogin-vendor")}
           className="flex flex-col py-6 space-y-6 justify-center">
-          <input name={"email"} type={"email"} placeholder={"Email Address"} />
+          <InputField
+            name={"email"}
+            type={"email"}
+            id={"email"}
+            label={__("Email Address", "trustedlogin-vendor")}
+            required={true}
+          />
+          <InputField
+            name={"name"}
+            type={"text"}
+            id={"name"}
+            label={__("Name", "trustedlogin-vendor")}
+            required={true}
+          />
           <PrimaryButton type={"submit"} onClick={handler}>
             {__("Invite", "trustedlogin-vendor")}
           </PrimaryButton>
@@ -32,8 +67,8 @@ const InviteMember = ({ team }) => {
   );
 };
 
-export default function AdminTeam() {
-  const { currentTeam } = useView();
+export default function AdminTeam({ teamId }) {
+  console.log({ teamId });
   //should show login form?
   const [showLogin, setShowLogin] = useState(false);
   //track state for modal open/close
@@ -76,12 +111,16 @@ export default function AdminTeam() {
   };
 
   useEffect(() => {
-    if (currentTeam < 1) return;
+    //return early if teamId is undefined
+    if (!teamId) {
+      return;
+    }
+
     fetchWithProxyRoute({
       proxyRoute: "api.teams.members",
       method: "GET",
       data: {
-        team: currentTeam,
+        team: teamId,
       },
       type: "teams",
     })
@@ -95,7 +134,7 @@ export default function AdminTeam() {
         handleProxyResponse(e);
         console.log({ e });
       });
-  }, [currentTeam]);
+  }, [teamId]);
   return (
     <>
       {!showLogin ? (
@@ -104,9 +143,11 @@ export default function AdminTeam() {
             <Modal
               showButtonsAtBottom={false}
               isOpen={true}
-              setIsOpen={() => setModalTeam(false)}
+              setIsOpen={() => {
+                setModalTeam(false);
+              }}
               title={__("Invite New Team Member", "trustedlogin-vendor")}>
-              <InviteMember team={currentTeam} />
+              <InviteMember teamId={teamId} />
             </Modal>
           ) : null}
           <section>
@@ -132,7 +173,11 @@ export default function AdminTeam() {
                   items={items}
                   SearchArea={() => (
                     <Fragment>
-                      <PrimaryButton onClick={() => setModalTeam(true)}>
+                      <PrimaryButton
+                        onClick={() => {
+                          setModalTeam(true);
+                          setCurrentTeam(currentTeam);
+                        }}>
                         {__("Invite Team Member", "trustedlogin-vendor")}
                       </PrimaryButton>
                     </Fragment>

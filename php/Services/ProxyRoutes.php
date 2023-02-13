@@ -10,9 +10,12 @@ use TrustedLogin\Vendor\Traits\VerifyUser;
 
 /**
  * Handles proxying admin requests to tl-app
+ *
+ * Uses ./proxy-routes.json to map the routes
  */
 class ProxyRoutes
 {
+    use Logger;
 
      /**
 	 * @var string
@@ -128,14 +131,14 @@ class ProxyRoutes
             //Replace dynamic parts of url with data from request
             foreach($dynamicParts as $part){
                 if( ! isset($data[$part])){
-                    return new \WP_Error(
-                        'invalid_data',
-                        'Invalid data',
-                        [
+                    return $this->responseData([
+                        'data' => [
                             'routeName' => $routeName,
                             'missing' => $part
-                        ]
-                    );
+                        ],
+                        'code' => 400,
+                        'success' => false
+                    ],false);
                 }
                 $route['uri'] = str_replace(
                     '{' . $part . '}',
@@ -157,22 +160,41 @@ class ProxyRoutes
         }
 
         if( \is_wp_error($response) ){
-            return $response;
+            return $this->responseData($response,false);
         }
         if(  ! in_array(
             $response['response']['code'],
             [200, 201, 204]
         ) ){
-            return $this->responseData($response,true);
+            return $this->responseData($response,false);
         }
 
         return $this->responseData($response,true);
     }
 
     protected function responseData($response,bool $success = true){
+        if( is_wp_error($response) ){
+            return [
+                'data' => $response->get_error_message(),
+                'code' => $response->get_error_code(),
+                'success' => false
+            ];
+        }
         $body = wp_remote_retrieve_body($response);
         if( empty($body) ){
-            return [];
+            $this->log(
+                'Empty response body',
+                __METHOD__,
+                'info',
+                [
+                    'response' => $response,
+                ]
+            );
+            return [
+                'data' => [],
+                'code' => 500,
+                'success' => false
+            ];
         }
 
         return [

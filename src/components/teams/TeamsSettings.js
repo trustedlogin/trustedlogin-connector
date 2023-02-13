@@ -39,7 +39,9 @@ const TeamsSettings = () => {
   }
 
   if (currentView.startsWith("teams/admin")) {
-    return <AdminTeam />;
+    //if currentView ends with a number, it's a team id
+
+    return <AdminTeam teamId={currentTeam || currentView.replace(/\D/g, "")} />;
   }
 
   if ("teams/access_key" === currentView) {

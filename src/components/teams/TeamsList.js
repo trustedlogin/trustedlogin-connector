@@ -184,7 +184,7 @@ const TeamsList = () => {
                 <ActionItemButton
                   isRed={true}
                   onClick={() => {
-                    setCurrentView("teams/admin");
+                    setCurrentView(`teams/admin/${team.id}`);
                     setCurrentTeam(team.id);
                   }}>
                   {__("Admin Team")}
