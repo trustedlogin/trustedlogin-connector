@@ -12,9 +12,10 @@ import { InputField } from "./fields";
 
 const InviteMember = ({ teamId }) => {
   const formRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const handler = (e) => {
     e.preventDefault();
-
+    setErrorMessage(null);
     const email = formRef.current.email.value;
     const name = formRef.current.name.value;
     const data = {
@@ -22,7 +23,6 @@ const InviteMember = ({ teamId }) => {
       email,
       name,
     };
-    console.log({ data });
     fetchWithProxyRoute({
       proxyRoute: "api.teams.invite",
       method: "POST",
@@ -33,7 +33,11 @@ const InviteMember = ({ teamId }) => {
         console.log({ response });
       })
       .catch((e) => {
-        console.log({ e });
+        if (e.data && e.data.message) {
+          setErrorMessage(e.data.message);
+        } else {
+          setErrorMessage("Error inviting member.");
+        }
       });
   };
   return (
@@ -44,6 +48,9 @@ const InviteMember = ({ teamId }) => {
           onSubmit={handler}
           aria-label={__("Invite New Team Member", "trustedlogin-vendor")}
           className="flex flex-col py-6 space-y-6 justify-center">
+          {errorMessage ? (
+            <p className="bg-red-700 p-4 text-white">{errorMessage}</p>
+          ) : null}
           <InputField
             name={"email"}
             type={"email"}
@@ -68,7 +75,6 @@ const InviteMember = ({ teamId }) => {
 };
 
 export default function AdminTeam({ teamId }) {
-  console.log({ teamId });
   //should show login form?
   const [showLogin, setShowLogin] = useState(false);
   //track state for modal open/close
@@ -176,7 +182,6 @@ export default function AdminTeam({ teamId }) {
                       <PrimaryButton
                         onClick={() => {
                           setModalTeam(true);
-                          setCurrentTeam(currentTeam);
                         }}>
                         {__("Invite Team Member", "trustedlogin-vendor")}
                       </PrimaryButton>
