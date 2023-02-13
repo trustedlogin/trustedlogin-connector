@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog } from "@headlessui/react";
 import { __ } from "@wordpress/i18n";
+import { HorizontalLogo } from "./TrustedLoginLogo";
 /**
  * Modal
  *
@@ -14,9 +15,14 @@ export default function Modal({
   description,
   infoLink,
   infoLinkText,
+  //Href for blue button
   goLink,
+  //Text for blue button
   goLinkText,
-  Logo,
+  //Shows horizontal logo by default
+  Logo = null,
+  //Show the cancel button and blue button at buttom?
+  showButtonsAtBottom = true,
 }) {
   return (
     <Dialog
@@ -52,7 +58,7 @@ export default function Modal({
               </div>
               <div className="flex flex-col">
                 <div className="flex mx-auto border h-20 w-20 items-center justify-center rounded-lg">
-                  <Logo />
+                  {Logo ? <Logo /> : <HorizontalLogo />}
                 </div>
                 <div className="max-w-sm mx-auto mt-2 mb-8 justify-center text-center">
                   <h2 className="mt-4 text-2xl text-gray-900">{title}</h2>
@@ -66,36 +72,38 @@ export default function Modal({
               </div>
 
               {children}
-              <div className="mt-6 flex sm:mt-8">
-                <button
-                  onClick={() => setIsOpen(false)}
-                  type="button"
-                  className="mt-3 mr-4 w-2/5 inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                  data-form-type="other">
-                  {__("Close", "tl")}
-                </button>
-                <a
-                  href={goLink}
-                  type="button"
-                  className="w-3/5 inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2.5 bg-blue-tl text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
-                  data-form-type="action,search">
-                  {goLinkText}
-                  <svg
-                    className="ml-3"
-                    width="11"
-                    height="10"
-                    viewBox="0 0 11 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M1.37528 9.12479L9.62486 0.87521M9.62486 0.87521H1.37528M9.62486 0.87521V9.12479"
-                      stroke="white"
-                      strokeWidth="1.67"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"></path>
-                  </svg>
-                </a>
-              </div>
+              {showButtonsAtBottom ? (
+                <div className="mt-6 flex sm:mt-8">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    type="button"
+                    className="mt-3 mr-4 w-2/5 inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                    data-form-type="other">
+                    {__("Close", "tl")}
+                  </button>
+                  <a
+                    href={goLink}
+                    type="button"
+                    className="w-3/5 inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2.5 bg-blue-tl text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
+                    data-form-type="action,search">
+                    {goLinkText}
+                    <svg
+                      className="ml-3"
+                      width="11"
+                      height="10"
+                      viewBox="0 0 11 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M1.37528 9.12479L9.62486 0.87521M9.62486 0.87521H1.37528M9.62486 0.87521V9.12479"
+                        stroke="white"
+                        strokeWidth="1.67"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"></path>
+                    </svg>
+                  </a>
+                </div>
+              ) : null}
             </div>
           </>
         </div>

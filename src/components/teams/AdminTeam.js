@@ -16,10 +16,7 @@ const InviteMember = ({ team }) => {
     console.log({ email, team: team.account_id });
   };
   return (
-    <NarrowFormLayout
-      minimal={minimal}
-      title={__("Invite New Team Member", "trustedlogin-vendor")}
-      description={__("Lorem Ipsum", "trustedlogin-vendor")}>
+    <>
       <>
         <form
           onSubmit={handler}
@@ -31,7 +28,7 @@ const InviteMember = ({ team }) => {
           </PrimaryButton>
         </form>
       </>
-    </NarrowFormLayout>
+    </>
   );
 };
 
@@ -105,9 +102,9 @@ export default function AdminTeam() {
         <>
           {modalOpen ? (
             <Modal
+              showButtonsAtBottom={false}
               isOpen={true}
-              Logo={() => <div> Logo?</div>}
-              setIsOpen={setModalTeam}
+              setIsOpen={() => setModalTeam(false)}
               title={__("Invite New Team Member", "trustedlogin-vendor")}>
               <InviteMember team={currentTeam} />
             </Modal>
