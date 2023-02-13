@@ -9,8 +9,9 @@ import { __ } from "@wordpress/i18n";
 import Modal from "../Modal";
 import LoginOrLogout from "../LoginLogout";
 import { InputField } from "./fields";
+import { useSettings } from "../../hooks/useSettings";
 
-const InviteMember = ({ teamId }) => {
+const InviteMember = ({ teamId, onInvited }) => {
   const formRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const handler = (e) => {
@@ -31,6 +32,10 @@ const InviteMember = ({ teamId }) => {
     })
       .then((response) => {
         console.log({ response });
+
+        if (201 == response.code) {
+          onInvited();
+        }
       })
       .catch((e) => {
         if (e.data && e.data.message) {
@@ -75,12 +80,27 @@ const InviteMember = ({ teamId }) => {
 };
 
 export default function AdminTeam({ teamId }) {
+  const { setNotice } = useSettings();
   //should show login form?
   const [showLogin, setShowLogin] = useState(false);
   //track state for modal open/close
   const [modalOpen, setModalTeam] = useState(false);
   const [members, setMembers] = useState([]);
   const [hasLoaded, setHasLoaded] = useState(false);
+  //needs to refresh members
+  const [needsRefresh, setNeedsRefresh] = useState(false);
+
+  //When invited, close modal
+  const onInvited = () => {
+    setModalTeam(false);
+    //reload members
+    setNeedsRefresh(true);
+    setNotice({
+      message: __("Member invited.", "trustedlogin-vendor"),
+      type: "text",
+      visible: true,
+    });
+  };
   const items = useMemo(() => {
     if (members.length > 0) {
       return members.map((member) => {
@@ -121,7 +141,6 @@ export default function AdminTeam({ teamId }) {
     if (!teamId) {
       return;
     }
-
     fetchWithProxyRoute({
       proxyRoute: "api.teams.members",
       method: "GET",
@@ -135,12 +154,14 @@ export default function AdminTeam({ teamId }) {
         if (data) {
           setMembers(data);
         }
+        setNeedsRefresh(false);
       })
       .catch((e) => {
         handleProxyResponse(e);
         console.log({ e });
+        setNeedsRefresh(false);
       });
-  }, [teamId]);
+  }, [teamId, needsRefresh]);
   return (
     <>
       {!showLogin ? (
@@ -153,7 +174,7 @@ export default function AdminTeam({ teamId }) {
                 setModalTeam(false);
               }}
               title={__("Invite New Team Member", "trustedlogin-vendor")}>
-              <InviteMember teamId={teamId} />
+              <InviteMember teamId={teamId} onInvited={onInvited} />
             </Modal>
           ) : null}
           <section>
