@@ -33,6 +33,9 @@ export default function ViewProvider({
   //This is a footgun.
   useEffect(() => {
     if (!["teams/edit", "teams/access_key"].includes(currentView)) {
+      if (currentView.startsWith("teams/admin")) {
+        return;
+      }
       setCurrentTeam(false);
     }
   }, [currentView]);
