@@ -83,16 +83,45 @@ export default function AdminTeam({ teamId }) {
   const { setNotice } = useSettings();
   //should show login form?
   const [showLogin, setShowLogin] = useState(false);
-  //track state for modal open/close
-  const [modalOpen, setModalTeam] = useState(false);
+  //track state for modal mode
+  // false|invite|remove
+  const [modalMode, setModalMode] = useState(false);
   const [members, setMembers] = useState([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   //needs to refresh members
   const [needsRefresh, setNeedsRefresh] = useState(false);
+  //member to remove
+  const [memberToRemove, setMemberToRemove] = useState(null);
+
+  //remove member
+  const onRemoveMember = (user) => {
+    fetchWithProxyRoute({
+      proxyRoute: "api.teams.removeTeamMember",
+      method: "DELETE",
+      data: {
+        team: teamId,
+        user: user,
+      },
+      type: "teams",
+    })
+      .then((r) => {
+        handleProxyResponse(r);
+        setNeedsRefresh(true);
+        setNotice({
+          message: __("Member removed.", "trustedlogin-vendor"),
+          type: "text",
+          visible: true,
+        });
+      })
+      .catch((e) => {
+        handleProxyResponse(e);
+        console.log({ e });
+      });
+  };
 
   //When invited, close modal
   const onInvited = () => {
-    setModalTeam(false);
+    setModalMode(false);
     //reload members
     setNeedsRefresh(true);
     setNotice({
@@ -166,16 +195,36 @@ export default function AdminTeam({ teamId }) {
     <>
       {!showLogin ? (
         <>
-          {modalOpen ? (
-            <Modal
-              showButtonsAtBottom={false}
-              isOpen={true}
-              setIsOpen={() => {
-                setModalTeam(false);
-              }}
-              title={__("Invite New Team Member", "trustedlogin-vendor")}>
-              <InviteMember teamId={teamId} onInvited={onInvited} />
-            </Modal>
+          {modalMode ? (
+            <Fragment>
+              {"invite" === modalMode ? (
+                <Modal
+                  showButtonsAtBottom={false}
+                  isOpen={true}
+                  setIsOpen={() => {
+                    setModalMode(false);
+                  }}
+                  title={__("Invite New Team Member", "trustedlogin-vendor")}>
+                  <InviteMember teamId={teamId} onInvited={onInvited} />
+                </Modal>
+              ) : (
+                <Modal
+                  showButtonsAtBottom={false}
+                  isOpen={true}
+                  setIsOpen={() => {
+                    setModalMode(false);
+                  }}
+                  title={__("Confirm?", "trustedlogin-vendor")}>
+                  <PrimaryButton
+                    onClick={() => {
+                      onRemoveMember();
+                      setModalMode(false);
+                    }}>
+                    {__("Remove", "trustedlogin-vendor")}
+                  </PrimaryButton>
+                </Modal>
+              )}
+            </Fragment>
           ) : null}
           <section>
             {items.length <= 0 ? (
@@ -202,7 +251,7 @@ export default function AdminTeam({ teamId }) {
                     <Fragment>
                       <PrimaryButton
                         onClick={() => {
-                          setModalTeam(true);
+                          setModalMode("invite");
                         }}>
                         {__("Invite Team Member", "trustedlogin-vendor")}
                       </PrimaryButton>
@@ -211,6 +260,13 @@ export default function AdminTeam({ teamId }) {
                   ActionArea={(item) => (
                     <Fragment key={item.id}>
                       <ActionItemButton isRed={false}>Button</ActionItemButton>
+                      {item.role != "owner" ? (
+                        <ActionItemButton
+                          isRed={true}
+                          onClick={() => setModalMode("remove")}>
+                          {__("Remove", "trustedlogin-vendor")}
+                        </ActionItemButton>
+                      ) : null}
                     </Fragment>
                   )}
                 />
