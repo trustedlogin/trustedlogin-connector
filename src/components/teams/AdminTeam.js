@@ -118,7 +118,11 @@ export default function AdminTeam() {
                 <CenteredLayout>
                   <>
                     <TitleDescriptionLink
-                      title={hasLoaded ? "Loading" : __("No Team Data Found")}
+                      title={
+                        !hasLoaded
+                          ? __("Loading", "trustedlogin-vendor")
+                          : __("No Team Data Found")
+                      }
                     />
                   </>
                 </CenteredLayout>
@@ -126,13 +130,13 @@ export default function AdminTeam() {
             ) : (
               <div>
                 <TablePage
-                  title={"Admin Team"}
-                  subTitle={"Manage your team"}
+                  title={__("Admin Team", "trustedlogin-vendor")}
+                  subTitle={__("Manage your team", "trustedlogin-vendor")}
                   items={items}
                   SearchArea={() => (
                     <Fragment>
                       <PrimaryButton onClick={() => setModalTeam(true)}>
-                        {__("Invite Team Member")}
+                        {__("Invite Team Member", "trustedlogin-vendor")}
                       </PrimaryButton>
                     </Fragment>
                   )}
