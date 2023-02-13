@@ -818,12 +818,12 @@ select {
   top: 0px;
 }
 
-.-right-52 {
-  right: -13rem;
-}
-
 .right-0 {
   right: 0px;
+}
+
+.-right-52 {
+  right: -13rem;
 }
 
 .top-4 {
@@ -838,12 +838,12 @@ select {
   left: 0px;
 }
 
-.z-0 {
-  z-index: 0;
-}
-
 .z-10 {
   z-index: 10;
+}
+
+.z-0 {
+  z-index: 0;
 }
 
 .col-span-1 {
@@ -936,16 +936,16 @@ select {
   margin-bottom: 1rem;
 }
 
+.mr-4 {
+  margin-right: 1rem;
+}
+
 .mr-1\.5 {
   margin-right: 0.375rem;
 }
 
 .mr-1 {
   margin-right: 0.25rem;
-}
-
-.mr-4 {
-  margin-right: 1rem;
 }
 
 .ml-5 {
@@ -1012,6 +1012,10 @@ select {
   height: 100%;
 }
 
+.h-20 {
+  height: 5rem;
+}
+
 .h-12 {
   height: 3rem;
 }
@@ -1026,10 +1030,6 @@ select {
 
 .h-2 {
   height: 0.5rem;
-}
-
-.h-20 {
-  height: 5rem;
 }
 
 .h-9 {
@@ -1068,22 +1068,6 @@ select {
   width: 1rem;
 }
 
-.w-12 {
-  width: 3rem;
-}
-
-.w-8 {
-  width: 2rem;
-}
-
-.w-2 {
-  width: 0.5rem;
-}
-
-.w-\[32rem\] {
-  width: 32rem;
-}
-
 .w-6 {
   width: 1.5rem;
 }
@@ -1098,6 +1082,22 @@ select {
 
 .w-3\/5 {
   width: 60%;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-2 {
+  width: 0.5rem;
+}
+
+.w-\[32rem\] {
+  width: 32rem;
 }
 
 .w-0\.5 {
@@ -1395,14 +1395,14 @@ select {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
-.bg-purple-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(147 51 234 / var(--tw-bg-opacity));
-}
-
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.bg-purple-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(147 51 234 / var(--tw-bg-opacity));
 }
 
 .bg-gray-300 {
@@ -1563,6 +1563,14 @@ select {
   padding-top: 3rem;
 }
 
+.pt-4 {
+  padding-top: 1rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
+}
+
 .pt-2 {
   padding-top: 0.5rem;
 }
@@ -1585,14 +1593,6 @@ select {
 
 .pl-2 {
   padding-left: 0.5rem;
-}
-
-.pt-4 {
-  padding-top: 1rem;
-}
-
-.pr-4 {
-  padding-right: 1rem;
 }
 
 .pb-10 {
@@ -2103,24 +2103,24 @@ body .bg-blue-tl:hover {
     left: -6rem;
   }
 
-  .sm\:col-start-2 {
-    grid-column-start: 2;
-  }
-
   .sm\:col-start-1 {
     grid-column-start: 1;
+  }
+
+  .sm\:col-start-2 {
+    grid-column-start: 2;
   }
 
   .sm\:mr-2 {
     margin-right: 0.5rem;
   }
 
-  .sm\:mt-0 {
-    margin-top: 0px;
-  }
-
   .sm\:mt-8 {
     margin-top: 2rem;
+  }
+
+  .sm\:mt-0 {
+    margin-top: 0px;
   }
 
   .sm\:block {

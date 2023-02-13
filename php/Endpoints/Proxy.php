@@ -148,6 +148,10 @@ class Proxy {
                 $data,
                 $this->getHeaders()
             );
+            $status = (int)$response['code'];
+            if( 401 === $status ){
+                $this->remoteSession->clearCookie();
+            }
             return new \WP_REST_Response(
                 $response,
                 (int)$response['code']

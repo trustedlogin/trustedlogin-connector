@@ -59,7 +59,7 @@ export default function AdminTeam() {
   }, [members]);
 
   const handleProxyResponse = (r) => {
-    hasLoaded(true);
+    setHasLoaded(true);
 
     if (r.code) {
       switch (r.code) {
