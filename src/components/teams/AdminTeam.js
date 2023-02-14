@@ -11,6 +11,7 @@ import LoginOrLogout from "../LoginLogout";
 import { InputField, SelectField } from "./fields";
 import { useSettings } from "../../hooks/useSettings";
 
+//Invite a new member to the team
 const InviteMember = ({ teamId, onInvited }) => {
   const formRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -78,7 +79,7 @@ const InviteMember = ({ teamId, onInvited }) => {
     </>
   );
 };
-
+//change role on team
 const ChangeRole = ({ teamId, member, onRoleChanged }) => {
   const formRef = useRef(null);
   const handler = (e) => {
@@ -112,6 +113,9 @@ const ChangeRole = ({ teamId, member, onRoleChanged }) => {
   );
 };
 
+/**
+ * Admin interface for a team
+ */
 export default function AdminTeam({ teamId }) {
   const { setNotice } = useSettings();
   //should show login form?
@@ -169,6 +173,7 @@ export default function AdminTeam({ teamId }) {
     });
   };
 
+  //When role change ready,
   const onRoleChanged = (data) => {
     fetchWithProxyRoute({
       proxyRoute: "api.teams.changeRole",
@@ -186,6 +191,7 @@ export default function AdminTeam({ teamId }) {
         setModalMode(false);
       } else {
         console.log({ r });
+        setModalMode(false);
         setNotice({
           message: __("Role change failed", "trustedlogin-vendor"),
           type: "error",
