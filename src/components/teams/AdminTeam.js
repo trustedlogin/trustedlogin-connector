@@ -8,7 +8,7 @@ import { PrimaryButton } from "../Buttons";
 import { __ } from "@wordpress/i18n";
 import Modal from "../Modal";
 import LoginOrLogout from "../LoginLogout";
-import { InputField } from "./fields";
+import { InputField, SelectField } from "./fields";
 import { useSettings } from "../../hooks/useSettings";
 
 const InviteMember = ({ teamId, onInvited }) => {
@@ -79,6 +79,39 @@ const InviteMember = ({ teamId, onInvited }) => {
   );
 };
 
+const ChangeRole = ({ teamId, member, onRoleChanged }) => {
+  const formRef = useRef(null);
+  const handler = (e) => {
+    e.preventDefault();
+    const role = formRef.current.role.value;
+    const data = {
+      team: teamId,
+      user: member,
+      role,
+    };
+    onRoleChanged(data);
+  };
+  return (
+    <form
+      ref={formRef}
+      onSubmit={handler}
+      aria-label={__("Change Role", "trustedlogin-vendor")}
+      className="flex flex-col py-6 space-y-6 justify-center">
+      <SelectField
+        name={"role"}
+        id={"role"}
+        label={__("Role", "trustedlogin-vendor")}
+        required={true}>
+        <option value={"admin"}>{__("Admin", "trustedlogin-vendor")}</option>
+        <option value={"editor"}>{__("Editor", "trustedlogin-vendor")}</option>
+      </SelectField>
+      <PrimaryButton type={"submit"} onClick={handler}>
+        {__("Change Role", "trustedlogin-vendor")}
+      </PrimaryButton>
+    </form>
+  );
+};
+
 export default function AdminTeam({ teamId }) {
   const { setNotice } = useSettings();
   //should show login form?
@@ -136,6 +169,32 @@ export default function AdminTeam({ teamId }) {
     });
   };
 
+  const onRoleChanged = (data) => {
+    fetchWithProxyRoute({
+      proxyRoute: "api.teams.changeRole",
+      method: "POST",
+      data,
+      type: "teams",
+    }).then((r) => {
+      if (201 === r.code) {
+        setNeedsRefresh(true);
+        setNotice({
+          message: __("Role changed.", "trustedlogin-vendor"),
+          type: "text",
+          visible: true,
+        });
+        setModalMode(false);
+      } else {
+        console.log({ r });
+        setNotice({
+          message: __("Role change failed", "trustedlogin-vendor"),
+          type: "error",
+          visible: true,
+        });
+      }
+    });
+  };
+
   /**
    * Modal for editing/removing/etc.
    */
@@ -154,6 +213,16 @@ export default function AdminTeam({ teamId }) {
           <PrimaryButton onClick={onRemoveMember}>
             {__("Remove", "trustedlogin-vendor")}
           </PrimaryButton>
+        );
+        break;
+      case "change-role":
+        title = __("Change Role", "trustedlogin-vendor");
+        Inside = (
+          <ChangeRole
+            teamId={teamId}
+            member={memberToEdit}
+            onRoleChanged={onRoleChanged}
+          />
         );
       default:
         break;
