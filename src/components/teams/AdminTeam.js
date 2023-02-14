@@ -90,11 +90,15 @@ export default function AdminTeam({ teamId }) {
   const [hasLoaded, setHasLoaded] = useState(false);
   //needs to refresh members
   const [needsRefresh, setNeedsRefresh] = useState(false);
-  //member to remove
-  const [memberToRemove, setMemberToRemove] = useState(null);
+  //member to remove/edit/etc.
+  const [memberToEdit, setMemberToEdit] = useState(null);
 
   //remove member
-  const onRemoveMember = (user) => {
+  const onRemoveMember = () => {
+    if (!memberToEdit) {
+      alert("No memberToEdit to remove.");
+      return;
+    }
     fetchWithProxyRoute({
       proxyRoute: "api.teams.removeTeamMember",
       method: "DELETE",
@@ -112,6 +116,7 @@ export default function AdminTeam({ teamId }) {
           type: "text",
           visible: true,
         });
+        setModalMode(false);
       })
       .catch((e) => {
         handleProxyResponse(e);
@@ -130,6 +135,41 @@ export default function AdminTeam({ teamId }) {
       visible: true,
     });
   };
+
+  /**
+   * Modal for editing/removing/etc.
+   */
+  const EditModal = useMemo(() => {
+    if (!modalMode) return null;
+    let title = "";
+    let Inside = null;
+    switch (modalMode) {
+      case "invite":
+        title = __("Invite New Team Member", "trustedlogin-vendor");
+        Inside = <InviteMember teamId={teamId} onInvited={onInvited} />;
+        break;
+      case "remove":
+        title = __("Confirm", "trustedlogin-vendor");
+        Inside = (
+          <PrimaryButton onClick={onRemoveMember}>
+            {__("Remove", "trustedlogin-vendor")}
+          </PrimaryButton>
+        );
+      default:
+        break;
+    }
+    return (
+      <Modal
+        showButtonsAtBottom={false}
+        isOpen={true}
+        setIsOpen={() => {
+          setModalMode(false);
+        }}
+        title={title}>
+        <Inside />
+      </Modal>
+    );
+  }, [memberToEdit, modalMode]);
   const items = useMemo(() => {
     if (members.length > 0) {
       return members.map((member) => {
@@ -197,33 +237,7 @@ export default function AdminTeam({ teamId }) {
         <>
           {modalMode ? (
             <Fragment>
-              {"invite" === modalMode ? (
-                <Modal
-                  showButtonsAtBottom={false}
-                  isOpen={true}
-                  setIsOpen={() => {
-                    setModalMode(false);
-                  }}
-                  title={__("Invite New Team Member", "trustedlogin-vendor")}>
-                  <InviteMember teamId={teamId} onInvited={onInvited} />
-                </Modal>
-              ) : (
-                <Modal
-                  showButtonsAtBottom={false}
-                  isOpen={true}
-                  setIsOpen={() => {
-                    setModalMode(false);
-                  }}
-                  title={__("Confirm?", "trustedlogin-vendor")}>
-                  <PrimaryButton
-                    onClick={() => {
-                      onRemoveMember();
-                      setModalMode(false);
-                    }}>
-                    {__("Remove", "trustedlogin-vendor")}
-                  </PrimaryButton>
-                </Modal>
-              )}
+              <EditModal />
             </Fragment>
           ) : null}
           <section>
@@ -261,11 +275,21 @@ export default function AdminTeam({ teamId }) {
                     <Fragment key={item.id}>
                       <ActionItemButton isRed={false}>Button</ActionItemButton>
                       {item.role != "owner" ? (
-                        <ActionItemButton
-                          isRed={true}
-                          onClick={() => setModalMode("remove")}>
-                          {__("Remove", "trustedlogin-vendor")}
-                        </ActionItemButton>
+                        <>
+                          <ActionItemButton
+                            isRed={true}
+                            onClick={() => {
+                              setMemberToEdit(item.id);
+                              setModalMode("remove");
+                            }}>
+                            {__("Remove", "trustedlogin-vendor")}
+                          </ActionItemButton>
+                          <ActionItemButton
+                            isRed={true}
+                            onClick={() => setModalMode("change-role")}>
+                            {__("Change Role", "trustedlogin-vendor")}
+                          </ActionItemButton>
+                        </>
                       ) : null}
                     </Fragment>
                   )}
