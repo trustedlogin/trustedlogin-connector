@@ -58,17 +58,17 @@ const InviteMember = ({ teamId, onInvited }) => {
             <p className="bg-red-700 p-4 text-white">{errorMessage}</p>
           ) : null}
           <InputField
-            name={"email"}
-            type={"email"}
-            id={"email"}
-            label={__("Email Address", "trustedlogin-vendor")}
-            required={true}
-          />
-          <InputField
             name={"name"}
             type={"text"}
             id={"name"}
             label={__("Name", "trustedlogin-vendor")}
+            required={true}
+          />
+          <InputField
+            name={"email"}
+            type={"email"}
+            id={"email"}
+            label={__("Email Address", "trustedlogin-vendor")}
             required={true}
           />
           <PrimaryButton type={"submit"} onClick={handler}>
