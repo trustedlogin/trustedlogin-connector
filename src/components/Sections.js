@@ -97,6 +97,14 @@ export const DebugLogSettings = () => {
     }
     return { debug: false, activity: false };
   });
+  const phpConstantIsSet = useMemo(() => {
+    if (tlVendor.settings.debug_mode) {
+      if ("NULL" === tlVendor.settings.debug_mode) {
+        return false;
+      }
+    }
+    return true;
+  }, [tlVendor.settings.debug_mode]);
   ///when enbaled changes, update the settings
   useMemo(() => {
     setLoading(true);
@@ -216,13 +224,23 @@ export const DebugLogSettings = () => {
                   "trustedlogin-vendor"
                 )}
                 <code>wp-content/uploads/trustedlogin-logs</code>
-                {/* TODO: Make this path live-updating */}
+                {phpConstantIsSet ? (
+                  <span className="text-red-700">
+                    {__(
+                      'This setting is currently disabled because the PHP constant "TRUSTEDLOGIN_DEBUG" is set.',
+                      "trustedlogin-vendor"
+                    )}
+                  </span>
+                ) : null}
               </p>
             </div>
           </div>
           <ToggleSwitch
             isEnabled={enabled.debug}
             onClick={() => {
+              if (phpConstantIsSet) {
+                return;
+              }
               setEnabled({ ...enabled, debug: !enabled.debug });
             }}
             labelledBy="debug-option-label"
