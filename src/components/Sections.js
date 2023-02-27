@@ -1,6 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { useMemo, useState } from "react";
 import { DangerButton, ToggleSwitch } from ".";
+import { updateLoggingSettings } from "../api";
 import { useSettings } from "../hooks/useSettings";
 import { SubmitAndCanelButtons } from "./Buttons";
 import { CenteredLayout } from "./Layout";
@@ -88,7 +89,22 @@ export const DangerZone = () => {
   );
 };
 export const DebugLogSettings = () => {
-  const [enabled, setEnabled] = useState({ debug: false, activity: false });
+  //loading status
+  const [loading, setLoading] = useState(false);
+  const [enabled, setEnabled] = useState(() => {
+    if (tlVendor.settings.error_logging) {
+      return { debug: true, activity: false };
+    }
+    return { debug: false, activity: false };
+  });
+  ///when enbaled changes, update the settings
+  useMemo(() => {
+    setLoading(true);
+    updateLoggingSettings(enabled.debug).then(() => {
+      setLoading(false);
+    });
+  }, [enabled]);
+
   //https://github.com/trustedlogin/vendor/issues/127
   const withAcitivityLog = false;
   return (

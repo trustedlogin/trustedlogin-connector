@@ -320,7 +320,10 @@ class SettingsApi
 	 * @return bool
 	 */
 	public function isErrorLogggingEnabled(){
-		return isset($this->globalSettings['error_logging']) && $this->globalSettings['error_logging'];
+		if( ! isset($this->globalSettings['error_logging'])){
+			return false;
+		}
+		return (bool)$this->globalSettings['error_logging'];
 	}
 
 	/**

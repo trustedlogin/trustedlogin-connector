@@ -56,6 +56,7 @@ class Logging extends Settings
 			)
 
 		);
+		$settingsApi->save();
 
 
 		return $this->createResponse($settingsApi);
