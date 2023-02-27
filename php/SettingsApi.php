@@ -43,6 +43,7 @@ class SettingsApi
 				'enabled' => true,
 			]
 		],
+		'error_logging' => false
 	];
 
 	/**
@@ -288,6 +289,7 @@ class SettingsApi
 		return array_merge(
 			$data,
 			[
+				'error_logging' => $this->getGlobalSettings()['error_logging'] ?? false,
 				'integrations' => $this->getIntegrationSettings(),
 			]
 		);
@@ -311,6 +313,14 @@ class SettingsApi
 	public function getGlobalSettings()
 	{
 		return $this->globalSettings;
+	}
+
+	/**
+	 * Is error logging enabled?
+	 * @return bool
+	 */
+	public function isErrorLogggingEnabled(){
+		return isset($this->globalSettings['error_logging']) && $this->globalSettings['error_logging'];
 	}
 
 	/**
