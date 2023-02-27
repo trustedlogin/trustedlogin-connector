@@ -3,6 +3,14 @@ namespace TrustedLogin\Vendor\Endpoints;
 
 use TrustedLogin\Vendor\SettingsApi;
 
+/**
+ * Endpoing that gets/sets logging settings
+ *
+ * Right now, this is just the error logging setting
+ *  - https://github.com/trustedlogin/vendor/issues/127
+ * Will also be used for activity logging
+ * 	- https://github.com/trustedlogin/vendor/issues/99
+ */
 class Logging extends Settings
 {
 
@@ -62,6 +70,7 @@ class Logging extends Settings
 		return $this->createResponse($settingsApi);
 	}
 
+	/** @inheritDoc */
 	protected function createResponse(SettingsApi $settingsApi){
 		return rest_ensure_response(
 			[
