@@ -227,6 +227,7 @@ export const DebugLogSettings = () => {
             }}
             labelledBy="debug-option-label"
             aria-describedBy="debug-option-description"
+            isLoading={loading}
           />
         </li>
         {withAcitivityLog ? (
