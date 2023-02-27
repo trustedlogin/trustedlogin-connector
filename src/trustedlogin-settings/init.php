@@ -100,35 +100,40 @@ add_action('init', function () {
          new MenuPage(
             MenuPage::SLUG_SETTINGS,
             __('Settings', 'trustedlogin-vendor'),
-            'settings'
+            'settings',
+            false
         );
 
         //Add access key submenu page
         new MenuPage(
             MenuPage::SLUG_TEAMS,
             __('Teams', 'trustedlogin-vendor'),
-            'teams'
+            'teams',
+            false
         );
 
         //Add helpdesks submenu page
         new MenuPage(
             MenuPage::SLUG_HELPDESKS,
             __('Help Desks', 'trustedlogin-vendor'),
-            'integrations'
+            'integrations',
+            false
         );
 
         //Add access key submenu page
         new MenuPage(
             MenuPage::SLUG_ACCESS_KEY,
             __('Access Key Log-In', 'trustedlogin-vendor'),
-            'teams/access_key'
+            'teams/access_key',
+            true
         );
-    }else{
+    } else {
         //Add onboarding submenu page
         new MenuPage(
             MenuPage::SLUG_SETTINGS,
             __('Onboarding', 'trustedlogin-vendor'),
-            'onboarding'
+            'onboarding',
+            false
         );
     }
 

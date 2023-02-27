@@ -41,15 +41,24 @@ class AccessKeyLogin
 
 	const REDIRECT_ENDPOINT = 'trustedlogin';
 
-	const ERROR_NO_ACCOUNT_ID = 404;
-
+	/**
+	 * Error code when the current user isn't allowed to provide support.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+	 */
 	const ERROR_INVALID_ROLE = 403;
 
+	/**
+	 * Error code when the there is no account in TrustedLogin matching the specified account ID.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+	 */
+	const ERROR_NO_ACCOUNT_ID = 404;
+
 	/*
-	* Error for no secret ids founc
-	* @See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+	* Error for no secret ids found.
+	* @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
 	*/
 	const ERROR_NO_SECRET_IDS_FOUND = 406;
+
 	/**
 	 * Error code for no envelope found
 	 *
@@ -116,14 +125,13 @@ class AccessKeyLogin
 				$e->getMessage()
 			);
 		}
-		if ($this->verifyUserRole($teamSettings)) {
-			/** YOLO!
+
+		if ( ! $this->verifyUserRole($teamSettings) ) {
 			return new \WP_Error(
 				self::ERROR_INVALID_ROLE,
 				'invalid_user_role',
-				'User does not have the correct role'
+				esc_html__( 'You do not have a role that is allowed to provide support for this team.', 'trustedlogin-vendor' )
 			);
-			*/
 		}
 
 		$tl = new TrustedLoginService(
@@ -144,7 +152,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_secret_ids',
-				'No secret ids found'
+				esc_html__( 'No secret IDs found', 'trustedlogin-vendor' )
 			);
 		}
 
@@ -156,12 +164,14 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_valid_secret_ids',
-				'No secret ids found'
+				esc_html__( 'No secret IDs found', 'trustedlogin-vendor' )
 			);
 		}
 
-	  //Return all url parts, not just 0
-		//@see https://github.com/trustedlogin/vendor/issues/109
+	    /**
+	     * Return all url parts, not just 0
+	     * @see https://github.com/trustedlogin/vendor/issues/109
+	     */
 		return wp_list_pluck( $valid_secrets, 'url_parts' );
 	}
 
