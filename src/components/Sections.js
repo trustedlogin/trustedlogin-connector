@@ -89,7 +89,8 @@ export const DangerZone = () => {
 };
 export const DebugLogSettings = () => {
   const [enabled, setEnabled] = useState({ debug: false, activity: false });
-
+  //https://github.com/trustedlogin/vendor/issues/127
+  const withAcitivityLog = false;
   return (
     <SettingSection
       title={__("Logging", "trustedlogin-vendor")}
@@ -212,62 +213,66 @@ export const DebugLogSettings = () => {
             aria-describedBy="debug-option-description"
           />
         </li>
-        <li className="py-8 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center justify-center h-12 w-12 border border-gray-300 rounded-lg">
-              <svg
-                className="text-gray-900"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M8.1001 16C9.5001 18.4 12.1001 20 15.0001 20C19.4001 20 23.0001 16.4 23.0001 12C23.0001 7.6 19.4001 4 15.0001 4C12.0001 4 9.5001 5.6 8.1001 8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M1 12H18"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M15 9L18 12L15 15"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+        {withAcitivityLog ? (
+          <li className="py-8 flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center justify-center h-12 w-12 border border-gray-300 rounded-lg">
+                <svg
+                  className="text-gray-900"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8.1001 16C9.5001 18.4 12.1001 20 15.0001 20C19.4001 20 23.0001 16.4 23.0001 12C23.0001 7.6 19.4001 4 15.0001 4C12.0001 4 9.5001 5.6 8.1001 8"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M1 12H18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M15 9L18 12L15 15"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <p
+                  className="font-medium text-gray-900"
+                  id="activity-log-label">
+                  {__("Activity Log", "trustedlogin-vendor")}
+                </p>
+                <p
+                  className="text-sm text-gray-500"
+                  id="activity-log-description">
+                  {__(
+                    "Activity Log shows a log of users attempting to log into customer sites using Access Keys.",
+                    "trustedlogin-vendor"
+                  )}
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <p className="font-medium text-gray-900" id="activity-log-label">
-                {__("Activity Log", "trustedlogin-vendor")}
-              </p>
-              <p
-                className="text-sm text-gray-500"
-                id="activity-log-description">
-                {__(
-                  "Activity Log shows a log of users attempting to log into customer sites using Access Keys.",
-                  "trustedlogin-vendor"
-                )}
-              </p>
-            </div>
-          </div>
-          <ToggleSwitch
-            isEnabled={enabled.activity}
-            onClick={() => {
-              setEnabled({ ...enabled, activity: !enabled.activity });
-            }}
-            labelledBy="activity-log-label"
-            aria-describedBy="activity-log-description"
-          />
-        </li>
+            <ToggleSwitch
+              isEnabled={enabled.activity}
+              onClick={() => {
+                setEnabled({ ...enabled, activity: !enabled.activity });
+              }}
+              labelledBy="activity-log-label"
+              aria-describedBy="activity-log-description"
+            />
+          </li>
+        ) : null}
       </ul>
     </SettingSection>
   );
