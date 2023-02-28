@@ -112,7 +112,7 @@ trait Logger
 
 		//Use plugin dir in development.
         if( defined( 'TRUSTEDLOGIN_DEBUG') && TRUSTEDLOGIN_DEBUG ) {
-            return dirname( __FILE__, 3 ) . '/trustedlogin.log';
+            return dirname( __FILE__, 3 ) . '/trustedlogin-vendor.log';
         }
 
 		$hash = $this->getHash();
@@ -120,14 +120,13 @@ trait Logger
 		//If we have a hash, use it.
 		if( ! $hash ) {
 			error_log( 'TrustedLogin: Unable to get a random hash for the log file.' );
-			return dirname( __FILE__, 3 ) . '/trustedlogin.log';
+			return dirname( __FILE__, 3 ) . '/trustedlogin-vendor.log';
 		}
-
 
 		$upload_dir = wp_upload_dir();
 
 		//else use a upload dir + random hash.
-        return trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-' . $hash . '.log';
+        return trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-vendor-' . $hash . '.log';
     }
 
 
