@@ -116,8 +116,16 @@ trait Logger
             return dirname( __FILE__, 3 ) . '/trustedlogin.log';
         }
 
-        $upload_dir = wp_upload_dir();
 		$hash = $this->getHash();
+
+		//If we have a hash, use it.
+		if( ! $hash ) {
+			error_log( 'TrustedLogin: Unable to get a random hash for the log file.' );
+			return dirname( __FILE__, 3 ) . '/trustedlogin.log';
+		}
+
+
+		$upload_dir = wp_upload_dir();
 
 		//else use a upload dir + random hash.
         return trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-' . $hash . '.log';
