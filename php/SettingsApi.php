@@ -25,6 +25,12 @@ class SettingsApi
 	const GLOBAL_SETTING_NAME = 'trustedlogin_vendor_other_settings';
 
 	/**
+	 * The name of the option we store log hash in.
+	 * @see Traits/Logger
+	 */
+	const LOG_LOCATION_SETTING_NAME = 'trustedlogin_vendor_log_location';
+
+	/**
 	 * @var TeamSettings[]
 	 */
 	protected $teamSettings = [];
