@@ -58,6 +58,8 @@ class Plugin
 			->register(true, false);
 		(new \TrustedLogin\Vendor\Endpoints\AccessKey())
 			->register(true, false);
+		(new \TrustedLogin\Vendor\Endpoints\Logging())
+			->register(true, true);
 	}
 
 	/**

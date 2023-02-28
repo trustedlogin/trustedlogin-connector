@@ -29,7 +29,7 @@ if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 //Set this to true, in wp-config.php to log all PHP errors/warnings/notices to trustedlogin.log
 // Code: define( 'TRUSTEDLOGIN_DEBUG', true );
 if( ! defined( 'TRUSTEDLOGIN_DEBUG') ){
-	define( 'TRUSTEDLOGIN_DEBUG', false );
+	define( 'TRUSTEDLOGIN_DEBUG', null );
 }
 
 
@@ -47,13 +47,13 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	//Include admin init file
 	include_once dirname( __FILE__ ) . '/src/trustedlogin-settings/init.php';
 
-	//Maybe register error handler
-	if( TRUSTEDLOGIN_DEBUG ){
-		\TrustedLogin\Vendor\ErrorHandler::register();
-	}
-
 	//This will initialize the plugin
 	$plugin = trustedlogin_vendor();
+
+	//Maybe register error handler
+	if( TRUSTEDLOGIN_DEBUG || $plugin->getSettings()->isErrorLogggingEnabled() ){
+		\TrustedLogin\Vendor\ErrorHandler::register();
+	}
 
 	/**
 	 * Runs when plugin is ready.

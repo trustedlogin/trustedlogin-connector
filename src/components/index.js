@@ -29,6 +29,7 @@ export const ToggleSwitch = ({
   onClick,
   labeledBy,
   describedBy,
+  isLoading = false,
 }) => {
   const buttonClasses = useMemo(() => {
     let classes =
@@ -38,8 +39,11 @@ export const ToggleSwitch = ({
     } else {
       classes = `bg-gray-200 ${classes}`;
     }
+    if (isLoading) {
+      classes = `animate-pulse ${classes}`;
+    }
     return classes;
-  }, [isEnabled]);
+  }, [isEnabled, isLoading]);
 
   const spanClasses = useMemo(() => {
     let classes =
