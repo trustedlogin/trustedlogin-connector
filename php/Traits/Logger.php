@@ -29,8 +29,9 @@ trait Logger
 			$message .= ' ' . json_encode($context, JSON_PRETTY_PRINT);
 		}
 
-		$logFileName = dirname(__FILE__, 3).'/trustedlogin.log';
-		if( ! file_exists( $logFileName ) ) {
+		$logFileName = $this->getLogFileName();
+
+		if ( ! file_exists( $logFileName ) ) {
 			touch( $logFileName );
 		}
 
