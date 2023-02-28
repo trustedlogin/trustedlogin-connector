@@ -36,7 +36,7 @@ class ResetEncryption extends Settings
 		//Delete keys
 		$encryption->deleteKeys();
 		//Makes new keys
-		$encryption->getKeys(true);
+		$encryption->getPublicKey();
 		return rest_ensure_response([],204);
 
 	}
