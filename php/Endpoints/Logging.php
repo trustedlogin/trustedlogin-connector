@@ -4,7 +4,7 @@ namespace TrustedLogin\Vendor\Endpoints;
 use TrustedLogin\Vendor\SettingsApi;
 
 /**
- * Endpoing that gets/sets logging settings
+ * Endpoint that gets/sets logging settings
  *
  * Right now, this is just the error logging setting
  *  - https://github.com/trustedlogin/vendor/issues/127
@@ -13,7 +13,6 @@ use TrustedLogin\Vendor\SettingsApi;
  */
 class Logging extends Settings
 {
-
 
 	/** @inheritdoc */
 	protected function route()
