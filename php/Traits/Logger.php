@@ -80,26 +80,43 @@ trait Logger
         return $date->format('Y-m-d H:i:s');
     }
 
+	/**
+	 * Returns a random hash for the log file.
+	 *
+	 * @return string Random hash.
+	 */
+	private function getHash() {
+
+		if ( $this->hash ) {
+			return $this->hash;
+		}
+
+		$hash = get_option( SettingsApi::LOG_LOCATION_SETTING_NAME, false );
+
+		if( $hash ) {
+			$this->hash = $hash;
+			return $hash;
+		}
+
+		$this->hash = hash( 'sha256', uniqid( rand(), true ) );
+
+		update_option(SettingsApi::LOG_LOCATION_SETTING_NAME, $this->hash );
+
+		return $this->hash;
+	}
+
     /**
      * @see https://github.com/trustedlogin/vendor/issues/83
      */
     private function getLogFileName(){
-        //Use plugin dir in development.
+
+		//Use plugin dir in development.
         if( defined( 'TRUSTEDLOGIN_DEBUG') && TRUSTEDLOGIN_DEBUG ) {
-            return dirname(__FILE__, 3).'/trustedlogin.log';
-        }
-        //else use a upload dir + random hash.
-        if( ! $this->hash ){
-            $hash = get_option(SettingsApi::LOG_LOCATION_SETTING_NAME,false);
-            if( ! $hash ){
-                $this->hash = hash('sha256',uniqid(rand(), true));
-                update_option(SettingsApi::LOG_LOCATION_SETTING_NAME,$hash);
-            }else{
-                $this->hash = $hash;
-            }
+            return dirname( __FILE__, 3 ) . '/trustedlogin.log';
         }
 
         $upload_dir = wp_upload_dir();
+		$hash = $this->getHash();
 
 		//else use a upload dir + random hash.
         return trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-' . $hash . '.log';
