@@ -29,6 +29,7 @@ class SettingsApi
 	 * @see Traits/Logger
 	 */
 	const LOG_LOCATION_SETTING_NAME = 'trustedlogin_vendor_log_location';
+
 	/**
 	 * @var TeamSettings[]
 	 */

@@ -3,6 +3,7 @@
 namespace TrustedLogin\Vendor\Traits;
 
 use DateTime;
+use TrustedLogin\Vendor\SettingsApi;
 
 trait Logger
 {
@@ -18,15 +19,13 @@ trait Logger
      */
 	public function log( $message,$method, $logLevel = 'info' , $context = [] )
 	{
-		$context = (array) $context;
-		$logLevel = strtolower( is_string($logLevel) ? $logLevel : 'info' );
-		if (defined('WP_DEBUG') && WP_DEBUG) {
-            //In phpunit, this is printing, which is annoying, so we'll just not.
-			//error_log($message);
-		}
-		$message = "[{$this->getTimestamp()}] [{$logLevel}] {$message}";
-		if($context) {
-			$message .= ' ' . json_encode($context, JSON_PRETTY_PRINT);
+
+		$context  = (array) $context;
+		$logLevel = strtolower( is_string( $logLevel ) ? $logLevel : 'info' );
+		$message  = "[{$this->getTimestamp()}] [{$logLevel}] {$message}";
+
+		if ( $context ) {
+			$message .= ' ' . json_encode( $context, JSON_PRETTY_PRINT );
 		}
 
 		$logFileName = $this->getLogFileName();
@@ -35,10 +34,10 @@ trait Logger
 			touch( $logFileName );
 		}
 
-		$file = fopen($logFileName, "a");
+		$file = fopen( $logFileName, "a" );
 
-		fwrite($file, "\n". $message);
-		fclose($file);
+		fwrite( $file, "\n" . $message );
+		fclose( $file );
 	}
 
  	/**
@@ -53,12 +52,12 @@ trait Logger
      */
     protected function formatMessage($level, $message, $context)
     {
-        $message = "[{$this->getTimestamp()}] [{$level}] {$message}";
-        if($context) {
-            $message .= ' ' . json_encode($context, JSON_PRETTY_PRINT);
-        }
+	    $message = "[{$this->getTimestamp()}] [{$level}] {$message}";
+	    if ( $context ) {
+		    $message .= ' ' . json_encode( $context, JSON_PRETTY_PRINT );
+	    }
 
-        return $message.PHP_EOL;
+	    return $message . PHP_EOL;
 
     }
 
