@@ -101,7 +101,8 @@ trait Logger
 
         $upload_dir = wp_upload_dir();
 
-        return trailingslashit($upload_dir['baseurl']) . $this->hash . '/trustedlogin.log';
+		//else use a upload dir + random hash.
+        return trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-' . $hash . '.log';
     }
 
 
