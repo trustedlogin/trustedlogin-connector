@@ -551,6 +551,7 @@ class SettingsApiTest extends \WP_UnitTestCase
 					'enabled' => true,
 				]
 			],
+			'error_logging' => false,
 			'key' => 'value'
 		];
 		$this->assertSame(
@@ -616,6 +617,7 @@ class SettingsApiTest extends \WP_UnitTestCase
 					'enabled' => true,
 				]
 			],
+			'error_logging' => false,
 			'key' => 'value'
 		];
 		$this->assertSame(
