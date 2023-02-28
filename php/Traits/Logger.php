@@ -110,7 +110,7 @@ trait Logger
     private function getLogFileName(){
 
 		//Use plugin dir in development.
-        if( defined( 'TRUSTEDLOGIN_DEBUG') && TRUSTEDLOGIN_DEBUG ) {
+        if( ( defined( 'TRUSTEDLOGIN_DEBUG') && TRUSTEDLOGIN_DEBUG ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
             return dirname( __FILE__, 3 ) . '/trustedlogin-vendor.log';
         }
 
