@@ -223,7 +223,7 @@ export const DebugLogSettings = () => {
                   "When enabled, logs will be saved to the following directory:",
                   "trustedlogin-vendor"
                 )}
-                <code>wp-content/uploads/trustedlogin-logs</code>
+                <code>{tlVendor.log_file_name}</code>
                 {phpConstantIsSet ? (
                   <span className="text-red-700">
                     {__(

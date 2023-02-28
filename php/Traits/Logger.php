@@ -105,9 +105,12 @@ trait Logger
 	}
 
     /**
+     * Get full path to the error log file.
+     *
+     * @return string
      * @see https://github.com/trustedlogin/vendor/issues/83
      */
-    private function getLogFileName(){
+    public function getLogFileName(){
 
 		//Use plugin dir in development.
         if( ( defined( 'TRUSTEDLOGIN_DEBUG') && TRUSTEDLOGIN_DEBUG ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
