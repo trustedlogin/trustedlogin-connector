@@ -49,6 +49,7 @@ class SettingsApi
 				'enabled' => true,
 			]
 		],
+		'error_logging' => false
 	];
 
 	/**
@@ -291,9 +292,16 @@ class SettingsApi
 			);
 		}
 		$data['teams'] = $teams;
+		$debugMode = TRUSTEDLOGIN_DEBUG;
+		if( is_null($debugMode) ){
+			$debugMode = 'NULL';
+		}
+
 		return array_merge(
 			$data,
 			[
+				'debug_mode' => $debugMode,
+				'error_logging' => $this->getGlobalSettings()['error_logging'] ?? false,
 				'integrations' => $this->getIntegrationSettings(),
 			]
 		);
@@ -317,6 +325,17 @@ class SettingsApi
 	public function getGlobalSettings()
 	{
 		return $this->globalSettings;
+	}
+
+	/**
+	 * Is error logging enabled?
+	 * @return bool
+	 */
+	public function isErrorLogggingEnabled(){
+		if( ! isset($this->globalSettings['error_logging'])){
+			return false;
+		}
+		return (bool)$this->globalSettings['error_logging'];
 	}
 
 	/**

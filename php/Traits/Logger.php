@@ -19,7 +19,6 @@ trait Logger
      */
 	public function log( $message,$method, $logLevel = 'info' , $context = [] )
 	{
-
 		$context  = (array) $context;
 		$logLevel = strtolower( is_string( $logLevel ) ? $logLevel : 'info' );
 		$message  = "[{$this->getTimestamp()}] [{$logLevel}] {$message}";

@@ -51,64 +51,29 @@ class TrustedLoginService
 	 *
 	 * @return void.
 	 */
-	public function handleMultipleSecrectIds($account_id, $secret_ids = array())
+	public function handleMultipleSecretIds($account_id, $secret_ids = array())
 	{
-
 		if (! is_array($secret_ids) || empty($secret_ids)) {
 			return;
 		}
 
+		$valid_secrets = $this->getValidSecrets( $secret_ids, $account_id );
+
+		if (1 === sizeof($valid_secrets)) {
+			reset( $valid_secrets );
+			$this->maybeRedirectSupport( $valid_secrets[0]['id'], $valid_secrets[0]['envelope'] );
+		}
+
 		$urls_output  = '';
 		$url_template = '<li><a href="%1$s" class="%2$s">%3$s</a></li>';
-		$valid_ids    = array();
 
-		foreach ($secret_ids as $secret_id) {
-			$envelope = $this->apiGetEnvelope($secret_id);
-
-			if (is_wp_error($envelope)) {
-				$this->log('Error: ' . $envelope->get_error_message(), __METHOD__, 'error');
-				continue;
-			}
-
-			if (empty($envelope)) {
-				$this->log('$envelope is empty', __METHOD__, 'error');
-				continue;
-			}
-
-			$this->log('$envelope is not an error. Here\'s the envelope: ', __METHOD__, 'debug',[
-				'envelope' => $envelope,
-			]);
-
-			// TODO: Convert to shared (client/vendor) Envelope library
-			$url_parts = $this->envelopeToUrl($envelope, true);
-
-			if (is_wp_error($url_parts)) {
-				$this->log('Error: ' , __METHOD__, 'error',[
-					'error_messages'=>$url_parts->get_error_message()
-				]);
-				continue;
-			}
-
-			if (empty($url_parts)) {
-				continue;
-			}
-
+		foreach ( $valid_secrets as $valid_secret ) {
 			$urls_output .= sprintf(
 				$url_template,
-				esc_url($url_parts['loginurl']),
+				esc_url($valid_secret['url_parts']['loginurl']),
 				esc_attr('trustedlogin-authlink'),
 				sprintf(esc_html__('Log in to %s', 'trustedlogin-vendor'), esc_html($url_parts['siteurl']))
 			);
-
-			$valid_ids[] = array(
-				'id' => $secret_id,
-				'envelope' => $envelope,
-			);
-		}
-
-		if (1 === sizeof($valid_ids)) {
-			reset($valid_ids);
-			$this->maybeRedirectSupport($valid_ids[0]['id'], $valid_ids[0]['envelope']);
 		}
 
 		if (empty($urls_output)) {
@@ -118,6 +83,59 @@ class TrustedLoginService
 		add_action('admin_notices', function () use ($urls_output) {
 			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-vendor') . '</h3><ul>' . $urls_output . '</ul></div>';
 		});
+	}
+
+	/**
+	 * Ingests an array of secret IDs and returns an array of only valid IDs with extra data.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param array $secret_ids
+	 * @param $account_id
+	 *
+	 * @return array{ id:string, url_parts:array, envelope:array }
+	 */
+	public function getValidSecrets( array $secret_ids, $account_id ) {
+
+		$valid_ids = [];
+
+		foreach ($secret_ids as $secret_id) {
+
+			$envelope = $this->apiGetEnvelope( $secret_id, $account_id );
+
+			$envelope = $this->verifyEnvelope( $envelope );
+
+			if ( is_wp_error( $envelope ) ) {
+				$this->log( 'Error: ' . $envelope->get_error_message(), __METHOD__, 'error' );
+				continue;
+			}
+
+			$this->log( '$envelope is not an error. Here\'s the envelope: ', __METHOD__, 'debug', [
+				'envelope' => $envelope,
+			] );
+
+			// TODO: Convert to shared (client/vendor) Envelope library
+			$url_parts = $this->envelopeToUrl( $envelope, true );
+
+			if ( is_wp_error( $url_parts ) ) {
+				$this->log( 'Error: ', __METHOD__, 'error', [
+					'error_messages' => $url_parts->get_error_message()
+				] );
+				continue;
+			}
+
+			if ( empty( $url_parts ) ) {
+				continue;
+			}
+
+			$valid_ids[] = array(
+				'id'        => $secret_id,
+				'url_parts' => $url_parts,
+				'envelope'  => $envelope,
+			);
+		}
+
+		return $valid_ids;
 	}
 
 
@@ -315,6 +333,48 @@ class TrustedLoginService
 	}
 
 	/**
+	 * Helper function: verify the structure of an envelope is valid.
+	 *
+	 * @since TODO
+	 *
+	 * @param array|mixed      Envelope to validate
+	 *
+	 * @return array|\WP_Error Valid envelope or error if invalid.
+	 */
+	public function verifyEnvelope( $envelope )
+	{
+
+		if (empty($envelope)) {
+			$this->log('$envelope is empty', __METHOD__, 'error');
+			return new \WP_Error( 'empty_envelope', 'The envelope is empty.' );
+		}
+
+		if (is_object($envelope)) {
+			$envelope = (array) $envelope;
+		}
+
+		if (! is_array($envelope)) {
+			$this->log('Error: envelope not an array. e:', __METHOD__, 'error',[
+				'envelope' => $envelope
+			]);
+
+			return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly');
+		}
+
+		$required_keys = [ 'identifier', 'siteUrl', 'publicKey', 'nonce' ];
+
+		foreach ($required_keys as $required_key) {
+			if (! array_key_exists($required_key, $envelope)) {
+				$this->log('Error: malformed envelope.', __METHOD__, 'error', $envelope);
+
+				return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly or there was a server error.');
+			}
+		}
+
+		return $envelope;
+	}
+
+	/**
 	 * Helper function: Extract redirect url from encrypted envelope.
 	 *
 	 * @since 0.1.0
@@ -335,36 +395,28 @@ class TrustedLoginService
 	public function envelopeToUrl($envelope, $return_parts = false)
 	{
 
-		if (is_object($envelope)) {
-			$envelope = (array) $envelope;
-		}
-
-		if (! is_array($envelope)) {
+		if ( is_wp_error( $this->verifyEnvelope( $envelope ) ) ) {
 			$this->log('Error: envelope not an array. e:', __METHOD__, 'error',[
 				'envelope' => $envelope
 			]);
 
-			return new WP_Error('malformed_envelope', 'The data received is not formatted correctly');
-		}
-
-		$required_keys = [ 'identifier', 'siteUrl', 'publicKey', 'nonce' ];
-
-		foreach ($required_keys as $required_key) {
-			if (! array_key_exists($required_key, $envelope)) {
-				$this->log('Error: malformed envelope.', __METHOD__, 'error', $envelope);
-
-				return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly or there was a server error.');
-			}
+			return new \WP_Error('malformed_envelope', 'The data received is not formatted correctly');
 		}
 
 		/** var \TrustedLogin\Vendor\Encryption $trustedlogin_encryption */
 		$trustedlogin_encryption = $this->plugin->getEncryption();
 
 		try {
-			$this->log('Starting to decrypt envelope.', __METHOD__, 'debug',['envelope' => $envelope]);
-			$decrypted_identifier = $trustedlogin_encryption->decryptCryptoBox($envelope['identifier'], $envelope['nonce'], $envelope['publicKey']);
-			if (is_wp_error($decrypted_identifier)) {
-				$this->log('There was an error decrypting the envelope.', __METHOD__,['print_identifier' => $decrypted_identifier]);
+
+			$this->log( 'Starting to decrypt envelope.', __METHOD__, 'debug', [ 'envelope' => $envelope ] );
+
+			$decrypted_identifier = $trustedlogin_encryption->decryptCryptoBox( $envelope['identifier'], $envelope['nonce'], $envelope['publicKey'] );
+
+			if ( is_wp_error( $decrypted_identifier ) ) {
+				$this->log( 'There was an error decrypting the envelope:', __METHOD__, [
+					'error_code' => $decrypted_identifier->get_error_code(),
+					'error_message' => $decrypted_identifier->get_error_message(),
+				] );
 
 				return $decrypted_identifier;
 			}

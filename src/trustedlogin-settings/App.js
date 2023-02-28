@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { useState, StrictMode, useMemo } from "react";
+import { StrictMode } from "react";
 import TrustedLoginSettings from "../components/TrustedLoginSettings";
 import SettingsProvider from "../hooks/useSettings";
 

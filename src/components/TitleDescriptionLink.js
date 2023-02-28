@@ -1,10 +1,8 @@
 import { useRef } from "react";
 import { __ } from "@wordpress/i18n";
-const loremIpsum = ` Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-ornare tortor in nisl fermentum.`;
 const TitleDescriptionLink = ({
   title,
-  description = loremIpsum,
+  description = '',
   link = "https://app.trustedlogin.com/settings",
   linkText = __("Where can I find this info?", "trustedloging-vendor"),
 }) => (

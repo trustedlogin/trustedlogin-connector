@@ -58,6 +58,8 @@ class Plugin
 			->register(true, false);
 		(new \TrustedLogin\Vendor\Endpoints\AccessKey())
 			->register(true, false);
+		(new \TrustedLogin\Vendor\Endpoints\Logging())
+			->register(true, true);
 	}
 
 	/**
@@ -107,7 +109,7 @@ class Plugin
 	 * Get API Handler by account id
 	 *
 	 * @param string $accountId Account ID, which must be saved in settings, to get handler for.
-	 * @param string $apiUrl Optional. Url for TrustedLogin API.
+	 * @param string $apiUrl Optional. URL override for TrustedLogin API.
 	 * @param null|TeamSettings $team Optional. TeamSettings  to use.
 	 *
 	 * @return ApiHandler
@@ -117,15 +119,13 @@ class Plugin
 		if( ! $team ) {
 			$team = SettingsApi::fromSaved()->getByAccountId($accountId);
 		}
-		if (empty($apiUrl)) {
-			$apiUrl = TRUSTEDLOGIN_API_URL;
-		}
+
 		return new ApiHandler([
 			'private_key' => $team->get('private_key'),
 			'public_key'  => $team->get('public_key'),
 			'debug_mode'  => $team->get('debug_enabled'),
 			'type'        => 'saas',
-			'api_url' => $apiUrl
+			'api_url'     => $apiUrl ?: $this->getApiUrl(),
 		], $this->apiSender );
 	}
 
@@ -134,22 +134,29 @@ class Plugin
 	 *
 	 * @return bool
 	 */
-	public function verifyAccount(TeamSettings $team){
+	public function verifyAccount(TeamSettings $team)
+	{
 		$handler = new ApiHandler([
 			'private_key' => $team->get('private_key'),
 			'public_key'  => $team->get('public_key'),
 			'debug_mode'  => $team->get('debug_enabled'),
 			'type'        => 'saas',
-			'api_url' => TRUSTEDLOGIN_API_URL
+			'api_url'     => $this->getApiUrl(),
 		], $this->apiSender );
+
 		return ! is_wp_error($handler->verify(
 			$team->get('account_id')
 		));
 	}
 
+	/**
+	 * Returns the API URL after passing it through a filter.
+	 *
+	 * @return string
+	 */
 	public function getApiUrl()
 	{
-		return apply_filters('trustedlogin/api-url/saas', TRUSTEDLOGIN_API_URL);
+		return (string) apply_filters('trustedlogin/api-url/saas', TRUSTEDLOGIN_API_URL);
 	}
 
 	/**
@@ -164,7 +171,8 @@ class Plugin
 		return $this;
 	}
 
-	public function getAccessKeyActions(){
+	public function getAccessKeyActions()
+	{
 		$data = [];
 		foreach($this->settings->allTeams(false) as $team){
 			$url = AccessKeyLogin::url(

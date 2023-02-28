@@ -6,7 +6,41 @@
 [![JavaScript Tests](https://github.com/trustedlogin/vendor/actions/workflows/test-js.yml/badge.svg)](https://github.com/trustedlogin/vendor/actions/workflows/test-js.yml)
 
 
-## Installation
+## Installation And Dev (new)
+
+-   Clone
+    - `git clone git@github.com:trustedlogin/vendor.git`
+- Install javascript dependencies
+    - `yarn`
+- Install php dependencies
+    - `composer install`
+    - `docker run --rm -it --volume "$(pwd)":/app
+prooph/composer:7.4 install`
+
+
+### Develop
+
+JS and CSS:
+
+- Start CSS watcher
+  - `yarn start:css`
+- Start JS watcher only
+  - `yarn start:js`
+- Test changed files
+  - `yarn test --watch`
+- Test all files once
+  - `yarn test`
+  - `yarn test --ci`
+- Lint JS
+  - `yarn lint`
+
+PHP:
+
+- Test
+
+## (old) Installation
+
+> This local dev with Docker was built to work with ngrok, which is not what we're doing now.
 
 Do not install in a directory that includes a space in the path, for example, one under "Local Sites". That will cause issues with wp.js.
 
@@ -35,9 +69,17 @@ It is important that you use the `wp.js` script to setup the local dev site, whi
         - Installs WordPress
         - Creates admin users, as specified in `NGROK_USERS` env variable
         - Activates plugin
+- Ensure that Docker is running
 - Build plugin for release and ZIP
     - `yarn`
     - `node wp.js zip`
+
+Note: if that doesn't work, make sure Docker is running and then run the following instead:
+
+```bash
+yarn build && npx --yes plugin-machine plugin build --token=notempty && npx --yes plugin-machine plugin zip --token=notempty
+```
+
 - Activate Plugin
     - `node wp.js --activate`
 - Reset WordPress

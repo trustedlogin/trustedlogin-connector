@@ -111,8 +111,7 @@ export const CenteredLayout = ({
         ) : null}
         {subTitle ? (
           <p className="mt-2 mb-8 text-sm text-gray-500">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ornare
-            tortor in nisl fermentum.
+            {subTitle}
           </p>
         ) : null}
         {children}

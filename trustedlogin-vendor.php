@@ -3,7 +3,7 @@
  * Plugin Name: TrustedLogin Support Plugin
  * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
- * Version: 0.11.0
+ * Version: 0.13.0
  * Requires PHP: 7.1
  * Author: Katz Web Services, Inc.
  * Author URI: https://www.trustedlogin.com
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 // Exit if accessed directly
 
-define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.11.0' );
+define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.12.0' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
 if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
@@ -29,7 +29,7 @@ if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 //Set this to true, in wp-config.php to log all PHP errors/warnings/notices to trustedlogin.log
 // Code: define( 'TRUSTEDLOGIN_DEBUG', true );
 if( ! defined( 'TRUSTEDLOGIN_DEBUG') ){
-	define( 'TRUSTEDLOGIN_DEBUG', false );
+	define( 'TRUSTEDLOGIN_DEBUG', null );
 }
 
 
@@ -47,13 +47,13 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	//Include admin init file
 	include_once dirname( __FILE__ ) . '/src/trustedlogin-settings/init.php';
 
-	//Maybe register error handler
-	if( TRUSTEDLOGIN_DEBUG ){
-		\TrustedLogin\Vendor\ErrorHandler::register();
-	}
-
 	//This will initialize the plugin
 	$plugin = trustedlogin_vendor();
+
+	//Maybe register error handler
+	if( TRUSTEDLOGIN_DEBUG || $plugin->getSettings()->isErrorLogggingEnabled() ){
+		\TrustedLogin\Vendor\ErrorHandler::register();
+	}
 
 	/**
 	 * Runs when plugin is ready.

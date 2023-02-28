@@ -44,7 +44,7 @@ exports[`IntegrationHelpscout renders and matches snapshot 1`] = `
               id="helpscout-label"
               role="label"
             >
-              Helpscout
+              Help Scout
             </div>
           </div>
         </div>
