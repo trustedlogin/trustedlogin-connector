@@ -131,6 +131,8 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
+		//https://github.com/trustedlogin/vendor/issues/131
+		'log_file_name' => trustedlogin_vendor()->getLogFileName( false ),
 	];
 
 	//Check if we can preset redirectData in form
