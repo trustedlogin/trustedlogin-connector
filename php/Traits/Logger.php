@@ -110,7 +110,7 @@ trait Logger
      * @return string
      * @see https://github.com/trustedlogin/vendor/issues/83
      */
-    public function getLogFileName(){
+    public function getLogFileName( $fullPath = true ){
 
 		//Use plugin dir in development.
         if( ( defined( 'TRUSTEDLOGIN_DEBUG') && TRUSTEDLOGIN_DEBUG ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
@@ -127,7 +127,10 @@ trait Logger
 
 		$upload_dir = wp_upload_dir();
 
-		//else use a upload dir + random hash.
+		if( ! $fullPath ) {
+			return '/' . str_replace( ABSPATH, '', $upload_dir['basedir'] . '/trustedlogin-logs/' . 'vendor-' . $hash . '.log' );
+		}
+
         return wp_normalize_path( trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-logs/' ) . 'vendor-' . $hash . '.log';
     }
 

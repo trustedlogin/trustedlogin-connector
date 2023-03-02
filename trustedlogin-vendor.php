@@ -132,7 +132,7 @@ function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $set
 		],
 		'settings' => $settingsApi->toResponseData(),
 		//https://github.com/trustedlogin/vendor/issues/131
-		'log_file_name' => trustedlogin_vendor()->getLogFileName(),
+		'log_file_name' => trustedlogin_vendor()->getLogFileName( false ),
 	];
 
 	//Check if we can preset redirectData in form

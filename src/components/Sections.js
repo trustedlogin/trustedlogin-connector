@@ -220,7 +220,7 @@ export const DebugLogSettings = () => {
                 className="text-sm text-gray-500"
                 id="debug-option-description">
                 {__(
-                  "When enabled, logs will be saved to the following directory:",
+                  "When enabled, logs will be saved to the following location:",
                   "trustedlogin-vendor"
                 )}
                 <code>{tlVendor.log_file_name}</code>
