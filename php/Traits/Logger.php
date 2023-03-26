@@ -30,6 +30,7 @@ trait Logger
 		$logFileName = $this->getLogFileName();
 
 		if ( ! file_exists( $logFileName ) ) {
+			wp_mkdir_p( dirname( $logFileName ) ); // Create the directory if it doesn't exist.
 			touch( $logFileName );
 		}
 
