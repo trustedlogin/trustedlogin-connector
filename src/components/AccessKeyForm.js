@@ -147,18 +147,18 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           setIsLoading(false);
           if (
             err &&
-            err.hasOwnProperty("message") &&
-            "message" === typeof err.message
-          ) {
-            setErrorMessage(err.message);
-          } else if (
-            err &&
             err.hasOwnProperty("data") &&
             "string" === typeof err.data
           ) {
             setErrorMessage(err.data);
+          } else if (
+            err &&
+            err.hasOwnProperty("message") &&
+            "string" === typeof err.message
+          ) {
+            setErrorMessage(err.message);
           } else {
-            setErrorMessage(__("An error happended."));
+            setErrorMessage(__("There was an error processing the access key."));
           }
         })
         .then((res) => {
@@ -190,11 +190,11 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
             return;
           }
           setIsLoading(false);
-          setErrorMessage(__("An error happended."));
+          setErrorMessage(__("There was an error while logging in with the access key."));
         })
         .catch((err) => {
           setIsLoading(false);
-          setErrorMessage(__("An error happended."));
+          setErrorMessage(__("There was an error while logging in with the access key."));
         });
     }
   };
