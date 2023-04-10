@@ -202,13 +202,9 @@ async function main() {
   }
   //By default set everything else up
   else {
-    install({ url: NGROK_WP_URL, title: "Trusted Login Vendor Test" })
-      .then(createUsers)
-      .then(() => {
-        log("Done");
-        log(NGROK_WP_URL);
-        //log(`Username`)
-      });
+    createUsers().then(() => {
+      log("Done");
+    });
   }
 }
 main();
