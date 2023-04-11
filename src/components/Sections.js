@@ -8,32 +8,50 @@ import { CenteredLayout } from "./Layout";
 import SettingSection from "./SettingSection";
 import TitleDescriptionLink from "./TitleDescriptionLink";
 
+
+export default function Success({ text }) {
+  return (
+    <div className="rounded-md bg-green-50 p-4">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <span class="dashicons dashicons-yes-alt h-5 w-5 text-green-400"></span>
+        </div>
+        <div className="ml-3">
+          <h3 className="text-sm font-medium text-green-800">{text}</h3>
+        </div>
+      </div>
+    </div>
+  )
+}
 export const DangerZone = () => {
-  const { api, setNotice } = useSettings();
+  const { api, setNotice, notice } = useSettings();
   const [isResetting, setIsResetting] = useState(false);
   const onDelete = () =>
     api
       .resetEncryptionKeys()
       .then(() => {
+        setIsResetting(false);
         setNotice({
-          text: "Encryption Reset Succesfully",
+          text: "Encryption Was Reset Succesfully",
           type: "success",
           visible: true,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        setIsResetting(false);
         setNotice({
           text: "Encryption Reset Failed",
           type: "error",
           visible: false,
         });
       });
-
   return (
     <>
       {!isResetting ? (
         <SettingSection title={__("Danger Zone", "trustedlogin-vendor")}>
+          {notice && notice.visible ? (
+            <Success text={notice.text} />
+          ) : null}
           <div className="bg-white p-8 border border-red-700 rounded-lg mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
