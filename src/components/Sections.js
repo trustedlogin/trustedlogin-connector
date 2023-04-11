@@ -7,22 +7,9 @@ import { SubmitAndCanelButtons } from "./Buttons";
 import { CenteredLayout } from "./Layout";
 import SettingSection from "./SettingSection";
 import TitleDescriptionLink from "./TitleDescriptionLink";
+import Success from "./Success";
 
 
-export default function Success({ text }) {
-  return (
-    <div className="rounded-md bg-green-50 p-4">
-      <div className="flex">
-        <div className="flex-shrink-0">
-          <span class="dashicons dashicons-yes-alt h-5 w-5 text-green-400"></span>
-        </div>
-        <div className="ml-3">
-          <h3 className="text-sm font-medium text-green-800">{text}</h3>
-        </div>
-      </div>
-    </div>
-  )
-}
 export const DangerZone = () => {
   const { api, setNotice, notice } = useSettings();
   const [isResetting, setIsResetting] = useState(false);
