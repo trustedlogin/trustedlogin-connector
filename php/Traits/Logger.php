@@ -105,6 +105,16 @@ trait Logger
 		return $this->hash;
 	}
 
+	/**
+	 * Returns the directory name where the log file.
+	 *
+	 * @since TODO
+	 * @return string
+	 */
+	private function getLogFileDirectoryName() {
+		return 'trustedlogin-logs';
+	}
+
     /**
      * Get full path to the error log file.
      *
@@ -128,11 +138,13 @@ trait Logger
 
 		$upload_dir = wp_upload_dir();
 
-		if( ! $fullPath ) {
-			return '/' . str_replace( ABSPATH, '', $upload_dir['basedir'] . '/trustedlogin-logs/' . 'vendor-' . $hash . '.log' );
-		}
+	    $upload_dir = wp_upload_dir();
 
-        return wp_normalize_path( trailingslashit( $upload_dir['basedir'] ) . 'trustedlogin-logs/' ) . 'vendor-' . $hash . '.log';
+	    if ( ! $fullPath ) {
+		    return '/' . str_replace( ABSPATH, '', $upload_dir['basedir'] . '/' . $this->getLogFileDirectoryName() . '/' . 'vendor-' . $hash . '.log' );
+	    }
+
+	    return wp_normalize_path( trailingslashit( $upload_dir['basedir'] ) . $this->getLogFileDirectoryName() . '/' ) . 'vendor-' . $hash . '.log';
     }
 
 
