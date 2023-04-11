@@ -1,8 +1,11 @@
 <?php
 namespace TrustedLogin\Vendor;
 use TrustedLogin\Vendor\Status\Onboarding;
+use TrustedLogin\Vendor\Traits\Logger;
 
 class Reset {
+
+    use Logger;
 
 
     const ACTION_NAME = 'tl_reset';
@@ -19,6 +22,12 @@ class Reset {
        $plugin->getSettings()->reset()->save();
        Onboarding::reset();
        $plugin->getEncryption()->deleteKeys();
+
+       $logFile = $this->getLogFileName();
+       if( file_exists($logFile) ){
+           unlink($logFile);
+       }
+
        return $plugin;
     }
 
