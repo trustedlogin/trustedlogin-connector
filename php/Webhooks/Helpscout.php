@@ -166,7 +166,7 @@ class Helpscout extends Webhook{
 					'response' => $response
 				] );
 
-				if ( ! empty( $response ) ) {
+				if ( is_array( $response ) ) {
 					foreach ( $response as $key => $secrets ) {
 
 						if ( ! is_array( $secrets ) ) {
