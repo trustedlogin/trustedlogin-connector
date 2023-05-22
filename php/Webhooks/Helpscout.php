@@ -16,7 +16,7 @@ class Helpscout extends Webhook{
     }
 
     /**
-	 * Generates the output for the helpscout widget.
+	 * Generates the output for the Help Scout widget.
 	 *
 	 * Checks the `$_SERVER` array for the signature and verifies the source before checking for licenses matching to users email.
 	 *
@@ -85,7 +85,7 @@ class Helpscout extends Webhook{
 	}
 
     /**
-     * Get HTML for the helpscout widget.
+     * Get HTML for the Help Scout widget.
      *
 	 * @param array $customer_emails
 	 *
@@ -213,14 +213,14 @@ class Helpscout extends Webhook{
 	}
 
     /**
-	 * Verifies the source of the Widget request is from Helpscout
+	 * Verifies the source of the Widget request is from Help Scout
 	 *
 	 * @since 0.1.0
 	 *
 	 * @param string $data provided via `PHP://input`.
 	 * @param string $signature provided via `$_SERVER` attribute.
 	 *
-	 * @return bool  if the calculated hash matches the signature provided.
+	 * @return bool Whether the calculated hash matches the signature provided.
 	 */
 	public function verify_request( $data, $signature = null ) {
 		return hash_equals( $signature, $this->makeSignature(
