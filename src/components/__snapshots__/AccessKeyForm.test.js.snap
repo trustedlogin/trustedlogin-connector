@@ -12,7 +12,7 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
         class="w-full p-8 text-center"
       >
         <svg
-          class="trustedlogin-horizontal-logo"
+          class="trustedlogin-horizontal-logo mx-auto"
           height="371.1px"
           style="enable-background: new 0 0 1299.9 371.1;"
           version="1.1"
@@ -184,7 +184,7 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
           value="Log In"
         />
       </form>
-      
+
     </div>
   </div>
 </div>
