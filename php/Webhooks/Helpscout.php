@@ -15,6 +15,15 @@ class Helpscout extends Webhook{
         return 'helpscout';
     }
 
+    /**
+     * Get name for this webhook with capitals.
+     *
+     * @return string
+     */
+    public static function getProviderNameCapitalized(){
+        return 'HelpScout';
+    }
+
 	/**
 	 * Generates the output for the Help Scout widget.
 	 *
@@ -157,15 +166,19 @@ class Helpscout extends Webhook{
 	 * @return string|null The signature or null if not found.
 	 */
 	private function get_signature_from_headers(): ?string {
+		// Create the provider name in uppercase.
+		$provider_name = strtoupper( $this->getProviderName() );
+		// Get the provider name with capitals.
+		$provider_name_capitalized = $this->getProviderNameCapitalized();
 		// Check different locations for the signature, return when found.
-		if ( isset( $_SERVER['X-HELPSCOUT-SIGNATURE'] ) ) {
-			return $_SERVER['X-HELPSCOUT-SIGNATURE'];
-		} elseif ( isset( $_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] ) ) {
-			return $_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'];
+		if ( isset( $_SERVER["X-{$provider_name}-SIGNATURE"] ) ) {
+			return $_SERVER["X-{$provider_name}-SIGNATURE"];
+		} elseif ( isset( $_SERVER["HTTP_X_{$provider_name}_SIGNATURE"] ) ) {
+			return $_SERVER["HTTP_X_{$provider_name}_SIGNATURE"];
 		} elseif ( function_exists( 'apache_request_headers' ) ) {
 			$headers = apache_request_headers();
 
-			return $headers['X-HelpScout-Signature'] ?? null;
+			return $headers["X-{$provider_name_capitalized}-Signature"] ?? null;
 		}
 
 		// If we couldn't find the signature, we return null.

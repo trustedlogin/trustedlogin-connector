@@ -6,7 +6,7 @@ const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
   const { settings, setSettings, onSaveIntegrationSettings } = useSettings();
 
   const isEnabled = useMemo(() => {
-    return settings.integrations[id].enabled || false;
+    return settings.integrations[id] ? settings.integrations[id].enabled : false;
   }, [settings.integrations]);
 
   const buttonClassName = useMemo(() => {
@@ -27,7 +27,7 @@ const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
         ...settings.integrations,
         [id]: {
           ...settings.integrations[id],
-          enabled: !settings.integrations[id].enabled,
+          enabled: settings.integrations[id] ? !settings.integrations[id].enabled : true,
         },
       },
     };
@@ -108,6 +108,44 @@ export const IntegrationHelpscout = () => {
               fill="#1292EE"
             />
           </svg>
+        )}
+      />
+    </>
+  );
+};
+
+export const IntegrationFreescout = () => {
+  let [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <>
+      <Integration
+        toggleOpenState={() => setIsOpen(!isOpen)}
+        id={"freescout"}
+        isEnabled={false}
+        name={"Free Scout"}
+        description={__(
+          "FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.",
+          "trustedlogin-vendor"
+        )}
+        Icon={() => (
+            <svg
+                width="40"
+                height="48"
+                viewBox="0 0 96 96"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+              <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M0,48l0,3.6c0,12.7,7.7,21.6,18.7,21.6h1.8c4.9,0,9.8-2.8,13.3-6.8c3.9,3,8.8,4.9,14.2,4.9
+        c12.9,0,23.3-10.5,23.3-23.3S60.9,24.7,48,24.7c-12.9,0-23.3,10.5-23.3,23.3v7.5c-0.1,1.3-2.8,3.9-4.1,4h-1.8c-4.4,0-5-4.9-5-7.8
+        V48c0-18.9,15.4-34.3,34.3-34.3c18.9,0,34.3,15.4,34.3,34.3c0,18.9-15.4,34.3-34.3,34.3c-7,0-11.9-2-15.2-3.5l-7.4,11.6
+        C30.6,93.2,38.2,96,48,96c26.5,0,48-21.5,48-48C96,21.5,74.5,0,48,0C21.5,0,0,21.5,0,48z M38.4,48c0-5.3,4.3-9.6,9.6-9.6
+        c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6C42.7,57.6,38.4,53.3,38.4,48z"
+                  fill="#0078d7"
+              />
+            </svg>
         )}
       />
     </>

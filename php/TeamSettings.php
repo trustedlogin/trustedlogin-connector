@@ -81,7 +81,10 @@ class TeamSettings
 			$helpdesks = [$helpdesks];
 		}
 		if( empty($helpdesks)){
-			return ['helpscout'];
+			return [
+				'helpscout',
+				'freescout',
+			];
 		}
 		return $helpdesks;
 	}

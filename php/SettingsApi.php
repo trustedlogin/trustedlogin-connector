@@ -4,6 +4,7 @@
 namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Status\IsTeamConnected;
+use TrustedLogin\Vendor\Webhooks\Freescout;
 use TrustedLogin\Vendor\Webhooks\Helpscout;
 
 /**
@@ -47,6 +48,9 @@ class SettingsApi
 		'integrations' => [
 			'helpscout' => [
 				'enabled' => true,
+			],
+			'freescout' => [
+				'enabled' => false,
 			]
 		],
 		'error_logging' => false
@@ -383,10 +387,21 @@ class SettingsApi
 		return $this;
 	}
 
-	protected function newHelpdeskSettings($accountId,$helpdesk){
+	protected function newHelpdeskSettings($accountId, $helpdesk) {
+
+		switch ($helpdesk) {
+			case 'freescout':
+				$callback = Freescout::actionUrl($accountId, $helpdesk);
+				break;
+			case 'helpscout':
+			default:
+				$callback = Helpscout::actionUrl($accountId, $helpdesk);
+				break;
+		}
+
 		return [
-			'secret' => AccessKeyLogin::makeSecret( $accountId ),
-			'callback' => Helpscout::actionUrl( $accountId,$helpdesk )
+			'secret' => AccessKeyLogin::makeSecret($accountId),
+			'callback' => $callback
 		];
 	}
 }

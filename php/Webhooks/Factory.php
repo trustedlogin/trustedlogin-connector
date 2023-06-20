@@ -17,6 +17,8 @@ class Factory {
         {
             case 'helpscout':
                 return new HelpScout( $teamSettings->getHelpdeskData()['secret'] );
+            case 'freeccout':
+                return new Freescout( $teamSettings->getHelpdeskData()['secret'] );
             default:
                 throw new \Exception( 'Unknown webhook type' );
         }
@@ -24,7 +26,8 @@ class Factory {
 
 	public static function getProviders(){
 		return [
-			'helpscout'
+			'helpscout',
+			'freescout',
 		];
 	}
 
