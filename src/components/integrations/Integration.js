@@ -1,6 +1,24 @@
 import { useMemo, useState } from "react";
 import { __ } from "@wordpress/i18n";
 import { useSettings } from "../../hooks/useSettings";
+import {FreescoutLogo, HelpscoutLogo} from "./ConfigureIntegration";
+
+const integrationData = {
+  'helpscout': {
+    id: "helpscout",
+    isEnabled: true,
+    name: __("Help Scout", 'trustedlogin-vendor'),
+    description: __("Customer support platform, knowledge base tool, and an contact widget for customer service.", 'trustedlogin-vendor'),
+    IconSVG: HelpscoutLogo,
+  },
+  'freescout': {
+    id: "freescout",
+    isEnabled: false,
+    name: __("Free Scout", 'trustedlogin-vendor'),
+    description: __("FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.", 'trustedlogin-vendor'),
+    IconSVG: FreescoutLogo,
+  }
+};
 
 const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
   const { settings, setSettings, onSaveIntegrationSettings } = useSettings();
@@ -51,7 +69,7 @@ const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
           <div className="flex-1 truncate">
             <div className="flex items-center">
               <button className="flex-shrink-0" onClick={toggleOpenState}>
-                <Icon />
+                <Icon height={48} width={40} />
               </button>
               <div
                 className="ml-5 w-0 flex-1"
@@ -80,74 +98,20 @@ const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
   );
 };
 
-export const IntegrationHelpscout = () => {
-  let [isOpen, setIsOpen] = useState(true);
+export const IntegrationComponent = ({ helpdesk }) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const integration = integrationData[helpdesk];
 
   return (
-    <>
-      <Integration
-        toggleOpenState={() => setIsOpen(!isOpen)}
-        id={"helpscout"}
-        isEnabled={true}
-        name={"Help Scout"}
-        description={__(
-          "Customer support platform, knowledge base tool, and an contact widget for customer service.",
-          "trustedlogin-vendor"
-        )}
-        Icon={() => (
-          <svg
-            width="40"
-            height="48"
-            viewBox="0 0 40 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M16.9209 14.1817L3.03705 28.3637C1.30192 26.5909 0.217179 24.1535 0 21.2726C0 18.6137 1.30163 15.9546 3.03705 14.1817L17.1381 0C18.8735 1.77286 19.958 4.43172 19.958 7.09086C19.958 9.75001 18.6567 12.4092 16.9212 14.1817H16.9209ZM23.0285 33.8183L37.0644 19.6363C38.8191 21.6306 39.916 24.0683 39.916 26.7271C39.916 29.3863 38.5997 32.0454 36.8455 33.8183L22.809 48C21.0545 46.2271 19.958 43.568 19.958 40.9091C19.958 38.25 21.2737 35.5908 23.0285 33.8183ZM22.6843 14.1817L26.8285 10.0363L37.0803 0C38.8252 1.7455 39.9157 4.36374 39.9157 6.98199C39.9157 9.60023 38.6072 12.2182 36.8619 13.9637L26.8285 24L22.6843 28.1454L16.7954 34.0363L12.6511 38.1817L2.83571 48C1.0905 46.2545 0 43.6363 0 41.018C0 38.3998 1.30883 35.7815 3.05375 34.0363L12.8691 24.218L16.7951 20.0726L22.6843 14.1817Z"
-              fill="#1292EE"
-            />
-          </svg>
-        )}
-      />
-    </>
-  );
-};
-
-export const IntegrationFreescout = () => {
-  let [isOpen, setIsOpen] = useState(true);
-
-  return (
-    <>
-      <Integration
-        toggleOpenState={() => setIsOpen(!isOpen)}
-        id={"freescout"}
-        isEnabled={false}
-        name={"Free Scout"}
-        description={__(
-          "FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.",
-          "trustedlogin-vendor"
-        )}
-        Icon={() => (
-            <svg
-                width="40"
-                height="48"
-                viewBox="0 0 96 96"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-              <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M0,48l0,3.6c0,12.7,7.7,21.6,18.7,21.6h1.8c4.9,0,9.8-2.8,13.3-6.8c3.9,3,8.8,4.9,14.2,4.9
-        c12.9,0,23.3-10.5,23.3-23.3S60.9,24.7,48,24.7c-12.9,0-23.3,10.5-23.3,23.3v7.5c-0.1,1.3-2.8,3.9-4.1,4h-1.8c-4.4,0-5-4.9-5-7.8
-        V48c0-18.9,15.4-34.3,34.3-34.3c18.9,0,34.3,15.4,34.3,34.3c0,18.9-15.4,34.3-34.3,34.3c-7,0-11.9-2-15.2-3.5l-7.4,11.6
-        C30.6,93.2,38.2,96,48,96c26.5,0,48-21.5,48-48C96,21.5,74.5,0,48,0C21.5,0,0,21.5,0,48z M38.4,48c0-5.3,4.3-9.6,9.6-9.6
-        c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6C42.7,57.6,38.4,53.3,38.4,48z"
-                  fill="#0078d7"
-              />
-            </svg>
-        )}
-      />
-    </>
+      <>
+        <Integration
+            toggleOpenState={() => setIsOpen(!isOpen)}
+            id={integration.id}
+            isEnabled={integration.isEnabled}
+            name={integration.name}
+            description={__(integration.description, "trustedlogin-vendor")}
+            Icon={integration.IconSVG}
+        />
+      </>
   );
 };

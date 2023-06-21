@@ -2,7 +2,7 @@ import { useMemo, useState, Fragment } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
 import { PrimaryButton, SubmitAndCanelButtons } from "../Buttons";
-import {ConfigureFreescout, ConfigureHelpscout} from "../integrations/ConfigureIntegration";
+import {ConfigureHelpDesk} from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { __ } from "@wordpress/i18n";
@@ -58,17 +58,15 @@ const TeamsList = () => {
     <>
       <>
         {teams.map((team) => {
-          const isHelpscout = team.helpdesk[0] === 'helpscout'; // You can replace the condition here to fit your need
-          const ConfigureComponent = isHelpscout ? ConfigureHelpscout : ConfigureFreescout;
-
           return (
               <Fragment key={team.id}>
-                <ConfigureComponent
+                <ConfigureHelpDesk
                     isOpen={modalTeam === team.id}
                     setIsOpen={() => {
                       setModalTeam(null);
                     }}
                     team={team}
+                    helpDesk={team.helpdesk[0]}
                 />
               </Fragment>
           );

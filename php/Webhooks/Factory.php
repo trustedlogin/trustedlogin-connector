@@ -65,7 +65,7 @@ class Factory {
             $args[$key] = urlencode($value);
         }
 
-		$url = add_query_arg( $args, site_url() );
+		$url = add_query_arg( $args, get_home_url() );
 		return $url;
 	}
 }
