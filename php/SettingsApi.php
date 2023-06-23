@@ -50,7 +50,7 @@ class SettingsApi
 				'enabled' => true,
 			],
 			'freescout' => [
-				'enabled' => false,
+				'enabled' => true,
 			]
 		],
 		'error_logging' => false
@@ -389,13 +389,12 @@ class SettingsApi
 
 	protected function newHelpdeskSettings($accountId, $helpdesk) {
 
-		switch ($helpdesk) {
+		switch ( $helpdesk ) {
 			case 'freescout':
-				$callback = Freescout::actionUrl($accountId, $helpdesk);
+				$callback = Freescout::actionUrl( $accountId, $helpdesk );
 				break;
-			case 'helpscout':
 			default:
-				$callback = Helpscout::actionUrl($accountId, $helpdesk);
+				$callback = Helpscout::actionUrl( $accountId, $helpdesk );
 				break;
 		}
 

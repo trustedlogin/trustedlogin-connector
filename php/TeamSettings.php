@@ -9,6 +9,7 @@
 namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Status\IsTeamConnected;
+use TrustedLogin\Vendor\Webhooks\Freescout;
 use TrustedLogin\Vendor\Webhooks\Helpscout;
 
 /**
@@ -182,16 +183,27 @@ class TeamSettings
 	 * @since 0.10.0
 	 * @return array
 	 */
-	public function getHelpdeskData()
+	public function getHelpdeskData( $type = 'helpscout' )
 	{
 		$helpdesks = $this->get('helpdesk');
+		$account_id = $this->get('account_id');
 		if( empty( $helpdesks)){
-			$helpdesks = ['helpscout'];
+			$helpdesks = [$type];
 			$this->set( 'helpdesk', $helpdesks);
 		}
 		if( ! is_array($helpdesks)){
 			$helpdesks = [$helpdesks];
 		}
+
+		switch ( $type ) {
+			case 'freescout':
+				$callback = Freescout::actionUrl( $account_id );
+				break;
+			default:
+				$callback = Helpscout::actionUrl( $account_id );
+				break;
+		}
+
 		$helpdeskSettings = $this->get(self::HELPDESK_SETTINGS,[]);
 		if ($helpdeskSettings){
 			$helpdesk = $helpdesks[0];
@@ -202,7 +214,7 @@ class TeamSettings
 				}
 				return [
 					'secret' => isset($data['secret']) ?$data['secret'] :"",
-					'callback' => HelpScout::actionUrl( $this->get('account_id') ),
+					'callback' => $callback,
 				];
 			}
 

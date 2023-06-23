@@ -16,9 +16,9 @@ class Factory {
         switch($type)
         {
             case 'helpscout':
-                return new HelpScout( $teamSettings->getHelpdeskData()['secret'] );
-            case 'freeccout':
-                return new Freescout( $teamSettings->getHelpdeskData()['secret'] );
+                return new HelpScout( $teamSettings->getHelpdeskData( $type )['secret'] );
+            case 'freescout':
+                return new Freescout( $teamSettings->getHelpdeskData( $type )['secret'] );
             default:
                 throw new \Exception( 'Unknown webhook type' );
         }
