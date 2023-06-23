@@ -549,6 +549,9 @@ class SettingsApiTest extends \WP_UnitTestCase
 			'integrations' => [
 				'helpscout' => [
 					'enabled' => true,
+				],
+				'freescout' => [
+					'enabled' => true,
 				]
 			],
 			'error_logging' => false,
@@ -614,6 +617,9 @@ class SettingsApiTest extends \WP_UnitTestCase
 		$expected = [
 			'integrations' => [
 				'helpscout' => [
+					'enabled' => true,
+				],
+				'freescout' => [
 					'enabled' => true,
 				]
 			],
