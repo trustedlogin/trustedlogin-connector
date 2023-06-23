@@ -23,16 +23,16 @@ prooph/composer:7.4 install`
 JS and CSS:
 
 - Start CSS watcher
-  - `yarn start:css`
+    - `yarn start:css`
 - Start JS watcher only
-  - `yarn start:js`
+    - `yarn start:js`
 - Test changed files
-  - `yarn test --watch`
+    - `yarn test --watch`
 - Test all files once
-  - `yarn test`
-  - `yarn test --ci`
+    - `yarn test`
+    - `yarn test --ci`
 - Lint JS
-  - `yarn lint`
+    - `yarn lint`
 
 PHP:
 
@@ -45,7 +45,6 @@ PHP:
 Do not install in a directory that includes a space in the path, for example, one under "Local Sites". That will cause issues with wp.js.
 
 IMPORTANT: You must use PHP 7.4 and composer 2.2+ when running composer. The wp.js script runs composer in Docker with the right versions.
-
 
 - Git clone:
     - `git clone git@github.com:trustedlogin/vendor.git`
@@ -107,6 +106,7 @@ There is a React app, for the admin page. It is located in `/src`. We create two
     - `yarn build`
 
 #### JavaScript
+
 - Build WordPress JavaScript for production
     - `yarn build:js`
 - Build the "App Build" JavaScript for production
@@ -162,6 +162,7 @@ $service = new TrustedLoginService(
     trustedlogin_vendor()
 );
 ```
+
 ### Tests
 
 Before doing this, you must create a ".env" file in the root of this plugin. You need to set the correct value for `TL_VENDOR_ENCRYTPTION_KEY`. Its value is saved in Zack and Josh's password managers. It is set as a Github actions environment variable. This is not needed in production.
@@ -217,9 +218,9 @@ A [docker-compose](https://docs.docker.com/samples/wordpress/)-based local devel
     - [http://localhost:8100](http://localhost:8100)
 - Run WP CLI command:
     - `docker-compose run wpcli wp user create admin admin@example.com --role=admin user_pass=pass`
-- Beacuse the constants`WP_DEBUG` and `TRUSTEDLOGIN_DEBUG` are set to true, errors will be logged to `./trustedlogin.log`.
-  - Constants are set in `docker-compose.yml`, in `services.wordpress.environment`, under `WORDPRESS_CONFIG_EXTRA`.
-  - I'm not sure where this is documented, but it works. This [Stackoverflow discussion](https://stackoverflow.com/questions/53197806/how-to-get-proper-docker-compose-multiline-environment-variables-formatting) is helpful.
+- Because the constants`WP_DEBUG` and `TRUSTEDLOGIN_DEBUG` are set to true, errors will be logged to `./trustedlogin.log`.
+    - Constants are set in `docker-compose.yml`, in `services.wordpress.environment`, under `WORDPRESS_CONFIG_EXTRA`.
+    - I'm not sure where this is documented, but it works. This [Stackoverflow discussion](https://stackoverflow.com/questions/53197806/how-to-get-proper-docker-compose-multiline-environment-variables-formatting) is helpful.
 
 ### PHPUnit
 
@@ -230,7 +231,7 @@ There is a special phpunit container for running WordPress tests, with WordPress
 - Test
     - `composer test:wordpress`
 - Run tests once
-  - `**docker-compose run phpunit phpunit --config=phpunit-integration.xml`
+    - `**docker-compose run phpunit phpunit --config=phpunit-integration.xml`
 
 If you see prompt `Do you trust "dealerdirect/phpcodesniffer-composer-installer" to execute code and wish to enable it now? (writes "allow-plugins" to composer.json) [y,n,d,?] y` you should answer "y". This is fine.
 
@@ -246,7 +247,7 @@ The ngrok container has a UI for inspecting ngrok requests. It can be accessed a
 
 We use [cypress](https://cypress.io) for end to end testing (e2e) the vendor plugin, and the [e2e client](https://github.com/trustedlogin/trustedlogin-e2e-client). These tests use the production eCommerce app and Vault. These tests use an "ngrok" team. Zack can add and remove people from that team.
 
-The [e2e client plugin](https://github.com/trustedlogin/trustedlogin-e2e-client) is installed at [https://e2e.trustedlogin.dev/]. The e2e tests in that plugin will use that site to grant access to the "ngrok" team. We can get the accessKey from that HTTP request's response. The ngrok endpoint will be serving a WordPress site using whatever version of this plugin is being tested, served at the ngrok endpoint.
+The [e2e client plugin](https://github.com/trustedlogin/trustedlogin-e2e-client) is installed at [https://e2e.trustedlogin.dev/](https://e2e.trustedlogin.dev/). The e2e tests in that plugin will use that site to grant access to the "ngrok" team. We can get the accessKey from that HTTP request's response. The ngrok endpoint will be serving a WordPress site using whatever version of this plugin is being tested, served at the ngrok endpoint.
 
 Then the tests will log into the vendor site and attempt to use the plugin's setting screen to login to the client site, using the access key.
 
@@ -264,8 +265,8 @@ Then the tests will log into the vendor site and attempt to use the plugin's set
     - `CLIENT_WP_USER=githubactions`
 - `NGROK_AUTH_TOKEN`
     - The auth token for the ngrok account
-    - https://dashboard.ngrok.com/get-started/your-authtoken
+    - [https://dashboard.ngrok.com/get-started/your-authtoken](https://dashboard.ngrok.com/get-started/your-authtoken)
 - `NGROK_WP_URL`
-    - NGROK_WP_URL=https://trustedlogin.ngrok.io`
+    - `NGROK_WP_URL=https://trustedlogin.ngrok.io`
     - ngrok URL for docker compose site.
     - In CI, this value should be `https://trustedlogin-ci.ngrok.io`
