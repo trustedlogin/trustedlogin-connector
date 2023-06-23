@@ -166,8 +166,8 @@ exports[`AddTeam Renders & Matches snapshot 1`] = `
                   >
                     <li
                       class="
-              highlightOption highlight 
-              false 
+              highlightOption highlight
+              false
               false option
             "
                     >
@@ -175,8 +175,8 @@ exports[`AddTeam Renders & Matches snapshot 1`] = `
                     </li>
                     <li
                       class="
-               
-              false 
+
+              false
               false option
             "
                     >
@@ -409,8 +409,8 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
                   >
                     <li
                       class="
-              highlightOption highlight 
-              false 
+              highlightOption highlight
+              false
               false option
             "
                     >
@@ -418,8 +418,8 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
                     </li>
                     <li
                       class="
-               
-              false 
+
+              false
               false option
             "
                     >
