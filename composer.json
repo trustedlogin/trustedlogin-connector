@@ -31,7 +31,7 @@
         "test:wordpress": "phpunit --config=phpunit-integration.xml",
         "sniffs": "vendor/bin/phpcs ./php ./trustedlogin-vendor.php --report=summary",
         "fixes": "./vendor/bin/phpcbf ./php ./trustedlogin-vendor.php ./tests ",
-        "compat": "./vendor/bin/phpcs -p ./php ./trustedlogin-vendor.php ./tests  --standard=PHPCompatibilityWP --extensions=php --runtime-set testVersion 7.0-"
+        "compat": "./vendor/bin/phpcs -p ./php ./trustedlogin-vendor.php ./tests  --standard=PHPCompatibilityWP --extensions=php --runtime-set testVersion 7.2-"
     },
     "config": {
         "allow-plugins": {
