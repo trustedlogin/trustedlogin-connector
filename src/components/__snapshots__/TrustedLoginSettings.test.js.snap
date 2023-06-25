@@ -177,8 +177,8 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                             >
                               <li
                                 class="
-              highlightOption highlight
-              false
+              highlightOption highlight 
+              false 
               false option
             "
                               >
@@ -186,8 +186,8 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                               </li>
                               <li
                                 class="
-
-              false
+               
+              false 
               false option
             "
                               >
