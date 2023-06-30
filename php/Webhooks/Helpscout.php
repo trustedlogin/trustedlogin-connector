@@ -125,6 +125,7 @@ class Helpscout extends Webhook{
 
 		// If there are any search keys, make the API call
 		if ( ! empty( $data['searchKeys'] ) ) {
+
 			/**
 			 * Expected result
 			 *
@@ -135,7 +136,9 @@ class Helpscout extends Webhook{
 			$response = $saas_api->call( $endpoint, $data, 'POST' );
 
 			// If the API call returns an error, get the error message
-			if ( is_wp_error( $response ) ) {
+			if( true === $response ) {
+				$item_html = '';
+			} elseif ( is_wp_error( $response ) ) {
 				$item_html = $response->get_error_message();
 			} else {
 				// Generate item HTML for each secret in the response
