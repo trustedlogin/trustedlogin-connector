@@ -132,7 +132,7 @@ class Helpscout extends Webhook{
 			 *   "<license_key>" => [ <secrets> ]
 			 * ]
 			 */
-			$response = $saas_api->call( $endpoint, $data, $method = 'POST' );
+			$response = $saas_api->call( $endpoint, $data, 'POST' );
 
 			// If the API call returns an error, get the error message
 			if ( is_wp_error( $response ) ) {
