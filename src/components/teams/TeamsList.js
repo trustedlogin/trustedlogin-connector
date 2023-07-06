@@ -93,7 +93,7 @@ const TeamsList = () => {
               <>
                 <div>
                   <label htmlFor="search" className="sr-only">
-                    Search
+                    {__("Search", "trustedlogin-vendor")}
                   </label>
                   <div className="relative h-full">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -136,7 +136,7 @@ const TeamsList = () => {
                           strokeLinejoin="round"></path>
                       </g>
                     </svg>
-                    Add Team
+                    {__("Add Team", "trustedlogin-vendor")}
                   </>
                 </PrimaryButton>
               </>
@@ -178,7 +178,7 @@ const TeamsList = () => {
                               setModalTeam(team.id);
                             }}
                             className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                            Configure
+                            {__("Configure", "trustedlogin-vendor")}
                           </button>
                         ) : null}
 
@@ -188,12 +188,12 @@ const TeamsList = () => {
                             setCurrentTeam(team.id);
                           }}
                           className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                          Edit
+                          {__("Edit", "trustedlogin-vendor")}
                         </button>
                         <button
                           onClick={() => startDelete(team.id)}
                           className="text-sm text-red-500 hover:text-red-800 p-2">
-                          Delete
+                          {__("Delete", "trustedlogin-vendor")}
                         </button>
                       </div>
                     </div>

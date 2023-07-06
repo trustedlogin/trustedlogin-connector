@@ -2,7 +2,7 @@ import { useSettings } from "../hooks/useSettings";
 import { useView } from "../hooks/useView";
 
 import { useMemo, Fragment } from "react";
-import { __ } from "@wordpress/i18n";
+import { __, _x } from "@wordpress/i18n";
 import { Popover } from "@headlessui/react";
 
 const useConnectCount = () => {
@@ -68,7 +68,7 @@ const TeamMenuItem = ({ team, toggleStatus }) => {
                         viewBox="0 0 8 8">
                         <circle cx="4" cy="4" r="3" />
                     </svg>
-                    <span className="border-r pr-2 mr-2 leading-none">Connected</span>
+                    <span className="border-r pr-2 mr-2 leading-none">{__("Connected", "trustedlogin-vendor")}</span>
                     <svg
                         className="text-gray-500"
                         width="12"
@@ -92,7 +92,7 @@ const TeamMenuItem = ({ team, toggleStatus }) => {
                         viewBox="0 0 8 8">
                         <circle cx="4" cy="4" r="3" />
                     </svg>
-                    <span className="border-r pr-2 mr-2 leading-none">Not Connected</span>
+                    <span className="border-r pr-2 mr-2 leading-none">{__("Not Connected", "trustedlogin-vendor")}</span>
                     <svg
                         className="text-gray-500"
                         width="12"
@@ -262,8 +262,8 @@ const StatusMenu = ({ toggleStatus, isStatusOpen }) => {
                                 ) : null}
                             </ul>
                             <div className="mb-8 inline-flex items-center">
-                                <a className="text-sm text-blue-tl" href="#">
-                                    Need help? View our Documentation
+                                <a className="text-sm text-blue-tl" href="https://docs.trustedlogin.com/Vendor/intro">
+                                    {__("Need help? View our Documentation", "trustedlogin-vendor")}
                                 </a>
                                 <svg
                                     className="ml-3"
