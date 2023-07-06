@@ -142,7 +142,7 @@ class Helpscout extends Webhook{
 				$item_html = $response->get_error_message();
 			} else {
 				// Generate item HTML for each secret in the response
-				$item_html = $this->generate_item_html( $response, $item_template, $data['statuses'], $account_id );
+				$item_html = $this->generate_item_html( (array) $response, $item_template, $data['statuses'], $account_id );
 			}
 
 			$this->log( 'item_html: ' . $item_html, __METHOD__ );
