@@ -51,10 +51,7 @@ const TeamMenuItem = ({ team, toggleStatus }) => {
                     <p
                         className="text-sm font-medium text-gray-900 min-w-[6rem]"
                         id="team-option-1-label">
-                        {team.account_id}
-                    </p>
-                    <p className="text-xs text-gray-500" id="team-option-1-description">
-                        figma.com
+                        {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not transate', "trustedlogin-vendor").replace('{id}', team.id ) }
                     </p>
                 </div>
             </div>
