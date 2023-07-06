@@ -292,7 +292,7 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk }) {
    * This value will only recalculate when [helpdeskName] changes.
    *
    * If the helpdeskName is 'helpscout', it returns 'Help Scout'.
-   * If the helpdeskName is 'freescout', it returns 'Free Scout'.
+   * If the helpdeskName is 'freescout', it returns 'FreeScout'.
    * Otherwise, it uses the slug as it is.
    */
   const helpdeskTitle = useMemo(() => {
@@ -300,7 +300,7 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk }) {
       case "helpscout":
         return __("Help Scout", "trustedlogin-vendor");
       case "freescout":
-        return __("Free Scout", "trustedlogin-vendor");
+        return __("FreeScout", "trustedlogin-vendor");
       default:
         return helpdeskName;
     }

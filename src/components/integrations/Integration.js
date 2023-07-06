@@ -14,7 +14,7 @@ const integrationData = {
   'freescout': {
     id: "freescout",
     isEnabled: false,
-    name: __("Free Scout", 'trustedlogin-vendor'),
+    name: __("FreeScout", 'trustedlogin-vendor'),
     description: __("FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.", 'trustedlogin-vendor'),
     IconSVG: FreescoutLogo,
   }
