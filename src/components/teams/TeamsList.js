@@ -2,7 +2,7 @@ import { useMemo, useState, Fragment } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
 import { PrimaryButton, SubmitAndCanelButtons } from "../Buttons";
-import { ConfigureHelscout } from "../integrations/ConfigureIntegration";
+import {ConfigureHelpDesk} from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { __ } from "@wordpress/i18n";
@@ -21,7 +21,7 @@ const TeamsList = () => {
   const teams = useMemo(() => settings.teams, [settings]);
   const [modalTeam, setModalTeam] = useState(null);
   const shouldShowConfigureButton = (team) => {
-    return team.helpdesk && team.helpdesk.includes("helpscout");
+    return team.helpdesk && ["helpscout", "freescout"].includes(team.helpdesk[0].toLowerCase());
   };
 
   /**
@@ -57,17 +57,20 @@ const TeamsList = () => {
   return (
     <>
       <>
-        {teams.map((team) => (
-          <Fragment key={team.id}>
-            <ConfigureHelscout
-              isOpen={modalTeam === team.id}
-              setIsOpen={() => {
-                setModalTeam(null);
-              }}
-              team={team}
-            />
-          </Fragment>
-        ))}
+        {teams.map((team) => {
+          return (
+              <Fragment key={team.id}>
+                <ConfigureHelpDesk
+                    isOpen={modalTeam === team.id}
+                    setIsOpen={() => {
+                      setModalTeam(null);
+                    }}
+                    team={team}
+                    helpDesk={team.helpdesk[0]}
+                />
+              </Fragment>
+          );
+        })}
       </>
       {isDeleting ? (
         <CenteredLayout>

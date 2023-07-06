@@ -175,10 +175,10 @@ class Plugin
 	{
 		$data = [];
 		foreach($this->settings->allTeams(false) as $team){
+			$helpdesk = $team->getHelpdesks()[0] ?? 'helpcout';
 			$url = AccessKeyLogin::url(
 				$team->get('account_id'),
-				'helpscout'
-				//$team->getHelpdesks()[0]
+				$helpdesk
 			);
 			$data[$team->get('account_id')] = $url;
 		}

@@ -138,7 +138,7 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
               </SelectFieldArea>
               <HelpDeskSelect
                 defaultValue={
-                  team ? team.help : teamFields.helpdesk.defaultValue
+                    team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? ''
                 }
               />
             </div>

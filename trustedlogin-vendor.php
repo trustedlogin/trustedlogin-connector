@@ -15,6 +15,10 @@
 
 use TrustedLogin\Vendor\ErrorHandler;
 use TrustedLogin\Vendor\AccessKeyLogin;
+use TrustedLogin\Vendor\Reset;
+use TrustedLogin\Vendor\SettingsApi;
+use TrustedLogin\Vendor\Status\Onboarding;
+use TrustedLogin\Vendor\Webhooks\Factory;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -114,20 +118,21 @@ function trustedlogin_vendor(){
 /**
  * Get data to set window.tlVendor in client with
  */
-function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $settingsApi){
+function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
+	$helpdesk  = $settingsApi->toArray()['teams'][0]['helpdesk'][0] ?? 'helpscout';
 
 	$data = [
-		'resetAction' => esc_url_raw(\TrustedLogin\Vendor\Reset::actionUrl()),
+		'resetAction' => esc_url_raw( Reset::actionUrl()),
 		'roles' => wp_roles()->get_names(),
-		'onboarding' => \TrustedLogin\Vendor\Status\Onboarding::hasOnboarded() ? 'COMPLETE' : '0',
+		'onboarding' => Onboarding::hasOnboarded() ? 'COMPLETE' : '0',
 		'accessKey' => [
 			AccessKeyLogin::ACCOUNT_ID_INPUT_NAME => $accountId,
 			AccessKeyLogin::ACCESS_KEY_INPUT_NAME => $accessKey,
 			AccessKeyLogin::REDIRECT_ENDPOINT => true,
 			'action'   => AccessKeyLogin::ACCESS_KEY_ACTION_NAME,
-			\TrustedLogin\Vendor\Webhooks\Factory::PROVIDER_KEY => 'helpscout',
+			Factory::PROVIDER_KEY => $helpdesk,
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
