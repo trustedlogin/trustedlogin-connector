@@ -5,7 +5,7 @@ import { PrimaryButton, SubmitAndCanelButtons } from "../Buttons";
 import {ConfigureHelpDesk} from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
-import { __ } from "@wordpress/i18n";
+import {__, _x} from "@wordpress/i18n";
 /**
  * Show list of teams
  *
@@ -160,12 +160,12 @@ const TeamsList = () => {
                           <p
                             className="text-lg font-medium text-gray-900 leading-tight min-w-[6rem]"
                             id="team-option-1-label">
-                            {team.name ? team.name : team.account_id}
+                            {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not translate', "trustedlogin-vendor").replace('{id}', team.id ) }
                           </p>
                           <p
                             className="text-sm text-gray-500"
                             id="team-option-1-description">
-                            {team.account_id}
+                            #{team.account_id}
                           </p>
                         </div>
                       </div>

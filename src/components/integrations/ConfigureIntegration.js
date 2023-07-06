@@ -68,9 +68,9 @@ const HelpDeskConfigs = {
     linkText: __("Learn how to set up a TrustedLogin Free Scout widget.", "trustedlogin-vendor"),
     description: [
         __("Place module source to Modules folder of your FreeScout installation", "text-domain"),
-        __("Enable module in modules admin panel", "text-domain"),
-        __("Go to Settings -> Modules -> TrustedLogin and Enter these values.", "text-domain"),
-        __("Finally go to your Mailbox settings and enable TrustedLogin widget.", "text-domain")
+        __("Enable module in Modules admin panel", "text-domain"),
+        __("Go to Settings -> Modules -> TrustedLogin and enter these values.", "text-domain"),
+        __("Finally, go to your Mailbox Settings, select TrustedLogin, enable the TrustedLogin widget.", "text-domain")
     ],
     goLink: "https://github.com/trustedlogin/freescout-module",
     goLinkText: __("Setup the TrustedLogin Freescout Module.", "trustedlogin-vendor"),
