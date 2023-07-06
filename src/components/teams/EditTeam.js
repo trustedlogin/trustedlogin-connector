@@ -44,7 +44,7 @@ export const HelpDeskSelect = ({ defaultValue, options = null }) => {
 const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
   const { setCurrentView } = useView();
   const formRef = useRef();
-  //useState for approved_roles, beacuse that works.
+  //useState for approved_roles, because that works.
   const [approved_roles, set_approved_roles] = useState(team?.approved_roles);
 
   //When form is submitted, collect the data and pass it to onClickSave
