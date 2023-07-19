@@ -254,7 +254,6 @@ Then the tests will log into the vendor site and attempt to use the plugin's set
 
 #### e2e Test Environment Variables
 
-
 - `CLIENT_WP_URL`
     - URL Of client site:
     - `CLIENT_WP_URL=https://e2e.trustedlogin.dev/`
@@ -270,3 +269,77 @@ Then the tests will log into the vendor site and attempt to use the plugin's set
     - `NGROK_WP_URL=https://trustedlogin.ngrok.io`
     - ngrok URL for docker compose site.
     - In CI, this value should be `https://trustedlogin-ci.ngrok.io`
+
+### Updating and Troubleshooting Tests
+
+When working on this project, you may occasionally encounter failing tests or need to add new tests for new features. Here are some steps to guide you through this process.
+
+#### When a Test Fails
+
+1. **Run the test**: The easiest way to work on test and ensuring you code is building is to run `yarn test --watch `.
+2. **Understand the test**: Look at the test that is failing and understand what it is testing and what the expected behavior is.
+   1. You are going to see an error like this:
+   ```
+       ["Warning: You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.%s", "
+
+      1 | import React from "react";
+      2 |
+    > 3 | export const SelectFieldArea = ({ id, label, children, htmlFor }) => (
+        |                                   ^
+      4 |   <div className="">
+      5 |     <label
+      6 |       htmlFor={htmlFor ? htmlFor : id}
+
+      at SelectFieldArea (src/components/teams/fields.js:3:35)
+      at SelectField (src/components/teams/fields.js:39:31)
+      at HelpDeskSelect (src/components/teams/EditTeam.js:14:34)
+      at ViewProvider (src/hooks/useView.js:12:3)
+      at SettingsProvider (src/hooks/useSettings.js:267:3)
+      at TestProvider (src/components/TestProvider.js:33:3)
+          at Provider"]
+    ```
+   2. This tells you whats wrong and includes the stack trace where it is happening.
+3. **Investigate the failure**: Look at the error message and any stack traces that are provided. This information is usually quite helpful in pinpointing the issue.
+4. **Fix the code**: Update the code to fix the test. This could mean fixing a bug in the implementation or updating the implementation to match a new feature requirement.
+5. **Run the test again**: If running in watch mode the test will run automatically, otherwise after fixing the code, run the test again to verify that it now passes.
+
+#### Adding New Tests
+
+1. **Understand the requirement**: Before writing the test, you should fully understand the feature you are testing and what the expected behavior is. The previous example is a test for handling the default value.
+2. **Write the test**: Using the Jest framework, write a test that checks whether the feature behaves as expected.
+   1. The following example is a new test to verify how the application would work when the value has changed.
+    ```
+      import { render, fireEvent } from "@testing-library/react";
+      
+      it("Updates on change", () => {
+        const handleChange = jest.fn();
+        
+        const { getByLabelText } = render(
+          <HelpDeskSelect value={"helpscout"} options={options} onChange={handleChange} />,
+          {
+            wrapper: Provider,
+          }
+        );
+        
+        const select = getByLabelText(teamFields.helpdesk.label);
+        fireEvent.change(select, { target: { value: 'new value' } });
+        expect(handleChange).toBeCalledWith('new value');
+      });
+    ```
+   2. This test renders the component with a default value and then simulates a change event. It then verifies that the `onChange` handler was called with the new value.
+3. **Run the test**: Run the test to ensure it passes and the feature is working as expected.
+
+#### Updating Snapshot Tests
+
+Sometimes, a test might fail because of changes in the component structure or design, even though the component's functionality hasn't changed. If you verify that the changes are expected and not the result of a bug, you'll need to update the snapshot that Jest uses to compare in future test runs.
+
+Here's how you update Jest snapshots:
+
+1. Run the following command in your terminal: `yarn test -- -u`. _Note:_ If you are using `yarn test --watch`, you are given the option to press `u` to update the snapshots.
+2. Jest will automatically update the snapshots and re-run the tests.
+3. Check the snapshot changes in your Git diff to ensure that all changes are as expected and intentional.
+4. If everything looks good, commit the updated snapshot files.
+
+Remember, updating snapshots should be done cautiously. Ensure that you've fully reviewed and understand any snapshot changes before committing them.
+
+Never update a snapshot if you see an unexpected change, as this might be an indication of a regression or bug in your code.
