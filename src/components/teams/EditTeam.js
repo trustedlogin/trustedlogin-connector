@@ -19,8 +19,8 @@ export const HelpDeskSelect = ({ value, onChange, options = null }) => {
 
   return (
     <SelectField
-      name={teamFields.helpdesk.id}
       id={teamFields.helpdesk.id}
+      name={teamFields.helpdesk.id}
       label={teamFields.helpdesk.label}
       value={value}
       onChange={onChange}>

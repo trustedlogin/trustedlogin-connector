@@ -109,16 +109,18 @@ describe("HelpDeskSelect", () => {
     const { getByLabelText } = render(<HelpDeskSelect options={options} />, {
       wrapper: Provider,
     });
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("Select a Help Desk");
   });
   it("Sets default value", () => {
+    const handleChange = jest.fn();
+
     const { getByLabelText } = render(
-      <HelpDeskSelect options={options} defaultValue={"zendesk"} />,
-      {
-        wrapper: Provider,
-      }
+        <HelpDeskSelect value={"helpscout"} options={options} onChange={handleChange} />,
+        {
+          wrapper: Provider,
+        }
     );
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("zendesk");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
   });
 
   it("Changes value", () => {
@@ -130,7 +132,7 @@ describe("HelpDeskSelect", () => {
         target: { value: "zendesk" },
       });
     });
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("zendesk");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
   });
 
   it("Changes value and collectTeams has that value", () => {
