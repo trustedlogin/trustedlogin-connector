@@ -324,6 +324,11 @@ class Helpscout extends Webhook{
 	 * @return bool Whether the calculated hash matches the signature provided.
 	 */
 	public function verify_request( $data, $signature = null ) {
+
+		if ( ! $signature ) {
+			return false;
+		}
+
 		return hash_equals( $signature, $this->makeSignature(
             is_array($data) ? json_encode($data) : $data
         ) );

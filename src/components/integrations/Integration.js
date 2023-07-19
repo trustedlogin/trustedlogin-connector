@@ -34,7 +34,7 @@ const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
 
   const spanClassName = useMemo(() => {
     let className = isEnabled ? "translate-x-5" : "translate-x-0";
-    return `${className} translate-x-5 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`;
+    return `${className} inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition-transform ease-in-out duration-200`;
   }, [isEnabled]);
 
   //When button is clicked:

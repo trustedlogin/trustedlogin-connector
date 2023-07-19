@@ -119,7 +119,7 @@ const TeamsList = () => {
                     <input
                       id="search"
                       name="search"
-                      className="block w-full h-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
+                      className="block w-full h-full !pl-10 !pr-3 !py-3 !border !border-gray-300 !rounded-lg leading-5 !bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
                       placeholder={__('Search…', 'trustedlogin-vendor')}
                       type="search"
                     />
