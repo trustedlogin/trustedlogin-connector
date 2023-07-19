@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfigureHelpscout renders and matches snapshot while closed 1`] = `<div />`;
+exports[`ConfigureHelpDesk renders and matches snapshot while closed 1`] = `<div />`;
 
-exports[`ConfigureHelpscout renders and matches snapshot while open 1`] = `<div />`;
+exports[`ConfigureHelpDesk renders and matches snapshot while open 1`] = `<div />`;
 
-exports[`IntegrationHelpscout renders and matches snapshot 1`] = `
+exports[`IntegrationComponent renders and matches snapshot 1`] = `
 <div>
   <li
     class="col-span-1 flex flex-col justify-between bg-white rounded-lg shadow divide-y divide-gray-200"
