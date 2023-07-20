@@ -1,6 +1,5 @@
 name: e2e
 
-
 on:
   pull_request:
     types: [opened, closed, merged,synchronize]
