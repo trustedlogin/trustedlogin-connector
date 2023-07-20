@@ -129,7 +129,7 @@ describe("HelpDeskSelect", () => {
     });
     act(() => {
       fireEvent.change(getByLabelText(teamFields.helpdesk.label), {
-        target: { value: "zendesk" },
+        target: { value: "helpscout" },
       });
     });
     expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");

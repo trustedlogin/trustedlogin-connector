@@ -335,7 +335,7 @@ Sometimes, a test might fail because of changes in the component structure or de
 
 Here's how you update Jest snapshots:
 
-1. Run the following command in your terminal: `yarn test -- -u`. _Note:_ If you are using `yarn test --watch`, you are given the option to press `u` to update the snapshots.
+1. Run the following command in your terminal: `yarn test -- -u`.
 2. Jest will automatically update the snapshots and re-run the tests.
 3. Check the snapshot changes in your Git diff to ensure that all changes are as expected and intentional.
 4. If everything looks good, commit the updated snapshot files.
