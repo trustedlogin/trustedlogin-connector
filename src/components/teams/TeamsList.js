@@ -58,15 +58,21 @@ const TeamsList = () => {
     <>
       <>
         {teams.map((team) => {
+          // Destructure id and helpdesk from team, provide default values in case they're undefined
+          const { id = null, helpdesk = [] } = team;
+
+          // Get the first helpdesk, or "helpscout" if helpdesk is an empty array
+          const firstHelpDesk = Array.isArray(helpdesk) && helpdesk.length > 0 ? helpdesk[0] : "helpscout";
+
           return (
-              <Fragment key={team.id}>
+              <Fragment key={id}>
                 <ConfigureHelpDesk
-                    isOpen={modalTeam === team.id}
+                    isOpen={modalTeam === id}
                     setIsOpen={() => {
                       setModalTeam(null);
                     }}
                     team={team}
-                    helpDesk={team.helpdesk[0]}
+                    helpDesk={firstHelpDesk}
                 />
               </Fragment>
           );

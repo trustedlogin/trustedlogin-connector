@@ -286,7 +286,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
  * @param {Object} props.team - The team data.
  * @param {string} props.helpDesk - The name of the help desk.
  */
-export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk }) {
+export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpscout" }) {
   /**
    * `useMemo` hook is used to memoize the value returned by the function.
    * This value will only recalculate when [helpdeskName] changes.
@@ -297,20 +297,30 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk }) {
    */
   const helpdeskTitle = useMemo(() => {
     switch (helpDesk) {
-      case "helpscout":
-        return __("Help Scout", "trustedlogin-vendor");
       case "freescout":
         return __("FreeScout", "trustedlogin-vendor");
       default:
-        return helpdeskName;
+      case "helpscout":
+        return __("Help Scout", "trustedlogin-vendor");
     }
   }, [helpDesk]);
 
   // Use memoized helpdeskTitle to create title
-    const title = useMemo(() => `${__("Configure", "trustedlogin-vendor")} ${helpdeskTitle}`, [helpdeskTitle]);
+  const title = useMemo(() => `${__("Configure", "trustedlogin-vendor")} ${helpdeskTitle}`, [helpdeskTitle]);
+
+  // Check if the helpDesk value is a valid key in HelpDeskConfigs
+  if (!HelpDeskConfigs.hasOwnProperty(helpDesk)) {
+    throw new Error(`Invalid help desk: ${helpDesk}`);
+  }
 
   // Get the configurations for the specific help desk from HelpDeskConfigs object
-  const { link, linkText, description, goLink, goLinkText } = HelpDeskConfigs[helpDesk];
+  const {
+    link = "#",
+    linkText = "",
+    description = "",
+    goLink = "#",
+    goLinkText = ""
+  } = HelpDeskConfigs[helpDesk] || {};
 
   // Render ConfigureIntegration component with necessary props and children
   return (
