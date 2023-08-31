@@ -1,7 +1,7 @@
 import { useMemo, useState, Fragment } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
-import { PrimaryButton, SubmitAndCanelButtons } from "../Buttons";
+import { PrimaryButton, SubmitAndCancelButtons } from "../Buttons";
 import {ConfigureHelpDesk} from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
@@ -83,10 +83,12 @@ const TeamsList = () => {
           <>
             <TitleDescriptionLink title={__("Are You Sure?", "trustedlogin-vendor")} />
 
-            <SubmitAndCanelButtons
+            <SubmitAndCancelButtons
               onSubmit={completeDelete}
               submitText={__("Delete Team", "trustedlogin-vendor")}
               onCancel={cancelDelete}
+              link={null}
+              linkText={null}
             />
           </>
         </CenteredLayout>

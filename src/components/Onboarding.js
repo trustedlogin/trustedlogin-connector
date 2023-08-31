@@ -116,8 +116,9 @@ const StepTwo = () => {
             "trustedlogin-vendor"
           )}
         </p>
-        <a className="text-blue-tl text-sm" href="#">
+        <a className="text-blue-tl text-sm" href="https://app.trustedlogin.com/settings#/teams" target="_blank">
           {__("Where can I find this info?", "trustedlogin-vendor")}
+          <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-vendor")}</span>
         </a>
       </div>
       <form
@@ -304,24 +305,13 @@ export const OnboardingLayout = ({
                                 "Link your account",
                                 "trustedlogin-vendor"
                               )}
-                              subTitle={__(
-                                "Vitae sed mi luctus laoreet.",
-                                "trustedlogin-vendor"
-                              )}
                             />
                             <Aside.FutureStep
                               title={__("Create Team", "trustedlogin-vendor")}
-                              subTitle={
-                                "Cursus semper viverra facilisis et et some more."
-                              }
                             />
                             <Aside.FutureStep
                               title={__(
                                 "Configure Help Desk",
-                                "trustedlogin-vendor"
-                              )}
-                              subTitle={__(
-                                "Penatibus eu quis ante.",
                                 "trustedlogin-vendor"
                               )}
                             />
@@ -330,11 +320,12 @@ export const OnboardingLayout = ({
                       </div>
                     </div>
                     <div className="inline-flex items-center justify-center">
-                      <a className="text-sm text-blue-tl" href="#">
+                      <a className="text-sm text-blue-tl" href="https://docs.trustedlogin.com/Vendor/intro">
                         {__(
                           "Need Help? View our Documentation",
                           "trustedlogin-vendor"
                         )}
+                        <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-vendor")}</span>
                       </a>
                       <svg
                         className="ml-3"

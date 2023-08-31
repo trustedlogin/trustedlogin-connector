@@ -1,3 +1,5 @@
+import {__, _x} from "@wordpress/i18n";
+
 export const Button = ({ children, onClick, className, type }) => (
   <button onClick={onClick} type={type} className={className}>
     {children}
@@ -21,11 +23,11 @@ export const SecondaryButton = ({ children, onClick }) => (
   </Button>
 );
 
-export const SubmitAndCanelButtons = ({
+export const SubmitAndCancelButtons = ({
   onSubmit,
   onCancel,
   submitText,
-  cancelText = "Cancel",
+  cancelText = __("Cancel", "trustedlogin-vendor"),
 }) => (
   <div className="pt-8 mt-4 border-t">
     <div className="flex justify-end">

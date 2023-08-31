@@ -12,6 +12,7 @@ const TitleDescriptionLink = ({
     {link && linkText && linkText.length && link.length ? (
         <a className="text-blue-tl text-sm" href={link} target="_blank">
           {linkText}
+          <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-vendor")}</span>
         </a>
     ) : ''}
   </div>
