@@ -372,7 +372,7 @@ class SettingsApi
 	 *
 	 * @param string $accountId
 	 * @param string $helpdesk
-	 * @return TeamSettings
+	 * @return SettingsApi
 	 */
 	public function resetHelpdeskSettings($accountId,$helpdesk){
 		$team = $this->getByAccountId($accountId);
