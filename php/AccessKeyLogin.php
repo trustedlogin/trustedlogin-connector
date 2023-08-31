@@ -39,6 +39,8 @@ class AccessKeyLogin
 
 	const ACCESS_KEY_INPUT_NAME = 'ak';
 
+	const ACCESS_KEY_STRING_LENGTH = 64;
+
 	const REDIRECT_ENDPOINT = 'trustedlogin';
 
 	/**
@@ -60,11 +62,17 @@ class AccessKeyLogin
 	const ERROR_NO_SECRET_IDS_FOUND = 406;
 
 	/**
+	 * Error code when the secret keys provided are of an invalid format.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
+	 */
+	const ERROR_INVALID_SECRET = 422;
+
+	/**
 	 * Error code for no envelope found
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/510
 	 */
-	const ERROR_NO_ENVELOPE= 510;
+	const ERROR_NO_ENVELOPE = 510;
 
 
 	/**
@@ -113,7 +121,15 @@ class AccessKeyLogin
 			$account_id = sanitize_text_field($_REQUEST[ self::ACCOUNT_ID_INPUT_NAME]);
 		}
 
-		//Get saved settings an then team settings
+		if( self::ACCESS_KEY_STRING_LENGTH !== strlen( $access_key ) ) {
+			return new \WP_Error(
+				self::ERROR_INVALID_SECRET,
+				'invalid_secret',
+				esc_html__( 'The provided key is not the correct length. Make sure you copied it correctly and it is an Access Key.', 'trustedlogin-vendor' )
+			);
+		}
+
+		//Get saved settings and then team settings
 		$settings = SettingsApi::fromSaved();
 
 		try {
