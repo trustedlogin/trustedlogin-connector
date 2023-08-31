@@ -73,7 +73,7 @@ export const PageHeader = ({ title, subTitle, Button }) => {
             isExpanded={false}
             hasPopup={true}>
             <svg
-              className="text-gray-500 mr-2"
+              className="text-gray-500 mr-2 inline-flex"
               width="15"
               height="15"
               viewBox="0 0 15 15"
@@ -84,7 +84,7 @@ export const PageHeader = ({ title, subTitle, Button }) => {
                 fill="currentColor"
               />
             </svg>
-            Reset All
+            {__('Reset All', 'trustedlogin-vendor' )}
           </SecondaryButton>
         )}
       </div>
