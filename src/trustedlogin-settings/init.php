@@ -2,13 +2,9 @@
 //Register assets for TrustedLogin Settings
 
 use TrustedLogin\Vendor\Status\Onboarding;
-use TrustedLogin\Vendor\Reset;
 use TrustedLogin\Vendor\MenuPage;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\AccessKeyLogin;
-use TrustedLogin\Vendor\ReturnScreen;
-
-use TrustedLogin\Vendor\Webhooks\Factory;
 
 add_action('init', function () {
     $hasOnboarded = Onboarding::hasOnboarded();
