@@ -81,11 +81,11 @@ const TeamsList = () => {
       {isDeleting ? (
         <CenteredLayout>
           <>
-            <TitleDescriptionLink title={__("Are You Sure?")} />
+            <TitleDescriptionLink title={__("Are You Sure?", "trustedlogin-vendor")} />
 
             <SubmitAndCanelButtons
               onSubmit={completeDelete}
-              submitText={"Delete Team"}
+              submitText={__("Delete Team", "trustedlogin-vendor")}
               onCancel={cancelDelete}
             />
           </>
@@ -93,8 +93,8 @@ const TeamsList = () => {
       ) : (
         <div className="flex flex-col px-5 py-6 sm:px-10">
           <PageHeader
-            title={"Teams"}
-            subTitle={"Manage your TrustedLogin settings"}
+            title={__("Teams", "trustedlogin-vendor")}
+            subTitle={__("Manage your TrustedLogin settings", "trustedlogin-vendor")}
             Button={() => (
               <>
                 <div>
