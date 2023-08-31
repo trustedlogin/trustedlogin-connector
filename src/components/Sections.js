@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { DangerButton, ToggleSwitch } from ".";
 import { updateLoggingSettings } from "../api";
 import { useSettings } from "../hooks/useSettings";
-import { SubmitAndCanelButtons } from "./Buttons";
+import { SubmitAndCancelButtons } from "./Buttons";
 import { CenteredLayout } from "./Layout";
 import SettingSection from "./SettingSection";
 import TitleDescriptionLink from "./TitleDescriptionLink";
@@ -83,7 +83,7 @@ export const DangerZone = () => {
       ) : (
         <CenteredLayout>
           <TitleDescriptionLink title={__("Are You Sure?")} />
-          <SubmitAndCanelButtons
+          <SubmitAndCancelButtons
             onSubmit={onDelete}
             submitText={"Reset Keys"}
             onCancel={() => setIsResetting(false)}

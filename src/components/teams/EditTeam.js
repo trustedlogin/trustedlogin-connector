@@ -5,7 +5,7 @@ import { __ } from "@wordpress/i18n";
 import { InputField, SelectField, SelectFieldArea } from "./fields";
 import teamFields from "./teamFields";
 import collectTeam from "./collectTeam";
-import { SubmitAndCanelButtons } from "../Buttons";
+import { SubmitAndCancelButtons } from "../Buttons";
 import RoleMultiSelect from "../RoleMultiSelect";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { useSettings } from "../../hooks/useSettings";
@@ -160,7 +160,7 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
               />
             </div>
           </div>
-          <SubmitAndCanelButtons
+          <SubmitAndCancelButtons
             onSubmit={handleSave}
             submitText={formTitle}
             onCancel={() => {
