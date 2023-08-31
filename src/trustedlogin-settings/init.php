@@ -12,6 +12,9 @@ use TrustedLogin\Vendor\Webhooks\Factory;
 
 add_action('init', function () {
     $hasOnboarded = Onboarding::hasOnboarded();
+	$settings = SettingsApi::fromSaved();
+	$hasConnectedTeam = $settings->hasConnectedTeam();
+
     /**
      * Register assets
      */
@@ -120,13 +123,15 @@ add_action('init', function () {
             false
         );
 
-        //Add access key submenu page
-        new MenuPage(
-            MenuPage::SLUG_ACCESS_KEY,
-            __('Access Key Log-In', 'trustedlogin-vendor'),
-            'teams/access_key',
-            true
-        );
+	    if ( $hasConnectedTeam ) {
+	        //Add access key submenu page
+	        new MenuPage(
+	            MenuPage::SLUG_ACCESS_KEY,
+	            __('Access Key Log-In', 'trustedlogin-vendor'),
+	            'teams/access_key',
+	            true
+	        );
+	    }
     } else {
         //Add onboarding submenu page
         new MenuPage(

@@ -281,6 +281,21 @@ class SettingsApi
 	}
 
 	/**
+	 * Check if any connected team is active.
+	 * @since 1.15.0
+	 * @return bool
+	 */
+	public function hasConnectedTeam() {
+		foreach ( $this->teamSettings as $setting ) {
+			if ( $setting->get( 'connected' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the settings, as used by API and UI
 	 *
 	 * @return array
