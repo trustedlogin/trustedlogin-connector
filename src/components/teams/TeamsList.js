@@ -158,7 +158,7 @@ const TeamsList = () => {
                               setModalTeam(team.id);
                             }}
                             className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                            {__("Configure", "trustedlogin-vendor")}
+                            {__("Configure Help Desk", "trustedlogin-vendor")}
                           </button>
                         ) : null}
 

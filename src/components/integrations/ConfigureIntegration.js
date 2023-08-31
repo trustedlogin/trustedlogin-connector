@@ -233,7 +233,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
             <button
                 onClick={() => copyToClipboard(secret)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
-                title="Copy secret key"
+                title={__("Copy secret key", "trustedlogin-vendor")}
                 data-form-type="action,search">
               <svg
                   width="16"
@@ -255,7 +255,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
           <label
               htmlFor="callback_url"
               className="block text-sm font-medium text-gray-700">
-            Callback URL
+            {__("Callback URL", "trustedlogin-vendor")}
           </label>
           <div className="mt-2 relative rounded-lg">
             <input
@@ -269,7 +269,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
             <button
                 onClick={() => copyToClipboard(callback)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
-                title="Copy callback URL"
+                title={__("Copy Callback URL", "trustedlogin-vendor")}
                 data-form-type="action,search">
               <svg
                   width="16"
@@ -322,7 +322,7 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpsco
   }, [helpDesk]);
 
   // Use memoized helpdeskTitle to create title
-  const title = useMemo(() => `${__("Configure", "trustedlogin-vendor")} ${helpdeskTitle}`, [helpdeskTitle]);
+  const title = useMemo(() => `${__("Configure Help Desk", "trustedlogin-vendor")} ${helpdeskTitle}`, [helpdeskTitle]);
 
   // Check if the helpDesk value is a valid key in HelpDeskConfigs
   if (!HelpDeskConfigs.hasOwnProperty(helpDesk)) {
