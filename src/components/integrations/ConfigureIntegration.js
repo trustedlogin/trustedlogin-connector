@@ -153,8 +153,10 @@ export const TeamDetails = ({ team, helpdeskName }) => {
    * @param {string} value - The value to copy to clipboard.
    */
   function copyToClipboard(value) {
+
     // Query for the "clipboard-write" permission
     navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+
       // If the permission is granted or the user is prompted
       if (result.state === "granted" || result.state === "prompt") {
         // Attempt to write the text to the clipboard
@@ -168,8 +170,22 @@ export const TeamDetails = ({ team, helpdeskName }) => {
         );
       }
     }).catch((err) => {
-      // If an error occurred while writing to the clipboard, log it to the console
-      console.error( { err, value } );
+
+      // Fallback for Safari and Firefox
+      console.warn("Falling back to direct clipboard write due to error:", err);
+
+      // Attempt to write the text to the clipboard
+      navigator.clipboard.writeText(value).then(
+          function () {
+            console.log("Clipboard successfully set in fallback.");
+          },
+          function (nested_err) {
+            console.error("Clipboard write failed in fallback.", { nested_err, value });
+          }
+      ).catch((nested_err) => {
+        console.error("Final error during clipboard write.", { nested_err, err, value });
+      });
+
     });
   }
 
