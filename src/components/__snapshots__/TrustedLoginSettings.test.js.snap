@@ -222,9 +222,9 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                             Help Scout
                           </option>
                           <option
-                            value="zendesk"
+                            value="freescout"
                           >
-                            Zendesk
+                            FreeScout
                           </option>
                         </select>
                       </div>
