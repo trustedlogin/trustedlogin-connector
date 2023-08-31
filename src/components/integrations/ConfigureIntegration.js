@@ -414,7 +414,7 @@ export default function ConfigureIntegration({ isOpen, setIsOpen, children, titl
                       type="button"
                       className="mt-3 mr-4 w-2/5 inline-flex justify-center items-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                       data-form-type="other">
-                    {__("close", "trustedlogin-vendor")}                  </button>
+                    {__("Close", "trustedlogin-vendor")}                  </button>
                   <a
                       href={goLink}
                       type="button"
