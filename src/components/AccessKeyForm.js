@@ -266,7 +266,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
             <>
               {redirectSite ? (
                 <>
-                  <div>{__("Redirecting", "trustedlogin")}</div>
+                  <div className={"text-center"}>{__("Redirecting…", "trustedlogin")}</div>
                   <input type="hidden" name="action" value={"trustedlogin"} />
                   <input
                     type="hidden"
