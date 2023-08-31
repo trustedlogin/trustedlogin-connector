@@ -111,6 +111,7 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
           <TitleDescriptionLink
             title={formTitle}
             link={"https://app.trustedlogin.com/settings#/teams"}
+            linkText={__("Where can I find this info?", "trustedlogin-vendor")}
           />
 
           <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">
