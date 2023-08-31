@@ -20,7 +20,6 @@ const teamFields = {
     options: [
       { value: "helpscout", label: __("Help Scout", "trustedlogin-vendor") },
       { value: "freescout", label: __("FreeScout", "trustedlogin-vendor") },
-      { value: "zendesk", label: __("Zendesk", "trustedlogin-vendor") },
     ],
   },
   approved_roles: {

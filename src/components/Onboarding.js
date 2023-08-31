@@ -154,7 +154,7 @@ const StepTwo = () => {
           label={teamFields.helpdesk.label}>
           <option>{__("Select a Help Desk", "trustedlogin-vendor")}</option>
           <option value={"helpscout"}>Help Scout</option>
-          <option value={"zendesk"}>Zendesk</option>
+          <option value={"freescout"}>FreeScout</option>
         </SelectField>
         <div className="pt-2">
           <button

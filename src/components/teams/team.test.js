@@ -87,7 +87,7 @@ describe("TeamsList", () => {
 describe("HelpDeskSelect", () => {
   const options = [
     { label: "Help Scout", value: "helpscout" },
-    { label: "Zendesk", value: "zendesk" },
+    { label: "FreeScout", value: "freescout" },
   ];
   it("Renders & Matches snapshot", () => {
     const Wrapper = (props) => <Provider {...props} />;
@@ -156,7 +156,7 @@ describe("HelpDeskSelect", () => {
     });
     act(() => {
       fireEvent.change(getByLabelText(teamFields.helpdesk.label), {
-        target: { value: "zendesk" },
+        target: { value: "freescout" },
       });
     });
     act(() => {
@@ -164,7 +164,7 @@ describe("HelpDeskSelect", () => {
     });
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith({
-      [teamFields.helpdesk.id]: "zendesk",
+      [teamFields.helpdesk.id]: "freescout",
     });
   });
 });
