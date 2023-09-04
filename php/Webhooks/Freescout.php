@@ -2,14 +2,17 @@
 
 namespace TrustedLogin\Vendor\Webhooks;
 
-class Freescout extends Helpscout{
+/**
+ * @since 0.15.0
+ */
+class Freescout extends Helpscout {
 
 	/**
 	 * Get slug for this webhook.
 	 *
 	 * @return string
 	 */
-	public static function getProviderName(){
+	public static function getProviderName() {
 		return 'freescout';
 	}
 
@@ -18,7 +21,7 @@ class Freescout extends Helpscout{
 	 *
 	 * @return string
 	 */
-	public static function getProviderNameCapitalized(){
+	public static function getProviderNameCapitalized() {
 		return 'FreeScout';
 	}
 }

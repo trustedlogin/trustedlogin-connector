@@ -166,6 +166,8 @@ class Helpscout extends Webhook{
 	/**
 	 * Extracts the Help Scout signature from headers.
 	 *
+	 * @since 0.15.0
+	 *
 	 * @return string|null The signature or null if not found.
 	 */
 	private function get_signature_from_headers(): ?string {
@@ -190,6 +192,8 @@ class Helpscout extends Webhook{
 
 	/**
 	 * Constructs an error response.
+	 *
+	 * @since 0.15.0
 	 *
 	 * @param int $status HTTP status code.
 	 * @param string $errorMessage Error message text.
@@ -217,6 +221,8 @@ class Helpscout extends Webhook{
 	/**
 	 * Extracts customer emails from the data object.
 	 *
+	 * @since 0.15.0
+	 *
 	 * @param mixed $data_obj Data object.
 	 *
 	 * @return array|false The emails if found, false otherwise.
@@ -235,6 +241,8 @@ class Helpscout extends Webhook{
 
 	/**
 	 * Prepare search keys for the API call.
+	 *
+	 * @since 0.15.0
 	 *
 	 * @param array $licenses List of licenses.
 	 *

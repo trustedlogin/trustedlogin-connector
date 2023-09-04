@@ -108,7 +108,7 @@ trait Logger {
 	/**
 	 * Returns the directory name where the log file.
 	 *
-	 * @since TODO
+	 * @since 0.14.0
 	 * @return string
 	 */
 	private function getLogFileDirectoryName() {

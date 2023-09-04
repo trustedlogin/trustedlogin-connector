@@ -1,17 +1,17 @@
-=== TrustedLogin Vendor ===
+=== TrustedLogin Support Plugin ===
 Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
-Tested up to: 6.2.2
-Stable tag: 0.14.0
+Tested up to: 6.3.1
+Stable tag: 0.15.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Empower support team members to securely and easily log into client sites using TrustedLogin.
 
 == Description ==
 
-TrustedLogin plugin to be installed on the website of the support-provider ("vendor").
+TrustedLogin plugin to be installed on the website of the support provider.
 
 == Installation ==
 
@@ -19,6 +19,16 @@ TrustedLogin plugin to be installed on the website of the support-provider ("ven
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.15.0 on September 4, 2023 =
+
+- Added support for the FreeScout help desk. Requires installing the [FreeScout TrustedLogin Module](https://github.com/trustedlogin/freescout-module)
+- Added support for logging into multiple sites when the same Access Key is used on multiple sites (when a license key is shared)
+- Set required length for an Access Key when submitting the form
+- Added an error notifying when the Access Key is invalid
+- Updated to display the Site Access menu item when the user has a support role
+- Delete the log file when Reset All is performed
+- Refactored the help desk provider classes
 
 = 0.14.0 on May 25, 2023 =
 
