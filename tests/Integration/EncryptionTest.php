@@ -242,7 +242,7 @@ class EncryptionTest extends \WP_UnitTestCase
 
 		$decrypted = $this->encryption->decryptCryptoBox('Very encrypted.', $nonce, $keys->public_key);
 
-		$this->assertNotEquals('sodium-error', $decrypted->get_error_code(), 'The sodium process requires specific parameters that were not met: ' . $decrypted->get_error_message());
+		$this->assertNotEquals('decryption_failed_sodiumexception', $decrypted->get_error_code(), 'The sodium process requires specific parameters that were not met: ' . $decrypted->get_error_message());
 
 		$this->assertEquals('decryption_failed', $decrypted->get_error_code(), $decrypted->get_error_message());
 

@@ -6,6 +6,7 @@ import { HorizontalLogo } from "./TrustedLoginLogo";
 import { SelectFieldArea, InputFieldArea } from "./teams/fields";
 import TitleDescriptionLink from "./TitleDescriptionLink";
 import { ToastError } from "./Errors";
+import { SecondaryButton } from "./Buttons";
 function collectFormData(form) {
   let data = {};
   const formData = new FormData(form);
@@ -23,26 +24,66 @@ const getAccessKey = () => {
   }
   return "";
 };
+
+const hasOnlyOneRedirectData = (redirectData) =>
+  redirectData && 1 == Object.keys(redirectData).length;
+const firstRedirectData = (redirectData) =>
+  redirectData && redirectData[Object.keys(redirectData)[0]];
+const Layout = ({ children, minimal, title, description }) => {
+  return (
+    <>
+      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto bg-white rounded-lg px-8 py-3 text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:px-14 sm:py-8">
+          <div className="w-full p-8 text-center">
+            <HorizontalLogo />
+          </div>
+
+          {!minimal ? (
+            <TitleDescriptionLink title={title} description={description} />
+          ) : null}
+
+          <>{children}</>
+        </div>
+      </div>
+    </>
+  );
+};
 const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
   //State for access key in form or url
   //May be preset in window.tlVendor.accessKey.ak
   const [accessKey, setAccessKey] = useState(() => getAccessKey());
+
   //State for redicect data fetched via api
   //May be preset in window.tlVendor.redirectData
   const [redirectData, setRedirectData] = useState(() => {
     //Use data set server-side, if it is there
     if (window.tlVendor && window.tlVendor.hasOwnProperty("redirectData")) {
-      let valid = true;
-      //Make sure we got all the parts
-      ["siteurl", "endpoint", "identifier"].forEach((key) => {
-        if (!window.tlVendor.redirectData.hasOwnProperty(key)) {
-          valid = false;
+      let data = {};
+      Object.keys(window.tlVendor.redirectData).forEach((id) => {
+        let site = window.tlVendor.redirectData[id];
+        let valid = true;
+        //Make sure we got all the parts
+        ["siteurl", "endpoint", "identifier"].forEach((key) => {
+          if (!window.tlVendor.redirectData[id].hasOwnProperty(key)) {
+            valid = false;
+          }
+        });
+        if (valid) {
+          data[id] = site;
         }
       });
-      if (valid) {
-        return window.tlVendor.redirectData;
-      }
+      return data;
     }
+    return null;
+  });
+
+  //Site were doing the redirect for.
+  const [redirectSite, setRedirectSite] = useState(() => {
+    //If we have 1 site in redirectData, use that
+    if (hasOnlyOneRedirectData(redirectData)) {
+      return firstRedirectData(redirectData);
+    }
+    //Will get selected later
     return null;
   });
 
@@ -106,18 +147,18 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           setIsLoading(false);
           if (
             err &&
-            err.hasOwnProperty("message") &&
-            "message" === typeof err.message
-          ) {
-            setErrorMessage(err.message);
-          } else if (
-            err &&
             err.hasOwnProperty("data") &&
             "string" === typeof err.data
           ) {
             setErrorMessage(err.data);
+          } else if (
+            err &&
+            err.hasOwnProperty("message") &&
+            "string" === typeof err.message
+          ) {
+            setErrorMessage(err.message);
           } else {
-            setErrorMessage(__("An error happended."));
+            setErrorMessage(__("There was an error processing the access key."));
           }
         })
         .then((res) => {
@@ -127,11 +168,13 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
             setIsLoading(false);
           }
         });
-    } //Have redirectData, login with it.
-    else {
+    } //Have redirectSite, login with it!
+    else if (redirectSite) {
       e.preventDefault();
       let data = collectFormData(form);
-      fetch(redirectData.loginurl, {
+      //Do a POST to login
+      //@see https://github.com/trustedlogin/vendor/pull/82
+      fetch(redirectSite.loginurl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,61 +185,98 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
         .then((r) => {
           //Response good?
           if (r.ok()) {
-            //Redirect to site,should be logged in.
-            window.location = redirectData.siteurl;
+            //Redirect to site,should be logged in already.
+            window.location = redirectSite.siteurl;
             return;
           }
           setIsLoading(false);
-          setErrorMessage(__("An error happended."));
+          setErrorMessage(__("There was an error while logging in with the access key."));
         })
         .catch((err) => {
           setIsLoading(false);
-          setErrorMessage(__("An error happended."));
+          setErrorMessage(__("There was an error while logging in with the access key."));
         });
     }
   };
 
-  //Once we have redirectData, submit form again
+  //If we have 1 redirectData, but no redirectSite, use first site
   useEffect(() => {
-    if (redirectData) {
+    //If we have 1 site in redirectData, use that
+    if (hasOnlyOneRedirectData(redirectData)) {
+      setRedirectSite(firstRedirectData(redirectData));
+    }
+  }, [redirectData, setRedirectSite]);
+
+  //Once we have redirectSite, submit form again
+  useEffect(() => {
+    if (redirectSite) {
       document.getElementById("access-key-form").submit();
     }
-  }, [redirectData]);
+  }, [redirectSite]);
 
+  //Have redirectData and not redirectSite, show select
+  if (redirectData && !redirectSite) {
+    return (
+      <Layout
+        minimal={minimal}
+        title={__("Select site to log into.", "trustedlogin-vendor")}
+        description={__(
+          "There are multiple sites associated with this access key.",
+          "trustedlogin-vendor"
+        )}>
+        <>
+          <div>
+            <ul>
+              {Object.keys(redirectData).map((id) => {
+                let site = redirectData[id];
+                return (
+                  <li key={id}>
+                    <SecondaryButton
+                      onClick={() => {
+                        setRedirectSite(site);
+                      }}>
+                      {site.siteurl}
+                    </SecondaryButton>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </>
+      </Layout>
+    );
+  }
   return (
     <>
-      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto bg-white rounded-lg px-8 py-3 text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:px-14 sm:py-8">
-          <div className="w-full p-8 text-center">
-            <HorizontalLogo />
-          </div>
-          {!minimal ? (
-            <TitleDescriptionLink
-              title={__("Log In Using Access Key", "trustedlogin-vendor")}
-            />
-          ) : null}
-
-          <>
-            <form
-              aria-label={__("Log In Using Access Key", "trustedlogin-vendor")}
-              onSubmit={handler}
-              id="access-key-form"
-              method={"POST"}
-              action={redirectData ? redirectData.siteurl : null}
-              className="flex flex-col py-6 space-y-6 justify-center">
-              {redirectData ? (
+      <Layout
+        minimal={minimal}
+        title={__("Log In Using Access Key", "trustedlogin-vendor")}
+        description={__(
+          "Paste the Access Key to log into the connected website.",
+          "trustedlogin-vendor"
+        )}>
+        <>
+          <form
+            aria-label={__("Log In Using Access Key", "trustedlogin-vendor")}
+            onSubmit={handler}
+            id="access-key-form"
+            method={"POST"}
+            action={redirectSite ? redirectSite.siteurl : null}
+            className="flex flex-col py-6 space-y-6 justify-center">
+            <>
+              {redirectSite ? (
                 <>
-                  <div>{__("Redirecting", "trustedlogin")}</div>
+                  <div className={"text-center"}>{__("Redirecting…", "trustedlogin")}</div>
                   <input type="hidden" name="action" value={"trustedlogin"} />
                   <input
                     type="hidden"
                     name="endpoint"
-                    value={redirectData.endpoint}
+                    value={redirectSite.endpoint}
                   />
                   <input
                     type="hidden"
                     name="identifier"
-                    value={redirectData.identifier}
+                    value={redirectSite.identifier}
                   />
                 </>
               ) : (
@@ -256,6 +336,8 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                         type="text"
                         name="ak"
                         id="ak"
+                        minLength={64}
+                        maxLength={64}
                         className="block w-full pl-4 pr-10 py-4 sm:text-md border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500"
                         placeholder={__(
                           "Paste key received from customer",
@@ -267,7 +349,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
 
                   <>
                     {isLoading ? (
-                      <div className="spinner is-active inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
+                      <div className="spinner-light-tl inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
                     ) : (
                       <input
                         type="submit"
@@ -278,11 +360,11 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                   </>
                 </>
               )}
-            </form>
-            {errorMessage && <ToastError heading={errorMessage} />}
-          </>
-        </div>
-      </div>
+            </>
+          </form>
+          {errorMessage && <ToastError heading={errorMessage} />}
+        </>
+      </Layout>
     </>
   );
 };

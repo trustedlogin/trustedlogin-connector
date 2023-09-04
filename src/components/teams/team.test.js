@@ -87,7 +87,7 @@ describe("TeamsList", () => {
 describe("HelpDeskSelect", () => {
   const options = [
     { label: "Help Scout", value: "helpscout" },
-    { label: "Zendesk", value: "zendesk" },
+    { label: "FreeScout", value: "freescout" },
   ];
   it("Renders & Matches snapshot", () => {
     const Wrapper = (props) => <Provider {...props} />;
@@ -109,16 +109,18 @@ describe("HelpDeskSelect", () => {
     const { getByLabelText } = render(<HelpDeskSelect options={options} />, {
       wrapper: Provider,
     });
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("Select a Help Desk");
   });
   it("Sets default value", () => {
+    const handleChange = jest.fn();
+
     const { getByLabelText } = render(
-      <HelpDeskSelect options={options} defaultValue={"zendesk"} />,
-      {
-        wrapper: Provider,
-      }
+        <HelpDeskSelect value={"helpscout"} options={options} onChange={handleChange} />,
+        {
+          wrapper: Provider,
+        }
     );
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("zendesk");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
   });
 
   it("Changes value", () => {
@@ -127,10 +129,10 @@ describe("HelpDeskSelect", () => {
     });
     act(() => {
       fireEvent.change(getByLabelText(teamFields.helpdesk.label), {
-        target: { value: "zendesk" },
+        target: { value: "helpscout" },
       });
     });
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("zendesk");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
   });
 
   it("Changes value and collectTeams has that value", () => {
@@ -154,7 +156,7 @@ describe("HelpDeskSelect", () => {
     });
     act(() => {
       fireEvent.change(getByLabelText(teamFields.helpdesk.label), {
-        target: { value: "zendesk" },
+        target: { value: "freescout" },
       });
     });
     act(() => {
@@ -162,7 +164,7 @@ describe("HelpDeskSelect", () => {
     });
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith({
-      [teamFields.helpdesk.id]: "zendesk",
+      [teamFields.helpdesk.id]: "freescout",
     });
   });
 });

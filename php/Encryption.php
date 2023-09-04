@@ -370,8 +370,16 @@ class Encryption
 			}
 
 			return $decrypted_payload;
-		} catch (\SodiumException $e) {
-			return new WP_Error('sodium-error', $e->getMessage(), $e);
+		} catch ( \TypeError $e ) {
+			return new WP_Error(
+				'decryption_failed_typeerror',
+				sprintf( 'Error while decrypting envelope: %s (%s)', $e->getMessage(), $e->getCode() )
+			);
+		} catch ( \SodiumException $e ) {
+			return new WP_Error(
+				'decryption_failed_sodiumexception',
+				sprintf( 'Error while decrypting envelope: %s (%s)', $e->getMessage(), $e->getCode() )
+			);
 		}
 	}
 

@@ -3,7 +3,7 @@
  * Plugin Name: TrustedLogin Support Plugin
  * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
- * Version: 0.11.0
+ * Version: 0.14.0
  * Requires PHP: 7.1
  * Author: Katz Web Services, Inc.
  * Author URI: https://www.trustedlogin.com
@@ -15,13 +15,17 @@
 
 use TrustedLogin\Vendor\ErrorHandler;
 use TrustedLogin\Vendor\AccessKeyLogin;
+use TrustedLogin\Vendor\Reset;
+use TrustedLogin\Vendor\SettingsApi;
+use TrustedLogin\Vendor\Status\Onboarding;
+use TrustedLogin\Vendor\Webhooks\Factory;
 
 if (!defined('ABSPATH')) {
     exit;
 }
 // Exit if accessed directly
 
-define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.11.0' );
+define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '0.14.0' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
 if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
@@ -29,7 +33,7 @@ if( ! defined( 'TRUSTEDLOGIN_API_URL')){
 //Set this to true, in wp-config.php to log all PHP errors/warnings/notices to trustedlogin.log
 // Code: define( 'TRUSTEDLOGIN_DEBUG', true );
 if( ! defined( 'TRUSTEDLOGIN_DEBUG') ){
-	define( 'TRUSTEDLOGIN_DEBUG', false );
+	define( 'TRUSTEDLOGIN_DEBUG', null );
 }
 
 
@@ -47,13 +51,13 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	//Include admin init file
 	include_once dirname( __FILE__ ) . '/src/trustedlogin-settings/init.php';
 
-	//Maybe register error handler
-	if( TRUSTEDLOGIN_DEBUG ){
-		\TrustedLogin\Vendor\ErrorHandler::register();
-	}
-
 	//This will initialize the plugin
 	$plugin = trustedlogin_vendor();
+
+	//Maybe register error handler
+	if( TRUSTEDLOGIN_DEBUG || $plugin->getSettings()->isErrorLogggingEnabled() ){
+		\TrustedLogin\Vendor\ErrorHandler::register();
+	}
 
 	/**
 	 * Runs when plugin is ready.
@@ -114,23 +118,26 @@ function trustedlogin_vendor(){
 /**
  * Get data to set window.tlVendor in client with
  */
-function trusted_login_vendor_prepare_data(\TrustedLogin\Vendor\SettingsApi $settingsApi){
+function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
+	$helpdesk  = $settingsApi->toArray()['teams'][0]['helpdesk'][0] ?? 'helpscout';
 
 	$data = [
-		'resetAction' => esc_url_raw(\TrustedLogin\Vendor\Reset::actionUrl()),
+		'resetAction' => esc_url_raw( Reset::actionUrl()),
 		'roles' => wp_roles()->get_names(),
-		'onboarding' => \TrustedLogin\Vendor\Status\Onboarding::hasOnboarded() ? 'COMPLETE' : '0',
+		'onboarding' => Onboarding::hasOnboarded() ? 'COMPLETE' : '0',
 		'accessKey' => [
 			AccessKeyLogin::ACCOUNT_ID_INPUT_NAME => $accountId,
 			AccessKeyLogin::ACCESS_KEY_INPUT_NAME => $accessKey,
 			AccessKeyLogin::REDIRECT_ENDPOINT => true,
 			'action'   => AccessKeyLogin::ACCESS_KEY_ACTION_NAME,
-			\TrustedLogin\Vendor\Webhooks\Factory::PROVIDER_KEY => 'helpscout',
+			Factory::PROVIDER_KEY => $helpdesk,
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
+		//https://github.com/trustedlogin/vendor/issues/131
+		'log_file_name' => trustedlogin_vendor()->getLogFileName( false ),
 	];
 
 	//Check if we can preset redirectData in form

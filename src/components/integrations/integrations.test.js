@@ -1,16 +1,16 @@
 import { render } from "@testing-library/react";
-import { IntegrationHelpscout } from "./Integration";
-import { ConfigureHelscout } from "./ConfigureIntegration";
+import { IntegrationComponent } from "./Integration";
+import {ConfigureHelpDesk} from "./ConfigureIntegration";
 import Provider from "../TestProvider";
-describe("IntegrationHelpscout", () => {
+describe("IntegrationComponent", () => {
   it("renders and matches snapshot", () => {
-    const { container } = render(<IntegrationHelpscout />, {
+    const { container } = render(<IntegrationComponent helpdesk={'helpscout'} />, {
       wrapper: Provider,
     });
     expect(container).toMatchSnapshot();
   });
 });
-describe("ConfigureHelpscout", () => {
+describe("ConfigureHelpDesk", () => {
   beforeAll(() => {
     //@see https://stackoverflow.com/a/57270851/1469799
     global.IntersectionObserver = class IntersectionObserver {
@@ -35,7 +35,7 @@ describe("ConfigureHelpscout", () => {
   });
   it("renders and matches snapshot while closed", () => {
     const { container } = render(
-      <ConfigureHelscout isOpen={false} setIsOpen={jest.fn()} />,
+      <ConfigureHelpDesk isOpen={false} setIsOpen={jest.fn()} helpDesk={'helpscout'} />,
       {
         wrapper: Provider,
       }
@@ -45,7 +45,7 @@ describe("ConfigureHelpscout", () => {
 
   it("renders and matches snapshot while open", () => {
     const { container } = render(
-      <ConfigureHelscout isOpen={true} setIsOpen={jest.fn()} />,
+      <ConfigureHelpDesk isOpen={true} setIsOpen={jest.fn()} helpDesk={'helpscout'} />,
       {
         wrapper: Provider,
       }

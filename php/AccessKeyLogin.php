@@ -39,23 +39,40 @@ class AccessKeyLogin
 
 	const ACCESS_KEY_INPUT_NAME = 'ak';
 
+	const ACCESS_KEY_STRING_LENGTH = 64;
+
 	const REDIRECT_ENDPOINT = 'trustedlogin';
 
-	const ERROR_NO_ACCOUNT_ID = 404;
-
+	/**
+	 * Error code when the current user isn't allowed to provide support.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+	 */
 	const ERROR_INVALID_ROLE = 403;
 
+	/**
+	 * Error code when the there is no account in TrustedLogin matching the specified account ID.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+	 */
+	const ERROR_NO_ACCOUNT_ID = 404;
+
 	/*
-	* Error for no secret ids founc
-	* @See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+	* Error for no secret ids found.
+	* @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
 	*/
 	const ERROR_NO_SECRET_IDS_FOUND = 406;
+
+	/**
+	 * Error code when the secret keys provided are of an invalid format.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
+	 */
+	const ERROR_INVALID_SECRET = 422;
+
 	/**
 	 * Error code for no envelope found
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/510
 	 */
-	const ERROR_NO_ENVELOPE= 510;
+	const ERROR_NO_ENVELOPE = 510;
 
 
 	/**
@@ -104,7 +121,15 @@ class AccessKeyLogin
 			$account_id = sanitize_text_field($_REQUEST[ self::ACCOUNT_ID_INPUT_NAME]);
 		}
 
-		//Get saved settings an then team settings
+		if( self::ACCESS_KEY_STRING_LENGTH !== strlen( $access_key ) ) {
+			return new \WP_Error(
+				self::ERROR_INVALID_SECRET,
+				'invalid_secret',
+				esc_html__( 'The provided key is not the correct length. Make sure you copied it correctly and it is an Access Key.', 'trustedlogin-vendor' )
+			);
+		}
+
+		//Get saved settings and then team settings
 		$settings = SettingsApi::fromSaved();
 
 		try {
@@ -116,62 +141,61 @@ class AccessKeyLogin
 				$e->getMessage()
 			);
 		}
-		if ($this->verifyUserRole($teamSettings)) {
-			/** YOLO!
+
+		if ( ! $this->verifyUserRole($teamSettings) ) {
 			return new \WP_Error(
 				self::ERROR_INVALID_ROLE,
 				'invalid_user_role',
-				'User does not have the correct role'
+				esc_html__( 'You do not have a role that is allowed to provide support for this team.', 'trustedlogin-vendor' )
 			);
-			*/
 		}
 
 		$tl = new TrustedLoginService(
 			trustedlogin_vendor()
 		);
 
-		$site_ids = $tl->apiGetSecretIds($access_key, $account_id);
+		$secret_ids = $tl->apiGetSecretIds($access_key, $account_id);
 
-		if (is_wp_error($site_ids)) {
+		if (is_wp_error($secret_ids)) {
 			return new \WP_Error(
 				400,
 				'invalid_secret_keys',
-				$site_ids->get_error_message()
+				$secret_ids->get_error_message()
 			);
 		}
 
-		if (empty($site_ids)) {
+		if (empty($secret_ids)) {
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
-				'no_secret_keys',
-				'No secret keys found'
+				'no_secret_ids',
+				esc_html__( 'There were no sites found that match that Access Key. Access may have been revoked.', 'trustedlogin-vendor' )
 			);
 		}
 
-		foreach ($site_ids as $site_id) {
-			$envelope = $tl->apiGetEnvelope($site_id, $account_id);
-			//Not an error?
-			if( ! is_wp_error($envelope)){
-				//Break, we got one.
-				break;
-			}
+		$valid_secrets = $tl->getValidSecrets( $secret_ids, $account_id );
+
+		$this->log( 'Valid secrets: ', __METHOD__, 'debug', $valid_secrets );
+
+		if ( empty( $valid_secrets ) ) {
+			return new \WP_Error(
+				self::ERROR_NO_SECRET_IDS_FOUND,
+				'no_valid_secret_ids',
+				esc_html__( 'There were secrets found, but they were invalid.', 'trustedlogin-vendor' )
+			);
 		}
 
-		//Return the last error, if its an error
-		//@todo what about the other ones?
-		if (is_wp_error($envelope)) {
-			return $envelope;
-		}
-		//Try to get parts of the envelope,may return WP_Error
-		$parts = $tl->envelopeToUrl($envelope, true);
-		return $parts;
+	    /**
+	     * Return all url parts, not just 0
+	     * @see https://github.com/trustedlogin/vendor/issues/109
+	     */
+		return wp_list_pluck( $valid_secrets, 'url_parts' );
 	}
 
 	/**
 	 * Verifies the $_POST request by the Access Key login form.
 	 *
 	 * @param bool $checkNonce. Optional. Default true. Set false to bypass nonce check.
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public function verifyGrantAccessRequest(bool $checkNonce = true)
 	{

@@ -256,13 +256,12 @@ class SettingsApiTest extends \WP_UnitTestCase
 		$settings = new SettingsApi($data);
 
 		$this->assertSame(
-			$helpscout_data,
-			$settings->getByAccountId($accountId)->getHelpdeskData()
+			$helpscout_data['secret'],
+			$settings->getByAccountId($accountId)->getHelpdeskData()['secret']
 		);
 	}
 
 	/**
-	 *
 	 * @covers SettingsApi::fromSaved()
 	 * @covers SettingsApi::save()
 	 * @covers SettingsApi::updateByAccountId()
@@ -309,9 +308,17 @@ class SettingsApiTest extends \WP_UnitTestCase
 		$setting1 = $settings->getByAccountId($accountId);
 		//Team we saved helpscout data for has helpscout data
 		$this->assertSame(
-			$helpscout_data,
+			$helpscout_data['secret'],
 			$setting1
-			->getHelpdeskData()
+			->getHelpdeskData()['secret']
+		);
+		$this->assertTrue(
+			\str_contains(
+				$setting1
+				->getHelpdeskData()['callback'],
+				'?trustedlogin=1&action=trustedlogin_webhook&provider=helpscout'
+			)
+
 		);
 		$this->assertArrayHasKey(
 			TeamSettings::HELPDESK_SETTINGS,
@@ -319,9 +326,9 @@ class SettingsApiTest extends \WP_UnitTestCase
 		);
 
 		$this->assertSame(
-			$helpscout_data,
+			$helpscout_data['secret'],
 			SettingsApi::fromSaved()->getByAccountId($accountId)
-			->getHelpdeskData()
+			->getHelpdeskData()['secret']
 		);
 
 		$this->assertSame(
@@ -542,8 +549,12 @@ class SettingsApiTest extends \WP_UnitTestCase
 			'integrations' => [
 				'helpscout' => [
 					'enabled' => true,
+				],
+				'freescout' => [
+					'enabled' => true,
 				]
 			],
+			'error_logging' => false,
 			'key' => 'value'
 		];
 		$this->assertSame(
@@ -607,8 +618,12 @@ class SettingsApiTest extends \WP_UnitTestCase
 			'integrations' => [
 				'helpscout' => [
 					'enabled' => true,
+				],
+				'freescout' => [
+					'enabled' => true,
 				]
 			],
+			'error_logging' => false,
 			'key' => 'value'
 		];
 		$this->assertSame(

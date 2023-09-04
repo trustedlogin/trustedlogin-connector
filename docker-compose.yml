@@ -3,22 +3,7 @@ version: "3.9"
 services:
 
   # Tunnel
-  ## Makes site availble on trustedlogin.nrok.com
-  ngrok:
-    image: shkoliar/ngrok:latest
-    ports:
-      - 4551:4551
-    links:
-      - wordpress
-    environment:
-      - DOMAIN=wordpress
-      - PORT=80
-      - SUBDOMAIN=trustedlogin
-      - DEBUG=true
-      - AUTH_TOKEN=${NGROK_AUTH_TOKEN}
-    restart: always
-    depends_on:
-      - wordpress
+
 
   # WordPress
   ## PHP + Core
@@ -33,7 +18,7 @@ services:
       ## Map this directory into the plugin directory
       - ./:/var/www/html/wp-content/plugins/trustedlogin-vendor
     ports:
-      - "8200:80"
+      - "8100:80"
     restart: always
     environment:
       WORDPRESS_DB_HOST: wpdb:3306
@@ -47,9 +32,7 @@ services:
         define( 'WP_DEBUG_DISPLAY', true );
         //If true, TrustedLogin\Vendor\ErrorHandler will handle all errors
         define( 'TRUSTEDLOGIN_DEBUG', true );
-        /* ngrok wp urls overrides */
-        define('WP_SITEURL', 'https://trustedlogin.ngrok.io');
-        define('WP_HOME', 'https://trustedlogin.ngrok.io' );
+
   ## Database for WordPress site
   wpdb:
     image: mariadb:10.5.8

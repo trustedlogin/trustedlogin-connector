@@ -1,29 +1,29 @@
 import { useView } from "../../hooks/useView";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { __ } from "@wordpress/i18n";
 
 import { InputField, SelectField, SelectFieldArea } from "./fields";
 import teamFields from "./teamFields";
 import collectTeam from "./collectTeam";
-import { SubmitAndCanelButtons } from "../Buttons";
+import { SubmitAndCancelButtons } from "../Buttons";
 import RoleMultiSelect from "../RoleMultiSelect";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { useSettings } from "../../hooks/useSettings";
 
 //HelpDesk select
-export const HelpDeskSelect = ({ defaultValue, options = null }) => {
+export const HelpDeskSelect = ({ value, onChange, options = null }) => {
   const { getEnabledHelpDeskOptions } = useSettings();
   const helpDeskOptions = useMemo(() => {
     return options ? options : getEnabledHelpDeskOptions();
   }, [options, getEnabledHelpDeskOptions]);
+
   return (
     <SelectField
-      name={teamFields.helpdesk.id}
       id={teamFields.helpdesk.id}
+      name={teamFields.helpdesk.id}
       label={teamFields.helpdesk.label}
-      defaultValue={
-        defaultValue ? defaultValue : teamFields.helpdesk.defaultValue
-      }>
+      value={value}
+      onChange={onChange}>
       {helpDeskOptions.length ? (
         <>
           <option>{__("Select a Help Desk", "trustedlogin-vendor")}</option>
@@ -44,8 +44,22 @@ export const HelpDeskSelect = ({ defaultValue, options = null }) => {
 const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
   const { setCurrentView } = useView();
   const formRef = useRef();
-  //useState for approved_roles, beacuse that works.
+  //useState for approved_roles, because that works.
   const [approved_roles, set_approved_roles] = useState(team?.approved_roles);
+  // Declare local state for account_id, public_key, and private_key
+  const [account_id, setAccount_id] = useState(team?.account_id);
+  const [public_key, setPublic_key] = useState(team?.public_key);
+  const [private_key, setPrivate_key] = useState(team?.private_key);
+  const [selectedHelpDesk, setSelectedHelpDesk] = useState(team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? '');
+
+  // Update local state when team changes
+  useEffect(() => {
+    setAccount_id(team?.account_id);
+    setPublic_key(team?.public_key);
+    setPrivate_key(team?.private_key);
+    set_approved_roles(team?.approved_roles);
+    setSelectedHelpDesk(team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? '');
+  }, [team]);
 
   //When form is submitted, collect the data and pass it to onClickSave
   const handleSave = (e) => {
@@ -97,33 +111,37 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
           <TitleDescriptionLink
             title={formTitle}
             link={"https://app.trustedlogin.com/settings#/teams"}
+            linkText={__("Where can I find this info?", "trustedlogin-vendor")}
           />
 
           <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">
             <div className="flex flex-col space-y-6 sm:flex-1">
               <InputField
-                type="text"
-                name={teamFields.account_id.id}
-                id={teamFields.account_id.id}
-                label={teamFields.account_id.label}
-                defaultValue={team?.account_id}
-                required={true}
+                  type="text"
+                  name={teamFields.account_id.id}
+                  id={teamFields.account_id.id}
+                  label={teamFields.account_id.label}
+                  value={account_id}
+                  onChange={(e) => setAccount_id(e.target.value)}
+                  required={true}
               />
               <InputField
-                type="text"
-                name={teamFields.public_key.id}
-                id={teamFields.public_key.id}
-                label={teamFields.public_key.label}
-                defaultValue={team?.public_key}
-                required={true}
+                  type="text"
+                  name={teamFields.public_key.id}
+                  id={teamFields.public_key.id}
+                  label={teamFields.public_key.label}
+                  value={public_key}
+                  onChange={(e) => setPublic_key(e.target.value)}
+                  required={true}
               />
               <InputField
-                type="text"
-                name={teamFields.private_key.id}
-                id={teamFields.private_key.id}
-                label={teamFields.private_key.label}
-                defaultValue={team?.private_key}
-                required={true}
+                  type="text"
+                  name={teamFields.private_key.id}
+                  id={teamFields.private_key.id}
+                  label={teamFields.private_key.label}
+                  value={private_key}
+                  onChange={(e) => setPrivate_key(e.target.value)}
+                  required={true}
               />
             </div>
             <div className="flex flex-col space-y-6 sm:flex-1">
@@ -137,13 +155,12 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
                 />
               </SelectFieldArea>
               <HelpDeskSelect
-                defaultValue={
-                  team ? team.help : teamFields.helpdesk.defaultValue
-                }
+                  value={selectedHelpDesk}
+                  onChange={(e) => setSelectedHelpDesk(e.target.value)}
               />
             </div>
           </div>
-          <SubmitAndCanelButtons
+          <SubmitAndCancelButtons
             onSubmit={handleSave}
             submitText={formTitle}
             onCancel={() => {

@@ -22,7 +22,7 @@ class ApiHandler
 	const API_VERSION = 'v1';
 
 	/**
-	 * @var string The url for the API being queried.
+	 * @var string The url for the API being queried. Defined in {@see ApiHandler::__construct()}.
 	 */
 	private $api_url;
 
@@ -255,8 +255,8 @@ class ApiHandler
 		}
 
 		$status = wp_remote_retrieve_response_code($verification);
-		$this->log($status, __METHOD__, 'debug');
 		switch ($status) {
+		$this->log( 'Verification status returned: ' . $status, __METHOD__, 'debug' );
 			case 400:
 			case 403:
 				return new WP_Error(
@@ -290,7 +290,7 @@ class ApiHandler
 		$body = wp_remote_retrieve_body($verification);
 
 		$body = json_decode($body);
-		$this->log(__LINE__, __METHOD__, 'debug',$body);
+		$this->log( 'Verification response on line ' . __LINE__ . ':', __METHOD__, 'debug', $body );
 
 		if (! $body) {
 			return new WP_Error(

@@ -16,7 +16,9 @@ class Factory {
         switch($type)
         {
             case 'helpscout':
-                return new HelpScout( $teamSettings->getHelpdeskData()['secret'] );
+                return new HelpScout( $teamSettings->getHelpdeskData( $type )['secret'] );
+            case 'freescout':
+                return new Freescout( $teamSettings->getHelpdeskData( $type )['secret'] );
             default:
                 throw new \Exception( 'Unknown webhook type' );
         }
@@ -24,7 +26,8 @@ class Factory {
 
 	public static function getProviders(){
 		return [
-			'helpscout'
+			'helpscout',
+			'freescout',
 		];
 	}
 
@@ -62,7 +65,7 @@ class Factory {
             $args[$key] = urlencode($value);
         }
 
-		$url = add_query_arg( $args, site_url() );
+		$url = add_query_arg( $args, get_home_url() );
 		return $url;
 	}
 }

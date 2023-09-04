@@ -44,7 +44,7 @@ class ResetTeam extends Settings
 	public function update(\WP_REST_Request $request)
 	{
 		$settingsApi = SettingsApi::fromSaved();
-		if( 'helpscout' == $request->param('integration')){
+		if ( in_array( [ 'helpscout', 'freescout' ], $request->param( 'integration' ), true ) ) {
 			try {
 				$settingsApi = $settingsApi->getByAccountId( $request->param('accountId') );
 				$settingsApi->resetHelpdeskSettings(

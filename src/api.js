@@ -33,6 +33,15 @@ export const updateSettings = async ({ teams = null, integrations = null }) => {
   return r;
 };
 
+export const updateLoggingSettings = async (errorLogging) => {
+  const r = await apiFetch({
+    path: `${path}/logging`,
+    method: "POST",
+    data: { error: errorLogging },
+  });
+  return r;
+};
+
 export const resetTeamIntegrations = async (accountId, integration) => {
   let r = await apiFetch({
     path: `${path}/team/reset`,

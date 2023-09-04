@@ -108,7 +108,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 				$signature
 			)
 		);
-
+		$_REQUEST[ \TrustedLogin\Vendor\AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] = self::ACCOUNT_ID;
 		//Mock request signature
 		$_SERVER['X-HELPSCOUT-SIGNATURE']= $signature;
 		//Process request

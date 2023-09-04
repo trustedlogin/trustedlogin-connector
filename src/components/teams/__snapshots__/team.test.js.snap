@@ -51,10 +51,7 @@ exports[`AddTeam Renders & Matches snapshot 1`] = `
         </h2>
         <p
           class="mt-2 mb-4 text-sm text-gray-500"
-        >
-           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-ornare tortor in nisl fermentum.
-        </p>
+        />
         <a
           class="text-blue-tl text-sm"
           href="https://app.trustedlogin.com/settings#/teams"
@@ -211,10 +208,9 @@ ornare tortor in nisl fermentum.
                   Select a Help Desk
                 </option>
                 <option
-                  selected=""
                   value="helpscout"
                 >
-                  Helpscout
+                  Help Scout
                 </option>
               </select>
             </div>
@@ -297,10 +293,7 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
         </h2>
         <p
           class="mt-2 mb-4 text-sm text-gray-500"
-        >
-           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-ornare tortor in nisl fermentum.
-        </p>
+        />
         <a
           class="text-blue-tl text-sm"
           href="https://app.trustedlogin.com/settings#/teams"
@@ -457,10 +450,9 @@ ornare tortor in nisl fermentum.
                   Select a Help Desk
                 </option>
                 <option
-                  selected=""
                   value="helpscout"
                 >
-                  Helpscout
+                  Help Scout
                 </option>
               </select>
             </div>
@@ -515,10 +507,9 @@ exports[`HelpDeskSelect Renders & Matches snapshot 1`] = `
           Select a Help Desk
         </option>
         <option
-          selected=""
           value="helpscout"
         >
-          Helpscout
+          Help Scout
         </option>
       </select>
     </div>
@@ -573,7 +564,7 @@ exports[`NoTeams Renders & Matches snapshot 1`] = `
         Create your first team
       </h2>
       <button
-        class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-lg text-white bg-blue-tl focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm"
+        class="inline-flex items-center justify-center mt-6 px-4 py-2 border border-transparent shadow-sm font-medium rounded-lg text-white bg-blue-tl focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm"
         type="button"
       >
         <svg
@@ -657,10 +648,10 @@ exports[`TeamsList Renders & Matches snapshot 1`] = `
               </svg>
             </div>
             <input
-              class="block w-full h-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
+              class="block w-full h-full !pl-10 !pr-3 !py-3 !border !border-gray-300 !rounded-lg leading-5 !bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
               id="search"
               name="search"
-              placeholder="Search..."
+              placeholder="Search…"
               type="search"
             />
           </div>
@@ -720,12 +711,13 @@ exports[`TeamsList Renders & Matches snapshot 1`] = `
                   class="text-lg font-medium text-gray-900 leading-tight min-w-[6rem]"
                   id="team-option-1-label"
                 >
-                  1
+                  Team 0
                 </p>
                 <p
                   class="text-sm text-gray-500"
                   id="team-option-1-description"
                 >
+                  #
                   1
                 </p>
               </div>
@@ -737,11 +729,6 @@ exports[`TeamsList Renders & Matches snapshot 1`] = `
             <div
               class="flex items-center space-x-6"
             >
-              <button
-                class="text-sm text-blue-tl hover:text-navy-tl p-2"
-              >
-                Configure
-              </button>
               <button
                 class="text-sm text-blue-tl hover:text-navy-tl p-2"
               >

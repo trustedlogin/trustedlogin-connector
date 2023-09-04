@@ -77,7 +77,7 @@ class Settings extends Endpoint
 	 * Verify that the account id is valid
 	 *
 	 * @param TeamSettings $teamSetting
-	 * @return void
+	 * @return void|bool
 	 */
 	public function verifyAccountId(TeamSettings $team){
 		if( ! IsTeamConnected::needToCheck($team) ){

@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfigureHelpscout renders and matches snapshot while closed 1`] = `<div />`;
+exports[`ConfigureHelpDesk renders and matches snapshot while closed 1`] = `<div />`;
 
-exports[`ConfigureHelpscout renders and matches snapshot while open 1`] = `<div />`;
+exports[`ConfigureHelpDesk renders and matches snapshot while open 1`] = `<div />`;
 
-exports[`IntegrationHelpscout renders and matches snapshot 1`] = `
+exports[`IntegrationComponent renders and matches snapshot 1`] = `
 <div>
   <li
     class="col-span-1 flex flex-col justify-between bg-white rounded-lg shadow divide-y divide-gray-200"
@@ -44,7 +44,7 @@ exports[`IntegrationHelpscout renders and matches snapshot 1`] = `
               id="helpscout-label"
               role="label"
             >
-              Helpscout
+              Help Scout
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@ exports[`IntegrationHelpscout renders and matches snapshot 1`] = `
         >
           <span
             aria-hidden="true"
-            class="translate-x-0 translate-x-5 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+            class="translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition-transform ease-in-out duration-200"
           />
         </button>
       </div>

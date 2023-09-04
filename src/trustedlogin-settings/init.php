@@ -2,16 +2,15 @@
 //Register assets for TrustedLogin Settings
 
 use TrustedLogin\Vendor\Status\Onboarding;
-use TrustedLogin\Vendor\Reset;
 use TrustedLogin\Vendor\MenuPage;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\AccessKeyLogin;
-use TrustedLogin\Vendor\ReturnScreen;
-
-use TrustedLogin\Vendor\Webhooks\Factory;
 
 add_action('init', function () {
     $hasOnboarded = Onboarding::hasOnboarded();
+	$settings = SettingsApi::fromSaved();
+	$hasConnectedTeam = $settings->hasConnectedTeam();
+
     /**
      * Register assets
      */
@@ -100,35 +99,42 @@ add_action('init', function () {
          new MenuPage(
             MenuPage::SLUG_SETTINGS,
             __('Settings', 'trustedlogin-vendor'),
-            'settings'
+            'settings',
+            false
         );
 
         //Add access key submenu page
         new MenuPage(
             MenuPage::SLUG_TEAMS,
             __('Teams', 'trustedlogin-vendor'),
-            'teams'
+            'teams',
+            false
         );
 
         //Add helpdesks submenu page
         new MenuPage(
             MenuPage::SLUG_HELPDESKS,
             __('Help Desks', 'trustedlogin-vendor'),
-            'integrations'
+            'integrations',
+            false
         );
 
-        //Add access key submenu page
-        new MenuPage(
-            MenuPage::SLUG_ACCESS_KEY,
-            __('Access Key Log-In', 'trustedlogin-vendor'),
-            'teams/access_key'
-        );
-    }else{
+	    if ( $hasConnectedTeam ) {
+	        //Add access key submenu page
+	        new MenuPage(
+	            MenuPage::SLUG_ACCESS_KEY,
+	            __('Access Key Log-In', 'trustedlogin-vendor'),
+	            'teams/access_key',
+	            true
+	        );
+	    }
+    } else {
         //Add onboarding submenu page
         new MenuPage(
             MenuPage::SLUG_SETTINGS,
             __('Onboarding', 'trustedlogin-vendor'),
-            'onboarding'
+            'onboarding',
+            false
         );
     }
 

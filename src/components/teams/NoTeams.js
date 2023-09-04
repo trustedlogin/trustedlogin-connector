@@ -45,7 +45,7 @@ const NoTeams = () => {
       <button
         onClick={() => setCurrentView("teams/new")}
         type="button"
-        className="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-lg text-white bg-blue-tl focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm">
+        className="inline-flex items-center justify-center mt-6 px-4 py-2 border border-transparent shadow-sm font-medium rounded-lg text-white bg-blue-tl focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm">
         <svg
           className="mr-1"
           xmlns="http://www.w3.org/2000/svg"

@@ -4,6 +4,7 @@
 namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Status\IsTeamConnected;
+use TrustedLogin\Vendor\Webhooks\Freescout;
 use TrustedLogin\Vendor\Webhooks\Helpscout;
 
 /**
@@ -25,6 +26,12 @@ class SettingsApi
 	const GLOBAL_SETTING_NAME = 'trustedlogin_vendor_other_settings';
 
 	/**
+	 * The name of the option we store log hash in.
+	 * @see Traits/Logger
+	 */
+	const LOG_LOCATION_SETTING_NAME = 'trustedlogin_vendor_log_location';
+
+	/**
 	 * @var TeamSettings[]
 	 */
 	protected $teamSettings = [];
@@ -41,8 +48,12 @@ class SettingsApi
 		'integrations' => [
 			'helpscout' => [
 				'enabled' => true,
+			],
+			'freescout' => [
+				'enabled' => true,
 			]
 		],
+		'error_logging' => false
 	];
 
 	/**
@@ -270,6 +281,21 @@ class SettingsApi
 	}
 
 	/**
+	 * Check if any connected team is active.
+	 * @since 1.15.0
+	 * @return bool
+	 */
+	public function hasConnectedTeam() {
+		foreach ( $this->teamSettings as $setting ) {
+			if ( $setting->get( 'connected' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the settings, as used by API and UI
 	 *
 	 * @return array
@@ -285,9 +311,16 @@ class SettingsApi
 			);
 		}
 		$data['teams'] = $teams;
+		$debugMode = TRUSTEDLOGIN_DEBUG;
+		if( is_null($debugMode) ){
+			$debugMode = 'NULL';
+		}
+
 		return array_merge(
 			$data,
 			[
+				'debug_mode' => $debugMode,
+				'error_logging' => $this->getGlobalSettings()['error_logging'] ?? false,
 				'integrations' => $this->getIntegrationSettings(),
 			]
 		);
@@ -311,6 +344,17 @@ class SettingsApi
 	public function getGlobalSettings()
 	{
 		return $this->globalSettings;
+	}
+
+	/**
+	 * Is error logging enabled?
+	 * @return bool
+	 */
+	public function isErrorLogggingEnabled(){
+		if( ! isset($this->globalSettings['error_logging'])){
+			return false;
+		}
+		return (bool)$this->globalSettings['error_logging'];
 	}
 
 	/**
@@ -343,7 +387,7 @@ class SettingsApi
 	 *
 	 * @param string $accountId
 	 * @param string $helpdesk
-	 * @return TeamSettings
+	 * @return SettingsApi
 	 */
 	public function resetHelpdeskSettings($accountId,$helpdesk){
 		$team = $this->getByAccountId($accountId);
@@ -358,10 +402,20 @@ class SettingsApi
 		return $this;
 	}
 
-	protected function newHelpdeskSettings($accountId,$helpdesk){
+	protected function newHelpdeskSettings($accountId, $helpdesk) {
+
+		switch ( $helpdesk ) {
+			case 'freescout':
+				$callback = Freescout::actionUrl( $accountId, $helpdesk );
+				break;
+			default:
+				$callback = Helpscout::actionUrl( $accountId, $helpdesk );
+				break;
+		}
+
 		return [
-			'secret' => AccessKeyLogin::makeSecret( $accountId ),
-			'callback' => Helpscout::actionUrl( $accountId,$helpdesk )
+			'secret' => AccessKeyLogin::makeSecret($accountId),
+			'callback' => $callback
 		];
 	}
 }
