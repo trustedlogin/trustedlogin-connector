@@ -168,8 +168,11 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
               class="mt-2 relative rounded-lg"
             >
               <input
+                autoComplete="off"
                 class="block w-full pl-4 pr-10 py-4 sm:text-md border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500"
                 id="ak"
+                minLength=64
+                maxLength=64
                 name="ak"
                 placeholder="Paste key received from customer"
                 type="text"
