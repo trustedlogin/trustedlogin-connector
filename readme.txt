@@ -20,6 +20,13 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
+= 0.15.1 on September 27, 2023 =
+
+- Disabled autocomplete on the Access Key input field
+- Added minimum and maximum length values to the Access Key input, helping prevent invalid Access Key submission
+- Fixed PHP warning
+- Fixed incorrect method usage when resetting teams (thanks @danieliser)
+
 = 0.15.0 on September 4, 2023 =
 
 - Added support for the FreeScout help desk. Requires installing the [FreeScout TrustedLogin Module](https://github.com/trustedlogin/freescout-module)
