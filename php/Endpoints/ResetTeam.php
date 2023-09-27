@@ -47,7 +47,6 @@ class ResetTeam extends Settings
 		$settingsApi = SettingsApi::fromSaved();
 		if (in_array([ 'helpscout', 'freescout' ], $request->get_param('integration'), true)) {
 			try {
-				$account = $settingsApi->getByAccountId($request->get_param('accountId'));
 				$settingsApi->resetHelpdeskSettings(
 					$request->get_param('accountId'),
 					$request->get_param('integration')
