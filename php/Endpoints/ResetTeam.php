@@ -30,7 +30,8 @@ class ResetTeam extends Settings
 		];
 	}
 
-	public function get(\WP_REST_Request $request){
+	public function get(\WP_REST_Request $request)
+	{
 		$settingsApi = SettingsApi::fromSaved();
 		return $this->createResponse($settingsApi);
 	}
@@ -44,22 +45,19 @@ class ResetTeam extends Settings
 	public function update(\WP_REST_Request $request)
 	{
 		$settingsApi = SettingsApi::fromSaved();
-		if ( in_array( [ 'helpscout', 'freescout' ], $request->param( 'integration' ), true ) ) {
+		if (in_array([ 'helpscout', 'freescout' ], $request->get_param('integration'), true)) {
 			try {
-				$settingsApi = $settingsApi->getByAccountId( $request->param('accountId') );
 				$settingsApi->resetHelpdeskSettings(
 					$request->get_param('accountId'),
-					$request->param('integration')
+					$request->get_param('integration')
 				);
-
 			} catch (\Throwable $th) {
-				return rest_ensure_response( [
+				return rest_ensure_response([
 					'error' => 'Account not found'
-				] );
+				]);
 			}
 		}
 
-		return $this->createResponse( SettingsApi::fromSaved());
+		return $this->createResponse(SettingsApi::fromSaved());
 	}
-
 }

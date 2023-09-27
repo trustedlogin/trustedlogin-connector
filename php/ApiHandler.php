@@ -255,8 +255,10 @@ class ApiHandler
 		}
 
 		$status = wp_remote_retrieve_response_code($verification);
-		switch ($status) {
+		
 		$this->log( 'Verification status returned: ' . $status, __METHOD__, 'debug' );
+		
+		switch ($status) {
 			case 400:
 			case 403:
 				return new WP_Error(

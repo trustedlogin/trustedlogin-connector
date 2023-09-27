@@ -75,9 +75,15 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                     </p>
                     <a
                       class="text-blue-tl text-sm"
-                      href="#"
+                      href="https://app.trustedlogin.com/settings#/teams"
+                      target="_blank"
                     >
                       Where can I find this info?
+                      <span
+                        class="screen-reader-text"
+                      >
+                        (Link opens in a new window)
+                      </span>
                     </a>
                   </div>
                   <form
@@ -417,9 +423,7 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                               </span>
                               <span
                                 class="text-sm text-gray-500"
-                              >
-                                Vitae sed mi luctus laoreet.
-                              </span>
+                              />
                             </span>
                           </a>
                         </li>
@@ -457,9 +461,7 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                               </span>
                               <span
                                 class="text-sm text-gray-500"
-                              >
-                                Cursus semper viverra facilisis et et some more.
-                              </span>
+                              />
                             </span>
                           </a>
                         </li>
@@ -497,9 +499,7 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                               </span>
                               <span
                                 class="text-sm text-gray-500"
-                              >
-                                Penatibus eu quis ante.
-                              </span>
+                              />
                             </span>
                           </a>
                         </li>
@@ -512,9 +512,14 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding NOT c
                 >
                   <a
                     class="text-sm text-blue-tl"
-                    href="#"
+                    href="https://docs.trustedlogin.com/Vendor/intro"
                   >
                     Need Help? View our Documentation
+                    <span
+                      class="screen-reader-text"
+                    >
+                      (Link opens in a new window)
+                    </span>
                   </a>
                   <svg
                     class="ml-3"
@@ -702,8 +707,9 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding compl
             </svg>
           </button>
         </div>
-        <button
+        <a
           class="inline-flex items-center px-3.5 h-10 border border-gray-300 text-sm leading-4 font-medium rounded-lg text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
+          href="https://docs.trustedlogin.com/Vendor/intro"
         >
           <svg
             class="-ml-0.5 h-4 w-4 sm:mr-2"
@@ -723,7 +729,7 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding compl
           >
             Need Help?
           </span>
-        </button>
+        </a>
       </div>
     </header>
     <div
@@ -751,44 +757,8 @@ exports[`TrustedLoginSettings renders & matches snapshot, with on-boarding compl
         <div
           class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3"
         >
-          <div>
-            <label
-              class="sr-only"
-              for="search"
-            >
-              Search
-            </label>
-            <div
-              class="relative h-full"
-            >
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="h-5 w-5 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clip-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                class="block w-full h-full !pl-10 !pr-3 !py-3 !border !border-gray-300 !rounded-lg leading-5 !bg-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm sm:py-2"
-                id="search"
-                name="search"
-                placeholder="Search…"
-                type="search"
-              />
-            </div>
-          </div>
           <button
-            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-tl hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
+            class="ml-3 inline-flex leading-6 justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-tl hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
             type="submit"
           >
             <svg

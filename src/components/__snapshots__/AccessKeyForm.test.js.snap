@@ -115,13 +115,7 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
         >
           Paste the Access Key to log into the connected website.
         </p>
-        <a
-          class="text-blue-tl text-sm"
-          href="https://app.trustedlogin.com/settings"
-          target="_blank"
-        >
-          Where can I find this info?
-        </a>
+        
       </div>
       <form
         aria-label="Log In Using Access Key"
@@ -168,8 +162,11 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
               class="mt-2 relative rounded-lg"
             >
               <input
+                autocomplete="off"
                 class="block w-full pl-4 pr-10 py-4 sm:text-md border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500"
                 id="ak"
+                maxlength="64"
+                minlength="64"
                 name="ak"
                 placeholder="Paste key received from customer"
                 type="text"
