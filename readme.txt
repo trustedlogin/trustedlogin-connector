@@ -1,4 +1,4 @@
-=== TrustedLogin Support Plugin ===
+=== TrustedLogin Connector ===
 Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
@@ -19,6 +19,10 @@ TrustedLogin plugin to be installed on the website of the support provider.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= develop =
+
+- Added checks to make sure the Account ID is a number
 
 = 0.15.1 on September 27, 2023 =
 

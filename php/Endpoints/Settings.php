@@ -83,12 +83,29 @@ class Settings extends Endpoint
 		if( ! IsTeamConnected::needToCheck($team) ){
 			return;
 		}
+
+		$team_account_id = $team->get('account_id');
+
+		// Validate if the team account ID is an integer. If so, convert to int from string.
+		$team_account_id = filter_var( $team_account_id, FILTER_VALIDATE_INT );
+
+		// Validate if the POSTed account_id is an integer.
+		if ( ! $team_account_id ) {
+			$team->set(
+				IsTeamConnected::KEY,
+				false
+			);
+			$team->set( IsTeamConnected::STATUS_KEY, 'error' );
+
+			return false;
+		}
+
 		$r = \trustedlogin_vendor()->getApiHandler(
-			$team->get('account_id'),
+			$team_account_id,
 			'',
 			$team
 		)->verify(
-			$team->get('account_id')
+			$team_account_id
 		);
 		if( ! is_wp_error($r) ){
 			$team = IsTeamConnected::setConnected($team);

@@ -126,6 +126,7 @@ const StepTwo = () => {
         className="flex flex-1 flex-col space-y-6"
         onSubmit={handleSave}>
         <InputField
+          type={"number"}
           id={teamFields.account_id.id}
           label={teamFields.account_id.label}
           required={true}
