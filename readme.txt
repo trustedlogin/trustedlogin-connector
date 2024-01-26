@@ -3,7 +3,7 @@ Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
 Tested up to: 6.3.1
-Stable tag: 0.15.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,9 +20,11 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
-= develop =
+= 1.0.0 on January 26, 2024 =
 
+- Renamed the plugin to TrustedLogin Connector
 - Added checks to make sure the Account ID is a number
+- Fixed resetting teams not working
 
 = 0.15.1 on September 27, 2023 =
 
