@@ -414,7 +414,7 @@ class SettingsApi
 		}
 
 		return [
-			'secret' => AccessKeyLogin::makeSecret($accountId),
+			'secret' => AccessKeyLogin::makeSecret(),
 			'callback' => $callback
 		];
 	}

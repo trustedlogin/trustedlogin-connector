@@ -86,7 +86,7 @@ exports[`AddTeam Renders & Matches snapshot 1`] = `
                 id="account_id"
                 name="account_id"
                 required=""
-                type="text"
+                type="number"
                 value=""
               />
             </div>
@@ -333,7 +333,7 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
                 id="account_id"
                 name="account_id"
                 required=""
-                type="text"
+                type="number"
                 value="1"
               />
             </div>

@@ -117,12 +117,12 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
           <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">
             <div className="flex flex-col space-y-6 sm:flex-1">
               <InputField
-                  type="text"
+                  type={"number"}
                   name={teamFields.account_id.id}
                   id={teamFields.account_id.id}
                   label={teamFields.account_id.label}
                   value={account_id}
-                  onChange={(e) => setAccount_id(e.target.value)}
+                  onChange={(e) => setAccount_id(e.target.valueAsNumber)}
                   required={true}
               />
               <InputField
