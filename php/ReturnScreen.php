@@ -61,11 +61,7 @@ class ReturnScreen {
 		    '/src/trustedlogin-dist.css' => $plugin_dir_url . 'src/trustedlogin-dist.css', // Fix style source
 	    ];
 
-	    foreach ( $replacements as $search => $replace ) {
-		    $html = str_replace( $search, $replace, $html );
-	    }
-
-	    echo $html;
+	    echo strtr( $html, $replacements );
 
 	    exit;
     }
