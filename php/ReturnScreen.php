@@ -48,7 +48,7 @@ class ReturnScreen {
 	    //Put window.tlVendor in the HTML.
 	    $html = str_replace(
 		    '<script></script>',
-		    sprintf( '<script>window.tlVendor=%s;</script>', json_encode( $data ) ),
+		    sprintf( '<script>window.tlVendor=%s;</script>', wp_json_encode( $data ) ),
 		    $html
 	    );
 

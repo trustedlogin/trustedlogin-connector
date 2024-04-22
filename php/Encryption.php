@@ -150,7 +150,7 @@ class Encryption
 	private function updateKeys($keys)
 	{
 
-		$keys_db_ready = json_encode($keys);
+		$keys_db_ready = wp_json_encode($keys);
 
 		if (! $keys_db_ready) {
 			return new \WP_Error('json_error', 'Could not encode keys to JSON.', $keys);

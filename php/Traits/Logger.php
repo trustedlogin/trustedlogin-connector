@@ -23,7 +23,7 @@ trait Logger {
 		$message  = "[{$this->getTimestamp()}] [{$logLevel}] {$message}";
 
 		if ( $context ) {
-			$message .= ' ' . json_encode( $context, JSON_PRETTY_PRINT );
+			$message .= ' ' . wp_json_encode( $context, JSON_PRETTY_PRINT );
 		}
 
 		$logFileName = $this->getLogFileName();
@@ -54,7 +54,7 @@ trait Logger {
 	protected function formatMessage( $level, $message, $context ) {
 		$message = "[{$this->getTimestamp()}] [{$level}] {$message}";
 		if ( $context ) {
-			$message .= ' ' . json_encode( $context, JSON_PRETTY_PRINT );
+			$message .= ' ' . wp_json_encode( $context, JSON_PRETTY_PRINT );
 		}
 
 		return $message . PHP_EOL;

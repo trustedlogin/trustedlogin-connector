@@ -338,7 +338,7 @@ class Helpscout extends Webhook{
 		}
 
 		return hash_equals( $signature, $this->makeSignature(
-            is_array($data) ? json_encode($data) : $data
+            is_array($data) ? wp_json_encode( $data ) : $data
         ) );
 	}
 

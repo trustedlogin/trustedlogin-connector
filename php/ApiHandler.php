@@ -237,7 +237,7 @@ class ApiHandler
 		$headers  = $this->getAdditionalHeader();
 
 		$verification = $this->apiSend($url, $body, $method, $headers);
-		$this->log( json_encode($verification),__METHOD__.':'.__LINE__, 'debug',$headers);
+		$this->log( wp_json_encode($verification),__METHOD__.':'.__LINE__, 'debug',$headers);
 
 		if (is_wp_error($verification)) {
 			return new WP_Error(
