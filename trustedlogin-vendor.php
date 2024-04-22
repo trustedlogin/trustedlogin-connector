@@ -5,7 +5,7 @@
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
  * Version: 1.0.0
  * Requires PHP: 7.1
- * Author: Katz Web Services, Inc.
+ * Author: TrustedLogin
  * Author URI: https://www.trustedlogin.com
  * Text Domain: trustedlogin-connector
  * License: GPL v2
@@ -68,10 +68,13 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 
     //Add REST API endpoints
 	add_action( 'rest_api_init', [$plugin, 'restApiInit']);
-    //Handle access key login if requests.
+
+	//Handle access key login if requests.
 	add_action( 'template_redirect',[\TrustedLogin\Vendor\MaybeRedirect::class, 'handle']);
+
 	//Handle the "Reset All" button in UI
 	add_action( 'admin_init',[\TrustedLogin\Vendor\MaybeRedirect::class, 'adminInit']);
+
 	if( file_exists(__DIR__. "/build/index.html")){
 		//Handle webhook/helpdesk return
 		add_action( 'admin_init',[
@@ -82,8 +85,6 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 			'callback'
 		]);
 	}
-
-
 
 }else{
 	throw new \Exception('Autoloader not found.');
