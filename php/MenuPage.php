@@ -194,7 +194,7 @@ class MenuPage {
             );
         }
         //React root
-        printf( '<div id="%s"></div>',self::REACT_ROOT_ID)  ;
+        printf( '<div id="%s"></div>',self::REACT_ROOT_ID); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
 }

@@ -25,7 +25,8 @@ add_action('init', function () {
             MenuPage::ASSET_HANDLE,
             $jsUrl,
             $dependencies,
-            $assets['version']
+            $assets['version'],
+            false
         );
         $settingsApi = SettingsApi::fromSaved();
         $data = trusted_login_vendor_prepare_data($settingsApi);

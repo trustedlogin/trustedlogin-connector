@@ -204,8 +204,8 @@ class Helpscout extends Webhook{
 	 */
 	private function build_error_message( int $status, string $errorMessage, string $instruction, ?string $extraMessage = null ): array {
 		// Generate the HTML error message.
-		$error_text = '<p class="red">' . esc_html__( $errorMessage, 'trustedlogin-vendor' ) . '</p>';
-		$error_text .= '<p>' . esc_html__( $instruction, 'trustedlogin-vendor' ) . '</p>';
+		$error_text = '<p class="red">' . esc_html( $errorMessage ) . '</p>';
+		$error_text .= '<p>' . esc_html( $instruction ) . '</p>';
 
 		// Prepare the response array.
 		$response = [ 'html' => $error_text, 'status' => $status ];

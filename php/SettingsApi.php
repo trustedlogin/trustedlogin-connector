@@ -206,7 +206,7 @@ class SettingsApi
 	/**
 	 * Add or update a setting to collection
 	 * @since 0.10.0
-	 * @param TeamSetting $setting
+	 * @param TeamSettings $setting
 	 * @return $this
 	 */
 	public function addSetting(TeamSettings $setting)

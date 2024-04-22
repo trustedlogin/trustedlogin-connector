@@ -61,7 +61,7 @@ class ReturnScreen {
 		    '/src/trustedlogin-dist.css' => $plugin_dir_url . 'src/trustedlogin-dist.css', // Fix style source
 	    ];
 
-	    echo strtr( $html, $replacements );
+	    echo strtr( $html, $replacements ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	    exit;
     }

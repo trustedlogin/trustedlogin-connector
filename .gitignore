@@ -31,3 +31,4 @@ cypress/screenshots
 cypress/videos
 trustedlogin-vendor.zip
 src/trustedlogin-dist.css
+.DS_Store
