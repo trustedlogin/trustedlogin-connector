@@ -73,8 +73,8 @@ trait Logger {
 	 */
 	private function getTimestamp() {
 		$originalTime = microtime( true );
-		$micro        = sprintf( "%06d", ( $originalTime - floor( $originalTime ) ) * 1000000 );
-		$date         = new DateTime( date( 'Y-m-d H:i:s.' . $micro, (int) $originalTime ) );
+		$micro        = sprintf( '%06d', ( $originalTime - floor( $originalTime ) ) * 1000000 );
+		$date         = new DateTime( gmdate( 'Y-m-d H:i:s.' . $micro, (int) $originalTime ) );
 
 		return $date->format( 'Y-m-d H:i:s' );
 	}
