@@ -276,6 +276,7 @@ class ApiHandler
 				return new WP_Error(
 					'verify-failed-405',
 					sprintf(
+						// translators: %1$s is the HTTP method used, %2$s is the URL.
 						__('Incorrect method (%1$s) used for %2$s', 'trustedlogin-connector'),
 						/* %1$s */ $method,
 						/* %2$s */ $url
@@ -284,6 +285,7 @@ class ApiHandler
 			case 500:
 				return new WP_Error(
 					'verify-failed-500',
+					// translators: %d is the HTTP status code.
 					sprintf(__('Status %d returned', 'trustedlogin-connector'), $status)
 				);
 				break;
@@ -387,6 +389,7 @@ class ApiHandler
 
 			$this->log("Error from API: {$errors}", __METHOD__, 'error');
 
+			// translators: %s is the error message from the API.
 			return new WP_Error('api_errors', sprintf(esc_html__('Errors returned from API: %s', 'trustedlogin-connector'), $errors));
 		}
 

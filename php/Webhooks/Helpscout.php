@@ -311,7 +311,9 @@ class Helpscout extends Webhook{
 					$item_template,
 					esc_url( $url ),
 					esc_html__( 'Access Website', 'trustedlogin-connector' ),
+					// translators: %s is replaced with the access key.
 					sprintf( esc_html__( 'Access Key: %s', 'trustedlogin-connector' ), $key ),
+					// translators: %s is replaced with the license status.
 					sprintf( esc_html__( 'License is %s', 'trustedlogin-connector' ), ucwords( esc_html( $statuses[ $key ] ) ) )
 				);
 			}

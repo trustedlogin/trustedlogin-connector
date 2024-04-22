@@ -72,6 +72,7 @@ class TrustedLoginService
 				$url_template,
 				esc_url($valid_secret['url_parts']['loginurl']),
 				esc_attr('trustedlogin-authlink'),
+				// translators: %s is the site URL that the user will be logged into.
 				sprintf(esc_html__('Log in to %s', 'trustedlogin-connector'), esc_html($url_parts['siteurl']))
 			);
 		}
@@ -326,6 +327,7 @@ class TrustedLoginService
 		if ($envelope && ! is_wp_error($envelope)) {
 			$success = esc_html__('Successfully fetched envelope.', 'trustedlogin-connector');
 		} else {
+			// translators: %s is the error message.
 			$success = sprintf(esc_html__('Failed: %s', 'trustedlogin-connector'), $envelope->get_error_message());
 		}
 
