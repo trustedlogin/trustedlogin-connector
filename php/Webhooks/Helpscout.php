@@ -94,7 +94,7 @@ class Helpscout extends Webhook{
 		$html_template = apply_filters(
 			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper',
 			'<ul class="c-sb-list c-sb-list--two-line">%1$s</ul>' .
-			'<a href="' . esc_url( admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG ) ) . '"><i class="icon-gear"></i>' . esc_html__( 'Go to Access Key Log-In', 'trustedlogin-vendor' ) . '</a>'
+			'<a href="' . esc_url( admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG ) ) . '"><i class="icon-gear"></i>' . esc_html__( 'Go to Access Key Log-In', 'trustedlogin-connector' ) . '</a>'
 		);
 
 		/**
@@ -155,7 +155,7 @@ class Helpscout extends Webhook{
 		if ( empty( $item_html ) ) {
 			$item_html = sprintf(
 				$no_items_template,
-				esc_html__( 'No TrustedLogin sessions authorized for this user.', 'trustedlogin-vendor' )
+				esc_html__( 'No TrustedLogin sessions authorized for this user.', 'trustedlogin-connector' )
 			);
 		}
 
@@ -310,9 +310,9 @@ class Helpscout extends Webhook{
 				$item_html .= sprintf(
 					$item_template,
 					esc_url( $url ),
-					esc_html__( 'Access Website', 'trustedlogin-vendor' ),
-					sprintf( esc_html__( 'Access Key: %s', 'trustedlogin-vendor' ), $key ),
-					sprintf( esc_html__( 'License is %s', 'trustedlogin-vendor' ), ucwords( esc_html( $statuses[ $key ] ) ) )
+					esc_html__( 'Access Website', 'trustedlogin-connector' ),
+					sprintf( esc_html__( 'Access Key: %s', 'trustedlogin-connector' ), $key ),
+					sprintf( esc_html__( 'License is %s', 'trustedlogin-connector' ), ucwords( esc_html( $statuses[ $key ] ) ) )
 				);
 			}
 		}

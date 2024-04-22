@@ -126,7 +126,7 @@ class MenuPage {
      */
     public function addMenuPage(){
 
-        $name = $this->childName ?? __('TrustedLogin', 'trustedlogin-vendor');
+        $name = $this->childName ?? __('TrustedLogin', 'trustedlogin-connector');
 
         // Default capability for the menu page.
         $capability = 'manage_options';

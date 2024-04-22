@@ -225,7 +225,7 @@ class ApiHandler
 		if (0 === $account_id) {
 			return new WP_Error(
 				'verify-failed',
-				__('No account ID provided.', 'trustedlogin-vendor')
+				__('No account ID provided.', 'trustedlogin-connector')
 			);
 		}
 
@@ -242,7 +242,7 @@ class ApiHandler
 		if (is_wp_error($verification)) {
 			return new WP_Error(
 				$verification->get_error_code(),
-				__('We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-vendor'),
+				__('We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-connector'),
 				$verification->get_error_message()
 			);
 		}
@@ -250,33 +250,33 @@ class ApiHandler
 		if (! $verification) {
 			return new WP_Error(
 				'verify-failed',
-				__('We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-vendor')
+				__('We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-connector')
 			);
 		}
 
 		$status = wp_remote_retrieve_response_code($verification);
-		
+
 		$this->log( 'Verification status returned: ' . $status, __METHOD__, 'debug' );
-		
+
 		switch ($status) {
 			case 400:
 			case 403:
 				return new WP_Error(
 					'verify-failed-' . $status,
-					__('Could not verify API and Private keys, please confirm the provided keys.', 'trustedlogin-vendor')
+					__('Could not verify API and Private keys, please confirm the provided keys.', 'trustedlogin-connector')
 				);
 				break;
 			case 404:
 				return new WP_Error(
 					'verify-failed-404',
-					__('Account not found, please check the ID provided.', 'trustedlogin-vendor')
+					__('Account not found, please check the ID provided.', 'trustedlogin-connector')
 				);
 				break;
 			case 405:
 				return new WP_Error(
 					'verify-failed-405',
 					sprintf(
-						__('Incorrect method (%1$s) used for %2$s', 'trustedlogin-vendor'),
+						__('Incorrect method (%1$s) used for %2$s', 'trustedlogin-connector'),
 						/* %1$s */ $method,
 						/* %2$s */ $url
 					)
@@ -284,7 +284,7 @@ class ApiHandler
 			case 500:
 				return new WP_Error(
 					'verify-failed-500',
-					sprintf(__('Status %d returned', 'trustedlogin-vendor'), $status)
+					sprintf(__('Status %d returned', 'trustedlogin-connector'), $status)
 				);
 				break;
 		}
@@ -297,21 +297,22 @@ class ApiHandler
 		if (! $body) {
 			return new WP_Error(
 				'verify-failed',
-				__('Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-vendor')
+				__('Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-connector')
 			);
 		}
 
 		if (isset($body->status) && 'active' !== $body->status) {
 			return new WP_Error(
 				'verify-failed-inactive',
-				__('Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-vendor')
+				__('Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-connector')
 			);
 		}
 
 		if (isset($body->error) && $body->error) {
 			return new WP_Error(
 				'verify-failed-other',
-				sprintf(__('Please contact support (Error Status #%d)', 'trustedlogin-vendor'), $status)
+				// translators: %d is the HTTP status code.
+				sprintf(__('Please contact support (Error Status #%d)', 'trustedlogin-connector'), $status)
 			);
 		}
 
@@ -339,7 +340,7 @@ class ApiHandler
 				'response' => $api_response
 			]);
 
-			return new WP_Error('malformed_response', esc_html__('Malformed API response received.', 'trustedlogin-vendor'));
+			return new WP_Error('malformed_response', esc_html__('Malformed API response received.', 'trustedlogin-connector'));
 		}
 
 		// first check the HTTP Response code
@@ -357,7 +358,7 @@ class ApiHandler
 		if (empty($body) || ! is_object($body)) {
 			$this->log('No body received:' , __METHOD__, 'error',['body' => $body]);
 
-			return new WP_Error('empty_body', esc_html__('No body received.', 'trustedlogin-vendor'));
+			return new WP_Error('empty_body', esc_html__('No body received.', 'trustedlogin-connector'));
 		}
 
 		$body_message = isset($body->message) ? $body->message : null;
@@ -377,7 +378,7 @@ class ApiHandler
 				// Problem with Token
 				// TODO: Handle this
 			case 404:
-				return new WP_Error('not_found', esc_html__('Not found.', 'trustedlogin-vendor'));
+				return new WP_Error('not_found', esc_html__('Not found.', 'trustedlogin-connector'));
 			default:
 		}
 
@@ -386,7 +387,7 @@ class ApiHandler
 
 			$this->log("Error from API: {$errors}", __METHOD__, 'error');
 
-			return new WP_Error('api_errors', sprintf(esc_html__('Errors returned from API: %s', 'trustedlogin-vendor'), $errors));
+			return new WP_Error('api_errors', sprintf(esc_html__('Errors returned from API: %s', 'trustedlogin-connector'), $errors));
 		}
 
 		return $body;

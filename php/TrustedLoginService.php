@@ -72,7 +72,7 @@ class TrustedLoginService
 				$url_template,
 				esc_url($valid_secret['url_parts']['loginurl']),
 				esc_attr('trustedlogin-authlink'),
-				sprintf(esc_html__('Log in to %s', 'trustedlogin-vendor'), esc_html($url_parts['siteurl']))
+				sprintf(esc_html__('Log in to %s', 'trustedlogin-connector'), esc_html($url_parts['siteurl']))
 			);
 		}
 
@@ -81,7 +81,7 @@ class TrustedLoginService
 		}
 
 		add_action('admin_notices', function () use ($urls_output) {
-			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-vendor') . '</h3><ul>' . $urls_output . '</ul></div>';
+			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-connector') . '</h3><ul>' . $urls_output . '</ul></div>';
 		});
 	}
 
@@ -201,7 +201,7 @@ class TrustedLoginService
 		$output = $this->get_redirect_form_html($envelope_parts);
 
 		// Use wp_die() to get a nice free template
-		wp_die($output, esc_html__('TrustedLogin redirect&hellip;', 'trustedlogin-vendor'), 302);
+		wp_die($output, esc_html__('TrustedLogin redirect&hellip;', 'trustedlogin-connector'), 302);
 	}
 
 	/**
@@ -219,11 +219,11 @@ class TrustedLoginService
 		if (empty($access_key)) {
 			$this->log('Error: access_key cannot be empty.', __METHOD__, 'error');
 
-			return new \WP_Error('data-error', esc_html__('Access Key cannot be empty', 'trustedlogin-vendor'));
+			return new \WP_Error('data-error', esc_html__('Access Key cannot be empty', 'trustedlogin-connector'));
 		}
 
 		if (! is_user_logged_in()) {
-			return new \WP_Error('auth-error', esc_html__('User not logged in.', 'trustedlogin-vendor'));
+			return new \WP_Error('auth-error', esc_html__('User not logged in.', 'trustedlogin-connector'));
 		}
 
 		$saas_api = $this->plugin->getApiHandler($account_id);
@@ -276,11 +276,11 @@ class TrustedLoginService
 		if (empty($secret_id)) {
 			$this->log('Error: secret_id cannot be empty.', __METHOD__, 'error');
 
-			return new \WP_Error('data-error', esc_html__('Site ID cannot be empty', 'trustedlogin-vendor'));
+			return new \WP_Error('data-error', esc_html__('Site ID cannot be empty', 'trustedlogin-connector'));
 		}
 
 		if (! is_user_logged_in()) {
-			return new \WP_Error('auth-error', esc_html__('User not logged in.', 'trustedlogin-vendor'));
+			return new \WP_Error('auth-error', esc_html__('User not logged in.', 'trustedlogin-connector'));
 		}
 
 		// The data array that will be sent to TrustedLogin to request a site's envelope
@@ -309,7 +309,7 @@ class TrustedLoginService
 		$x_tl_token  = $saas_api->getXTlToken();
 
 		if (is_wp_error($x_tl_token)) {
-			$error = esc_html__('Error getting X-TL-TOKEN header', 'trustedlogin-vendor');
+			$error = esc_html__('Error getting X-TL-TOKEN header', 'trustedlogin-connector');
 			$this->log($error, __METHOD__, 'error');
 			return new \WP_Error('x-tl-token-error', $error);
 		}
@@ -317,16 +317,16 @@ class TrustedLoginService
 		$token_added = $saas_api->setAdditionalHeader('X-TL-TOKEN', $x_tl_token);
 
 		if (! $token_added) {
-			$error = esc_html__('Error setting X-TL-TOKEN header', 'trustedlogin-vendor');
+			$error = esc_html__('Error setting X-TL-TOKEN header', 'trustedlogin-connector');
 			$this->log($error, __METHOD__, 'error');
 			return new \WP_Error('x-tl-token-error', $error);
 		}
 
 		$envelope = $saas_api->call($endpoint, $data, 'POST');
 		if ($envelope && ! is_wp_error($envelope)) {
-			$success = esc_html__('Successfully fetched envelope.', 'trustedlogin-vendor');
+			$success = esc_html__('Successfully fetched envelope.', 'trustedlogin-connector');
 		} else {
-			$success = sprintf(esc_html__('Failed: %s', 'trustedlogin-vendor'), $envelope->get_error_message());
+			$success = sprintf(esc_html__('Failed: %s', 'trustedlogin-connector'), $envelope->get_error_message());
 		}
 
 		return $envelope;

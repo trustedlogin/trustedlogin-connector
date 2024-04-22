@@ -126,7 +126,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_INVALID_SECRET,
 				'invalid_secret',
-				esc_html__( 'The provided key is not the correct length. Make sure you copied it correctly and it is an Access Key.', 'trustedlogin-vendor' )
+				esc_html__( 'The provided key is not the correct length. Make sure you copied it correctly and it is an Access Key.', 'trustedlogin-connector' )
 			);
 		}
 
@@ -147,7 +147,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_INVALID_ROLE,
 				'invalid_user_role',
-				esc_html__( 'You do not have a role that is allowed to provide support for this team.', 'trustedlogin-vendor' )
+				esc_html__( 'You do not have a role that is allowed to provide support for this team.', 'trustedlogin-connector' )
 			);
 		}
 
@@ -169,7 +169,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_secret_ids',
-				esc_html__( 'There were no sites found that match that Access Key. Access may have been revoked.', 'trustedlogin-vendor' )
+				esc_html__( 'There were no sites found that match that Access Key. Access may have been revoked.', 'trustedlogin-connector' )
 			);
 		}
 
@@ -181,7 +181,7 @@ class AccessKeyLogin
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_valid_secret_ids',
-				esc_html__( 'There were secrets found, but they were invalid.', 'trustedlogin-vendor' )
+				esc_html__( 'There were secrets found, but they were invalid.', 'trustedlogin-connector' )
 			);
 		}
 
@@ -203,18 +203,18 @@ class AccessKeyLogin
 
 		if (empty($_REQUEST[ self::ACCESS_KEY_INPUT_NAME ])) {
 			$this->log('No access key sent.', __METHOD__, 'error');
-			return new \WP_Error('no_access_key', esc_html__('No access key was sent with the request.', 'trustedlogin-vendor'));
+			return new \WP_Error('no_access_key', esc_html__('No access key was sent with the request.', 'trustedlogin-connector'));
 		}
 
 		if (empty($_REQUEST[self::ACCOUNT_ID_INPUT_NAME ])) {
 			$this->log('No account id  sent.', __METHOD__, 'error');
-			return new \WP_Error('no_account_id', esc_html__('No account id was sent with the request.', 'trustedlogin-vendor'));
+			return new \WP_Error('no_account_id', esc_html__('No account id was sent with the request.', 'trustedlogin-connector'));
 		}
 
 		if( $checkNonce ){
 			if (empty($_REQUEST[ self::NONCE_NAME ])) {
 				$this->log('No nonce set. Insecure request.', __METHOD__, 'error');
-				return new \WP_Error('no_nonce', esc_html__('No nonce was sent with the request.', 'trustedlogin-vendor'));
+				return new \WP_Error('no_nonce', esc_html__('No nonce was sent with the request.', 'trustedlogin-connector'));
 			}
 
 			// Valid nonce?
@@ -222,7 +222,7 @@ class AccessKeyLogin
 
 			if (! $valid) {
 				$this->log('Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error');
-				return new \WP_Error('bad_nonce', esc_html__('The nonce was not set for the request.', 'trustedlogin-vendor'));
+				return new \WP_Error('bad_nonce', esc_html__('The nonce was not set for the request.', 'trustedlogin-connector'));
 
 			}
 		}

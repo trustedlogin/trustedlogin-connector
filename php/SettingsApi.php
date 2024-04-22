@@ -183,7 +183,7 @@ class SettingsApi
 				return $this;
 			}
 		}
-		throw new \Exception('Canot save, Account not found');
+		throw new \Exception( esc_html__( 'Cannot save; account not found.', 'trustedlogin-connector' ) );
 	}
 
 	/**

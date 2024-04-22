@@ -7,15 +7,15 @@ const integrationData = {
   'helpscout': {
     id: "helpscout",
     isEnabled: true,
-    name: __("Help Scout", 'trustedlogin-vendor'),
-    description: __("Customer support platform, knowledge base tool, and an contact widget for customer service.", 'trustedlogin-vendor'),
+    name: __("Help Scout", 'trustedlogin-connector'),
+    description: __("Customer support platform, knowledge base tool, and an contact widget for customer service.", 'trustedlogin-connector'),
     IconSVG: HelpscoutLogo,
   },
   'freescout': {
     id: "freescout",
     isEnabled: false,
-    name: __("FreeScout", 'trustedlogin-vendor'),
-    description: __("FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.", 'trustedlogin-vendor'),
+    name: __("FreeScout", 'trustedlogin-connector'),
+    description: __("FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.", 'trustedlogin-connector'),
     IconSVG: FreescoutLogo,
   }
 };

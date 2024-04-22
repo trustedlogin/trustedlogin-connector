@@ -84,7 +84,7 @@ export const PageHeader = ({ title, subTitle, Button }) => {
                 fill="currentColor"
               />
             </svg>
-            {__('Reset All', 'trustedlogin-vendor' )}
+            {__('Reset All', 'trustedlogin-connector' )}
           </SecondaryButton>
         )}
       </div>

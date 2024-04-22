@@ -54,17 +54,17 @@ add_action('init', function () {
             $error = sanitize_text_field($_GET['error']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             switch($error){
                 case 'nonce':
-                    $error = __('Nonce is invalid', 'trustedlogin-vendor');
+                    $error = __('Nonce is invalid', 'trustedlogin-connector');
                 break;
                 case AccessKeyLogin::ERROR_NO_ACCOUNT_ID:
-                    $error = __('No account matching that ID found', 'trustedlogin-vendor');
+                    $error = __('No account matching that ID found', 'trustedlogin-connector');
                     break;
                 case 'invalid_secret_keys':
-                    $error = __('Invalid secret keys', 'trustedlogin-vendor');
+                    $error = __('Invalid secret keys', 'trustedlogin-connector');
                     break;
 
                 case AccessKeyLogin::ERROR_NO_SECRET_IDS_FOUND :
-                    $error = __('No secret keys found', 'trustedlogin-vendor');
+                    $error = __('No secret keys found', 'trustedlogin-connector');
                     break;
                 default:
                     $error = str_replace('_', ' ', $error);
@@ -98,7 +98,7 @@ add_action('init', function () {
          //Add settings submenu page
          new MenuPage(
             MenuPage::SLUG_SETTINGS,
-            __('Settings', 'trustedlogin-vendor'),
+            __('Settings', 'trustedlogin-connector'),
             'settings',
             false
         );
@@ -106,7 +106,7 @@ add_action('init', function () {
         //Add access key submenu page
         new MenuPage(
             MenuPage::SLUG_TEAMS,
-            __('Teams', 'trustedlogin-vendor'),
+            __('Teams', 'trustedlogin-connector'),
             'teams',
             false
         );
@@ -114,7 +114,7 @@ add_action('init', function () {
         //Add helpdesks submenu page
         new MenuPage(
             MenuPage::SLUG_HELPDESKS,
-            __('Help Desks', 'trustedlogin-vendor'),
+            __('Help Desks', 'trustedlogin-connector'),
             'integrations',
             false
         );
@@ -123,7 +123,7 @@ add_action('init', function () {
 	        //Add access key submenu page
 	        new MenuPage(
 	            MenuPage::SLUG_ACCESS_KEY,
-	            __('Access Key Log-In', 'trustedlogin-vendor'),
+	            __('Access Key Log-In', 'trustedlogin-connector'),
 	            'teams/access_key',
 	            true
 	        );
@@ -132,7 +132,7 @@ add_action('init', function () {
         //Add onboarding submenu page
         new MenuPage(
             MenuPage::SLUG_SETTINGS,
-            __('Onboarding', 'trustedlogin-vendor'),
+            __('Onboarding', 'trustedlogin-connector'),
             'onboarding',
             false
         );
