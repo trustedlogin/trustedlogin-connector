@@ -98,7 +98,7 @@ trait Logger {
 			return $hash;
 		}
 
-		$this->hash = hash( 'sha256', uniqid( rand(), true ) );
+		$this->hash = hash( 'sha256', uniqid( wp_rand(), true ) );
 
 		update_option( SettingsApi::LOG_LOCATION_SETTING_NAME, $this->hash );
 
