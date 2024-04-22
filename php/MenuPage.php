@@ -168,11 +168,11 @@ class MenuPage {
             return;
         }
         //Remove admin notices added correctly
-        //see: https://github.com/trustedlogin/vendor/issues/35
+        //see: https://github.com/trustedlogin/trustedlogin-connector/issues/35
         remove_all_actions('admin_notices');
         remove_all_actions('all_admin_notices');
         if( isset(
-            $_REQUEST[MaybeRedirect::REDIRECT_KEY]
+            $_REQUEST[MaybeRedirect::REDIRECT_KEY] // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         ) ){
             return;
         }

@@ -116,8 +116,9 @@ class AccessKeyLogin
 			if ( is_wp_error($verified)) {
 				return $verified;
 			}
-
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$access_key = sanitize_text_field($_REQUEST[ self::ACCESS_KEY_INPUT_NAME ]);
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$account_id = sanitize_text_field($_REQUEST[ self::ACCOUNT_ID_INPUT_NAME]);
 		}
 
@@ -238,10 +239,12 @@ class AccessKeyLogin
 	 * @return string
 	 */
 	public static function fromRequest(bool $ak = true ){
+
 		if( $ak ){
-			return isset($_REQUEST[self::ACCESS_KEY_INPUT_NAME]) ? sanitize_text_field($_REQUEST[self::ACCESS_KEY_INPUT_NAME]) : '';
+			return isset($_REQUEST[self::ACCESS_KEY_INPUT_NAME]) ? sanitize_text_field($_REQUEST[self::ACCESS_KEY_INPUT_NAME]) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
-		return isset($_REQUEST[self::ACCOUNT_ID_INPUT_NAME]) ? sanitize_text_field($_REQUEST[self::ACCOUNT_ID_INPUT_NAME]) : '';
+
+		return isset($_REQUEST[self::ACCOUNT_ID_INPUT_NAME]) ? sanitize_text_field($_REQUEST[self::ACCOUNT_ID_INPUT_NAME]) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	}
 }

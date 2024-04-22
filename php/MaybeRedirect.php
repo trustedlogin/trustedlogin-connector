@@ -60,21 +60,19 @@ class MaybeRedirect
 	public static function handle()
 	{
 		//Access key redirect
-		if ( ! isset($_REQUEST[ AccessKeyLogin::REDIRECT_ENDPOINT ])) {
+		if ( ! isset($_REQUEST[ AccessKeyLogin::REDIRECT_ENDPOINT ])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 
-		if( isset($_REQUEST['action']) && Webhook::WEBHOOK_ACTION == $_REQUEST['action']){
-			$provider = $_REQUEST[Factory::PROVIDER_KEY];
+		if( isset($_REQUEST['action']) && Webhook::WEBHOOK_ACTION == $_REQUEST['action']){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$provider = $_REQUEST[Factory::PROVIDER_KEY]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if( ! in_array($provider, Factory::getProviders())){
-				//$this->log( 'Unknown provider: ' . $provider,__METHOD__ );
 				return;
 			}
 			if( ! IsIntegrationActive::check($provider)){
-				//$this->log( 'Integration not active: ' . $provider,__METHOD__ );
 				return;
 			}
-			$accountId = $_REQUEST[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME];
+			$accountId = $_REQUEST[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			try {
 				$team  = SettingsApi::fromSaved()->getByAccountId($accountId);

@@ -47,7 +47,7 @@ class Helpscout extends Webhook{
 		}
 
 		// Get account_id from request.
-		$account_id = $_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] ?? null;
+		$account_id = $_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] ?? null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		// Decode the data from JSON.
 		$data_obj = json_decode( $data, false );

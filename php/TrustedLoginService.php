@@ -161,7 +161,7 @@ class TrustedLoginService
 		if (! is_admin()) {
 			$redirect_url = get_site_url();
 		} else {
-			$redirect_url = add_query_arg('page', sanitize_text_field($_GET['page']), admin_url('admin.php'));
+			$redirect_url = add_query_arg('page', sanitize_text_field($_GET['page']), admin_url('admin.php')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		//Get saved settings an then team settings
 		$settings = SettingsApi::fromSaved();
