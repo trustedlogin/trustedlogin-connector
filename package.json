@@ -18,7 +18,8 @@
     "lint": "prettier ./src --write",
     "start:js": "wp-scripts start",
     "start:css": "yarn tailwindcss -i ./src/tailwind.css -o ./src/trustedlogin-dist.css --watch",
-    "build:css": "cross-env  NODE_ENV=production TAILWIND_MODE=build yarn tailwindcss -i ./src/tailwind.css -o ./src/trustedlogin-dist.css"
+    "build:css": "cross-env  NODE_ENV=production TAILWIND_MODE=build yarn tailwindcss -i ./src/tailwind.css -o ./src/trustedlogin-dist.css",
+    "package:dist": "npx zx bin/package-dist.mjs"
   },
   "devDependencies": {
     "@babel/core": "^7",
@@ -26,7 +27,8 @@
     "@wordpress/api-fetch": "^6.5.0",
     "@wordpress/scripts": "^16",
     "cross-env": "^7.0.3",
-    "prettier": "2.5.1"
+    "prettier": "2.5.1",
+    "zx": "^8.0.2"
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",
