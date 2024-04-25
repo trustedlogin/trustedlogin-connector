@@ -1678,8 +1678,8 @@ select {
   line-height: 1rem;
 }
 
-.leading-7 {
-  line-height: 1.75rem;
+.leading-6 {
+  line-height: 1.5rem;
 }
 
 .leading-none {
@@ -1688,14 +1688,6 @@ select {
 
 .leading-tight {
   line-height: 1.25;
-}
-
-.leading-6 {
-  line-height: 1.5rem;
-}
-
-.leading-5 {
-  line-height: 1.25rem;
 }
 
 .tracking-wide {
