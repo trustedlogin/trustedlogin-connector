@@ -73,7 +73,7 @@ async function createDistArchive() {
 		process.exit( 1 );
 	}
 
-	console.log( `Distribution archive created: ${ finalDistArchive }` );
+	console.log(`::set-output name=dist_archive::${finalDistArchive}`);
 }
 
 createDistArchive();

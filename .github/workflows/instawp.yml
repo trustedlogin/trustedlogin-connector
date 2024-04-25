@@ -15,16 +15,11 @@ jobs:
           node-version: 16
       - name: Build CSS and JS first
         run: yarn && yarn build
-      - name: Zip Plugin
-        id: pluginmachine
-        uses: imaginarymachines/builder-action@main
-        with:
-          PLUGIN_MACHINE_TOKEN:  ${{ secrets.PLUGIN_MACHINE_TOKEN }}
-          PLUGIN_DIR: ${{ github.workspace }}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          COMMENT_PR: true
-      - name: ZIP URL
-        run: echo ${{steps.pluginmachine.outputs.upload}}
+      - name: Create distribution archive
+        id: package_dist
+        run: npm run package:dist
+      - name: Distribution archive
+        run: echo ${{steps.package_dist.outputs.dist_archive}}
       - uses: instawp/wordpress-testing-automation@main
         id: create-wp
         with:
