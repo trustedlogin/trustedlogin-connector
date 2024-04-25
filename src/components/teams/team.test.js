@@ -52,7 +52,7 @@ describe("EditTeam", () => {
     });
     act(() => {
       fireEvent.change(getByLabelText(teamFields.account_id.label), {
-        target: { value: "account3" },
+        target: { value: "12345" },
       });
       fireEvent.change(getByLabelText(teamFields.private_key.label), {
         target: { value: "secret" },
@@ -70,7 +70,7 @@ describe("EditTeam", () => {
     });
     expect(onClickSave).toBeCalledTimes(1);
     const lastCall = onClickSave.mock.calls[0][0];
-    expect(lastCall[teamFields.account_id.id]).toEqual("account3");
+    expect(lastCall[teamFields.account_id.id]).toEqual("12345");
     expect(lastCall[teamFields.public_key.id]).toEqual("public");
     expect(lastCall[teamFields.private_key.id]).toEqual("secret");
   });
