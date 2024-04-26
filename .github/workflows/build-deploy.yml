@@ -12,6 +12,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Set commit SHA
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "COMMIT_SHA=${{ github.event.pull_request.head.sha }}".substring(0, 7) >> $GITHUB_ENV
+          else
+            echo "COMMIT_SHA=${{ github.sha }}".substring(0, 7) >> $GITHUB_ENV
+          fi
       - name: Build CSS and JS first
         run: yarn && yarn build
       - name: Install Composer dependencies
@@ -29,7 +36,7 @@ jobs:
           secret_key: ${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY }}
       - name: Create distribution archive
         id: package_dist_archive
-        run: npm run package:dist
+        run: npm run package:dist ${COMMIT_SHA}
       - name: Upload distribution archive to DigitalOcean
         id: upload_dist_archive
         run: |
@@ -39,11 +46,6 @@ jobs:
           echo "DIST_ARCHIVE_URL=$URL" >> $GITHUB_ENV
       - name: Update PR with a link to the distribution archive
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            COMMIT_SHA=${{ github.event.pull_request.head.sha }}
-          else
-            COMMIT_SHA=${{ github.sha }}
-          fi
           npx zx bin/add-build-file-link-to-pr.mjs ${{ github.repository }} ${COMMIT_SHA} $DIST_ARCHIVE_URL
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

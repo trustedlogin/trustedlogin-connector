@@ -1,8 +1,15 @@
 #!/usr/bin/env zx
+/**
+ * The script creates a distribution ZIP archive for the plugin.
+ *
+ * Usage: script <commit-hash>
+ */
+
+import path from 'path';
 
 const tempDir = 'dist_archive_temp';
 
-const distArchive = 'trustedlogin-connector-{version}.zip';
+const distArchive = 'trustedlogin-connector{version}{hash}.zip';
 
 const distArchiveContents = [
 	'trustedlogin-vendor.php',
@@ -18,6 +25,8 @@ const distArchiveContents = [
 const pluginFile = 'trustedlogin-vendor.php';
 const pluginPrefix = 'trustedlogin-connector';
 const pluginVersion = await getPluginVersion();
+
+const [ commitHash ] = process.argv.slice( 3 );
 
 async function getPluginVersion() {
 	let version;
@@ -44,7 +53,9 @@ async function getPluginVersion() {
 
 async function createDistArchive() {
 	const _tempDir = `${ tempDir }/${ pluginPrefix }`;
-	const finalDistArchive = distArchive.replace( '{version}', pluginVersion );
+	const finalDistArchive = distArchive
+		.replace( '{version}', `-${ pluginVersion }` )
+		.replace( '{hash}', commitHash ? `-${ commitHash }` : '' );
 
 	try {
 		console.log( `Creating distribution archive for version ${ pluginVersion }…` );
@@ -73,9 +84,11 @@ async function createDistArchive() {
 		process.exit( 1 );
 	}
 
-	try {
-		await $`echo "DIST_ARCHIVE=${finalDistArchive}" >> $GITHUB_ENV`;
-	} catch ( error ) {}
+	if ( process.env.GITHUB_ENV ) {
+		await $`echo "DIST_ARCHIVE=${ finalDistArchive }" >> $GITHUB_ENV`;
+	} else {
+		echo `Distribution archive created: ${ finalDistArchive }`;
+	}
 }
 
 createDistArchive();
