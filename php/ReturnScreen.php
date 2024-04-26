@@ -37,7 +37,7 @@ class ReturnScreen {
 		    return;
 	    }
 
-	    $data = trusted_login_vendor_prepare_data( $this->settings );
+	    $data = trustedlogin_connector_prepare_data( $this->settings );
 
 	    if ( ! isset( $data['redirectData'] ) ) {
 		    return;

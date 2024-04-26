@@ -134,9 +134,15 @@ function trustedlogin_vendor(){
 
 
 /**
- * Get data to set window.tlVendor in client with
+ * Get data to set window.tlVendor object in the dashboard.
+ *
+ * @since 1.1.0
+ *
+ * @param SettingsApi $settingsApi
+ *
+ * @return array
  */
-function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
+function trustedlogin_connector_prepare_data( SettingsApi $settingsApi){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$helpdesk  = $settingsApi->toArray()['teams'][0]['helpdesk'][0] ?? 'helpscout';
@@ -154,8 +160,8 @@ function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
-		//https://github.com/trustedlogin/vendor/issues/131
-		'log_file_name' => trustedlogin_vendor()->getLogFileName( false ),
+		/** @see https://github.com/trustedlogin/trustedlogin-connector/issues/131 Pass full log path to the app. */
+		'log_file_name' => trustedlogin_connector()->getLogFileName( false ),
 	];
 
 	//Check if we can preset redirectData in form
@@ -176,4 +182,15 @@ function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
 
 	}
 	return $data;
+}
+
+/**
+ * @deprecated 1.1 Use {@see trustedlogin_connector_prepare_data()} instead.
+ * @param SettingsApi $settingsApi
+ *
+ * @return array
+ */
+function trusted_login_vendor_prepare_data(SettingsApi $settingsApi){
+	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector_prepare_data()' );
+	return trustedlogin_connector_prepare_data( $settingsApi );
 }

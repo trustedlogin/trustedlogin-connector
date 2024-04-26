@@ -29,7 +29,7 @@ add_action('init', function () {
             false
         );
         $settingsApi = SettingsApi::fromSaved();
-        $data = trusted_login_vendor_prepare_data($settingsApi);
+        $data = trustedlogin_connector_prepare_data($settingsApi);
         $accessKey = isset($data[AccessKeyLogin::ACCESS_KEY_INPUT_NAME])
         ? sanitize_text_field($data[AccessKeyLogin::ACCESS_KEY_INPUT_NAME]) : '';
         $accountId = isset($data[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME]) ? sanitize_text_field($data[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME]) : '';
