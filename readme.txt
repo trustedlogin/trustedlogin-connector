@@ -28,6 +28,10 @@ TrustedLogin plugin to be installed on the website of the support provider.
 - Renamed actions (deprecated actions will be removed in a future release):
   - `trustedlogin_vendor` to `trustedlogin_connector`
   - `trustedlogin_vendor_settings_saved` to `trustedlogin_connector_settings_saved`
+- Removed the following methods, since they are not needed (they are now handled by the JS `AccessKeyForm` component since 0.13.0):
+  - `TrustedLoginService::handleMultipleSecretIds()`
+  - `TrustedLoginService::maybeRedirectSupport()`
+
 
 = 1.0.0 on January 26, 2024 =
 
