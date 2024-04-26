@@ -91,11 +91,22 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 }
 
 /**
- * Deactivation function
+ * Deactivation function.
+ * @since 1.1
+ * @return void
  */
 function trustedlogin_connector_deactivate() {
 	delete_option( 'tl_permalinks_flushed' );
 	delete_option( 'trustedlogin_vendor_config' );
+}
+
+/**
+ * Deactivation function.
+ * @deprecated 1.1 Use {@see trustedlogin_connector_deactivate()} instead.
+ */
+function trustedlogin_vendor_deactivate(){
+	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector_deactivate' );
+	trustedlogin_connector_deactivate();
 }
 
 
