@@ -82,16 +82,18 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	//Handle the "Reset All" button in UI
 	add_action( 'admin_init',[\TrustedLogin\Vendor\MaybeRedirect::class, 'adminInit']);
 
-	if( file_exists(__DIR__. "/build/index.html")){
-		//Handle webhook/helpdesk return
-		add_action( 'admin_init',[
-			new \TrustedLogin\Vendor\ReturnScreen(
-				file_get_contents(__DIR__. "/build/index.html"),
-				trustedlogin_connector()->getSettings()
-			),
-			'callback'
-		]);
-	}
+	$return_screen = new \TrustedLogin\Vendor\ReturnScreen(
+		trustedlogin_connector()->getSettings()
+	);
+
+	/**
+	 * Handle the request to log in to client sites from help desks.
+	 *
+	 * This request will be validated by {@see \TrustedLogin\Vendor\ReturnScreen::shouldHandle()}.
+	 *
+	 * The reason for this is to not pass any details about the  all GET parameters from the URL.
+	 */
+	add_action( 'admin_init', [ $return_screen, 'callback' ] );
 
 }else{
 	error_log( sprintf( esc_html__( 'Cannot load TrustedLogin Connector plugin: %s', 'trustedlogin-connector' ), esc_html__( 'Autoloader not found.', 'trustedlogin-connector' ) ) );
@@ -147,7 +149,6 @@ function trustedlogin_vendor(){
 	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector()' );
 	return trustedlogin_connector();
 }
-
 
 /**
  * Get data to set window.tlVendor object in the dashboard.
