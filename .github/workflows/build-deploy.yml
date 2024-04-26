@@ -15,10 +15,11 @@ jobs:
       - name: Set commit SHA
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "COMMIT_SHA=${{ github.event.pull_request.head.sha }}".substring(0, 7) >> $GITHUB_ENV
+            COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
           else
-            echo "COMMIT_SHA=${{ github.sha }}".substring(0, 7) >> $GITHUB_ENV
+            COMMIT_SHA="${{ github.sha }}"
           fi
+          echo "COMMIT_SHA=${COMMIT_SHA:0:7}" >> $GITHUB_ENV
       - name: Build CSS and JS first
         run: yarn && yarn build
       - name: Install Composer dependencies
