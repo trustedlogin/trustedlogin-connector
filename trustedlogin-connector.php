@@ -4,7 +4,7 @@
  * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
  * Version: 1.0.0
- * Requires PHP: 7.1
+ * Requires PHP: 7.2
  * Author: TrustedLogin
  * Author URI: https://www.trustedlogin.com
  * Text Domain: trustedlogin-connector
