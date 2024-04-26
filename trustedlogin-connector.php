@@ -123,11 +123,12 @@ function trustedlogin_connector() {
 /**
  * Accessor for main plugin container.
  *
- * @deprecated 1.0.1 Use {@see trustedlogin_connector()} instead.
+ * @deprecated 1.1 Use {@see trustedlogin_connector()} instead.
  *
  * @return \TrustedLogin\Vendor\Plugin;
  */
 function trustedlogin_vendor(){
+	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector()' );
 	return trustedlogin_connector();
 }
 
