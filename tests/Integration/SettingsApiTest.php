@@ -301,7 +301,7 @@ class SettingsApiTest extends \WP_UnitTestCase
 
 		$settings->save();
 		$this->assertNotEmpty(
-			did_action('trustedlogin_vendor_settings_saved')
+			did_action('trustedlogin_connector_settings_saved')
 		);
 		$settings = SettingsApi::fromSaved();
 

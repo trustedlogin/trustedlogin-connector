@@ -61,10 +61,17 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 
 	/**
 	 * Runs when plugin is ready.
-	 *
-	 * @var TrustedLogin\Vendor\Plugin $plugin
+	 * @deprecated 1.1 Use "trustedlogin_connector" action instead.
+	 * @param TrustedLogin\Vendor\Plugin $plugin
 	 */
-	do_action( 'trustedlogin_vendor', $plugin );
+	do_action_deprecated( 'trustedlogin_vendor', [ $plugin ], '1.1', 'trustedlogin_connector' );
+
+	/**
+	 * Runs when plugin is ready.
+	 * @since 1.1
+	 * @param TrustedLogin\Vendor\Plugin $plugin
+	 */
+	do_action( 'trustedlogin_connector', $plugin );
 
     //Add REST API endpoints
 	add_action( 'rest_api_init', [$plugin, 'restApiInit']);

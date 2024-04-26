@@ -140,7 +140,12 @@ class SettingsApi
 		/**
 		 * Fires after settings are saved.
 		 */
-		do_action( 'trustedlogin_vendor_settings_saved', $count );
+		do_action( 'trustedlogin_connector_settings_saved', $count );
+
+		/**
+		 * @deprecated 1.1
+		 */
+		do_action_deprecated( 'trustedlogin_vendor_settings_saved', [ $count ], '1.1', 'trustedlogin_connector_settings_saved' );
 
 		//When saving settings, maybe mark onboarding complete
 		if( $count ){
