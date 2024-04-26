@@ -15,11 +15,31 @@ jobs:
           node-version: 16
       - name: Build CSS and JS first
         run: yarn && yarn build
+      - name: Install Composer dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: '7.2'
+          dev: no
+          args: --prefer-dist
+      - name: Configure S3cmd tool
+        uses: s3-actions/s3cmd@v1.6.1
+        with:
+          provider: digitalocean
+          region: 'sfo3'
+          access_key: ${{ secrets.DIGITALOCEAN_SPACES_ACCESS_KEY }}
+          secret_key: ${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY }}
       - name: Create distribution archive
-        id: package_dist
+        id: package_dist_archive
         run: npm run package:dist
-      - name: Distribution archive
-        run: echo ${{steps.package_dist.outputs.dist_archive}}
+      - name: Upload distribution archive to DigitalOcean
+        id: upload_dist_archive
+        run: |
+          set -e
+          s3cmd put ${DIST_ARCHIVE} --acl-public s3://trustedlogin/github-trustedlogin-connector-builds/${DIST_ARCHIVE} > s3cmd_output.txt
+          URL=$(awk '/Public URL of the object is/{print $NF}' s3cmd_output.txt)
+          echo "DIST_ARCHIVE_URL=$URL" >> $GITHUB_ENV
+      - name: Update PR with a link to the distribution archive
+        run: npx zx bin/add-build-file-link-to-pr.mjs ${{ github.repository }} ${{ github.sha }} $DIST_ARCHIVE_URL
       - uses: instawp/wordpress-testing-automation@main
         id: create-wp
         with:
@@ -29,7 +49,7 @@ jobs:
           INSTAWP_TEMPLATE_SLUG: vendor
           REPO_ID: 4
           INSTAWP_ACTION: create-site-template
-          ARTIFACT_URL: ${{steps.pluginmachine.outputs.upload}}
+          ARTIFACT_URL: ${{ env.DIST_ARCHIVE_URL }}
       - name: InstaWP URL
         run: echo URL ${{ steps.create-wp.outputs.instawp_url }}
         shell: bash

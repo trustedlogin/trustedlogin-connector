@@ -73,7 +73,9 @@ async function createDistArchive() {
 		process.exit( 1 );
 	}
 
-	console.log(`::set-output name=dist_archive::${finalDistArchive}`);
+	try {
+		await $`echo "DIST_ARCHIVE=${finalDistArchive}" >> $GITHUB_ENV`;
+	} catch ( error ) {}
 }
 
 createDistArchive();
