@@ -2,8 +2,8 @@
 Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
-Tested up to: 6.3.1
-Stable tag: 1.0.0
+Tested up to: 6.5
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,11 +22,19 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 = 1.1.0 on April 26, 2024 =
 
-- Added a new function `trustedlogin_connector()` to replace the deprecated `trustedlogin_vendor()` function.
-- Added `trustedlogin_connector_prepare_data()` to replace deprecated `trusted_login_vendor_prepare_data()` function.
-- Logging now uses `WP_Filesystem` to write the log files.
+- **Renamed the plugin file to `trustedlogin-connector.php` - this will require you reactivate the plugin after updating!**
+- Code tweaks to comply with WP Coding Standards
+- Updated the textdomain to `trustedlogin-connector`
+
+__Developer Notes:__
+
 - Renamed the Composer package to `trustedlogin/trustedlogin-connector`
 - Required PHP version is now 7.2 or higher
+- Logging now uses `WP_Filesystem` to write the log files
+- Renamed functions (deprecated functions will be removed in a future release):
+  - `trustedlogin_vendor()` to `trustedlogin_connector()`
+  - `trusted_login_vendor_prepare_data()` to `trustedlogin_connector_prepare_data()`
+  - `trustedlogin_vendor_deactivate()` to `trustedlogin_connector_deactivate()`
 - Renamed actions (deprecated actions will be removed in a future release):
   - `trustedlogin_vendor` to `trustedlogin_connector`
   - `trustedlogin_vendor_settings_saved` to `trustedlogin_connector_settings_saved`
@@ -34,6 +42,7 @@ TrustedLogin plugin to be installed on the website of the support provider.
   - `TrustedLoginService::handleMultipleSecretIds()`
   - `TrustedLoginService::maybeRedirectSupport()`
 
+A full list of changes can be found in the [TrustedLogin Connector GitHub repository](https://github.com/trustedlogin/trustedlogin-connector/releases/tag/v1.1.0).
 
 = 1.0.0 on January 26, 2024 =
 
