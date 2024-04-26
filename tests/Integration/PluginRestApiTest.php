@@ -85,7 +85,7 @@ class PluginRestApiTest extends TestCase
 		$endpoint = new \TrustedLogin\Vendor\Endpoints\PublicKey();
 		$r = $endpoint->get(new \WP_REST_Request());
 		$this->assertSame(
-			trustedlogin_vendor()->getPublicKey(),
+			trustedlogin_connector()->getPublicKey(),
 			$r->get_data()['publicKey']
 		);
 	}
@@ -98,7 +98,7 @@ class PluginRestApiTest extends TestCase
 		$endpoint = new \TrustedLogin\Vendor\Endpoints\SignatureKey();
 		$r = $endpoint->get(new \WP_REST_Request());
 		$this->assertSame(
-			trustedlogin_vendor()->getSignatureKey(),
+			trustedlogin_connector()->getSignatureKey(),
 			$r->get_data()['signatureKey']
 		);
 	}

@@ -20,6 +20,10 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
+= 1.1.0 on April 26, 2024 =
+
+- Deprecated the `trustedlogin_vendor()` function in favor of `trustedlogin_connector()`.
+
 = 1.0.0 on January 26, 2024 =
 
 - Renamed the plugin to TrustedLogin Connector

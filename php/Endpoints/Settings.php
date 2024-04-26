@@ -100,7 +100,7 @@ class Settings extends Endpoint
 			return false;
 		}
 
-		$r = \trustedlogin_vendor()->getApiHandler(
+		$r = \trustedlogin_connector()->getApiHandler(
 			$team_account_id,
 			'',
 			$team

@@ -52,7 +52,7 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	include_once dirname( __FILE__ ) . '/src/trustedlogin-settings/init.php';
 
 	//This will initialize the plugin
-	$plugin = trustedlogin_vendor();
+	$plugin = trustedlogin_connector();
 
 	//Maybe register error handler
 	if( TRUSTEDLOGIN_DEBUG || $plugin->getSettings()->isErrorLogggingEnabled() ){
@@ -80,7 +80,7 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 		add_action( 'admin_init',[
 			new \TrustedLogin\Vendor\ReturnScreen(
 				file_get_contents(__DIR__. "/build/index.html"),
-				trustedlogin_vendor()->getSettings()
+				trustedlogin_connector()->getSettings()
 			),
 			'callback'
 		]);
@@ -93,26 +93,42 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 /**
  * Deactivation function
  */
-function trustedlogin_vendor_deactivate() {
+function trustedlogin_connector_deactivate() {
 	delete_option( 'tl_permalinks_flushed' );
 	delete_option( 'trustedlogin_vendor_config' );
 }
 
 
 /**
- * Accesor for main plugin container
+ * Accessor for main plugin container.
+ *
+ * @return \TrustedLogin\Vendor\Plugin;
+ */
+function trustedlogin_connector() {
+	/** @var \TrustedLogin\Vendor\Plugin */
+	static $trustedlogin_connector;
+
+	if ( $trustedlogin_connector ) {
+		return $trustedlogin_connector;
+	}
+
+	if( ! $trustedlogin_connector ){
+		$trustedlogin_connector = new \TrustedLogin\Vendor\Plugin(
+			new \TrustedLogin\Vendor\Encryption()
+		);
+	}
+	return $trustedlogin_connector;
+}
+
+/**
+ * Accessor for main plugin container.
+ *
+ * @deprecated 1.0.1 Use {@see trustedlogin_connector()} instead.
  *
  * @return \TrustedLogin\Vendor\Plugin;
  */
 function trustedlogin_vendor(){
-	/** @var \TrustedLogin\Vendor\Plugin */
-	static $trustedlogin_vendor;
-	if( ! $trustedlogin_vendor ){
-		$trustedlogin_vendor = new \TrustedLogin\Vendor\Plugin(
-			new \TrustedLogin\Vendor\Encryption()
-		);
-	}
-	return $trustedlogin_vendor;
+	return trustedlogin_connector();
 }
 
 

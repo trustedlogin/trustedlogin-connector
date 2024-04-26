@@ -152,7 +152,7 @@ class AccessKeyLogin
 		}
 
 		$tl = new TrustedLoginService(
-			trustedlogin_vendor()
+			trustedlogin_connector()
 		);
 
 		$secret_ids = $tl->apiGetSecretIds($access_key, $account_id);

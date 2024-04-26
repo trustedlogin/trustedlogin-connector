@@ -84,7 +84,7 @@ class Helpscout extends Webhook{
 		$licenses = $this->getLicensesByEmails( $customer_emails );
 
 		// Get API Handler
-		$saas_api = trustedlogin_vendor()->getApiHandler( $account_id );
+		$saas_api = trustedlogin_connector()->getApiHandler( $account_id );
 
 		/**
 		 * Filter: Allows for changing the html output of the wrapper html elements.

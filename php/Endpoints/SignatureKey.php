@@ -15,7 +15,7 @@ class SignatureKey extends Endpoint
 	/** @inheritdoc */
 	public function get(\WP_REST_Request $request)
 	{
-		$sign_public_key         = \trustedlogin_vendor()->getSignatureKey();
+		$sign_public_key         = \trustedlogin_connector()->getSignatureKey();
 
 		$response = new \WP_REST_Response();
 

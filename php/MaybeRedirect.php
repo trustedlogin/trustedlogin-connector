@@ -39,7 +39,7 @@ class MaybeRedirect
 
 		//Reset all data
 		(new Reset())->resetAll(
-			\trustedlogin_vendor()
+			\trustedlogin_connector()
 		);
 
 		wp_safe_redirect(

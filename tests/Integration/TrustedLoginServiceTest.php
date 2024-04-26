@@ -56,7 +56,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 		);
 
 		$service = new TrustedLoginService(
-			trustedlogin_vendor()
+			trustedlogin_connector()
 		);
 		$r = $service->apiGetSecretIds('accessKey1', self::ACCOUNT_ID);
 		$this->assertTrue(
@@ -78,7 +78,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 	public function testApiGetEnvelope()
 	{
 		$service = new TrustedLoginService(
-			trustedlogin_vendor()
+			trustedlogin_connector()
 		);
 		$r = $service->apiGetEnvelope('secret?', self::ACCOUNT_ID);
 		$this->assertTrue(
@@ -102,7 +102,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 			return $this->getEncryptionKeys();
 		});
 		$service = new TrustedLoginService(
-			trustedlogin_vendor()
+			trustedlogin_connector()
 		);
 		//Get envelope and try to turn it into a URL.
 		$envelope = json_decode($this->getEnvelopeData(), true);

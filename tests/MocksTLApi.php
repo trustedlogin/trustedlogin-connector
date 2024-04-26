@@ -16,7 +16,7 @@ trait MocksTLApi
 	{
 
 		$sender = new MocksSendsApiRequests();
-		trustedlogin_vendor()->setApiSender(
+		trustedlogin_connector()->setApiSender(
 			$sender
 		);
 	}
@@ -35,7 +35,7 @@ trait MocksTLApi
 	 */
 	protected function resetTlApiMock()
 	{
-		trustedlogin_vendor()->setApiSender(
+		trustedlogin_connector()->setApiSender(
 			new ApiSend()
 		);
 	}
