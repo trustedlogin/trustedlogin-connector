@@ -24,6 +24,7 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 - Added a new function `trustedlogin_connector()` to replace the deprecated `trustedlogin_vendor()` function.
 - Added `trustedlogin_connector_prepare_data()` to replace deprecated `trusted_login_vendor_prepare_data()` function.
+- Logging now uses `WP_Filesystem` to write the log files.
 - Renamed actions (deprecated actions will be removed in a future release):
   - `trustedlogin_vendor` to `trustedlogin_connector`
   - `trustedlogin_vendor_settings_saved` to `trustedlogin_connector_settings_saved`

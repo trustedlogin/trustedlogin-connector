@@ -15,7 +15,16 @@ trait Logger {
 	private $hash;
 
 	/**
-	 * Use trustedlogin_vendor()->log( 'message', __METHOD__ );
+	 * Logs a message to a file using the WordPress Filesystem API.
+	 *
+	 * Call using `trustedlogin_connector()->log( 'message', __METHOD__ );`
+	 *
+	 * @param string $message  The message to log.
+	 * @param string $method   The method issuing the log call.
+	 * @param string $logLevel The log level (e.g., 'info', 'warning', etc.).
+	 * @param array  $context  Additional context to log with the message.
+	 *
+	 * @return void
 	 */
 	public function log( $message, $method, $logLevel = 'info', $context = [] ) {
 		$context  = (array) $context;
@@ -26,17 +35,40 @@ trait Logger {
 			$message .= ' ' . wp_json_encode( $context, JSON_PRETTY_PRINT );
 		}
 
-		$logFileName = $this->getLogFileName();
+		$logFileName   = $this->getLogFileName();
+		$logFileDir    = dirname( $logFileName );
+		$wp_filesystem = $this->init_wp_filesystem();
 
-		if ( ! file_exists( $logFileName ) ) {
-			wp_mkdir_p( dirname( $logFileName ) ); // Create the directory if it doesn't exist.
-			touch( $logFileName );
+		if ( ! $wp_filesystem->is_dir( $logFileDir ) ) {
+			$wp_filesystem->mkdir( $logFileDir, FS_CHMOD_DIR ); // Ensure permission compatibility.
 		}
 
-		$file = fopen( $logFileName, "a" );
+		if ( ! $wp_filesystem->exists( $logFileName ) ) {
+			$wp_filesystem->touch( $logFileName );
+		}
 
-		fwrite( $file, "\n" . $message );
-		fclose( $file );
+		// Read existing content and append new message
+		$existing_content = $wp_filesystem->get_contents( $logFileName );
+		$new_content      = $existing_content . $message . "\n";
+		$wp_filesystem->put_contents( $logFileName, $new_content, FS_CHMOD_FILE );
+	}
+
+	/**
+	 * Initializes the WordPress filesystem API.
+	 *
+	 * @since 1.1
+	 *
+	 * @return \WP_Filesystem_Base The filesystem object.
+	 */
+	private function init_wp_filesystem() {
+		global $wp_filesystem;
+
+		if ( ! $wp_filesystem ) {
+			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
+
+		return $wp_filesystem;
 	}
 
 	/**
@@ -72,6 +104,7 @@ trait Logger {
 	 * @return string
 	 */
 	private function getTimestamp() {
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		$originalTime = microtime( true );
 		$micro        = sprintf( '%06d', ( $originalTime - floor( $originalTime ) ) * 1000000 );
 		$date         = new DateTime( gmdate( 'Y-m-d H:i:s.' . $micro, (int) $originalTime ) );
