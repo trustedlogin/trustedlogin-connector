@@ -12,7 +12,7 @@ const tempDir = 'dist_archive_temp';
 const distArchive = 'trustedlogin-connector{version}{hash}.zip';
 
 const distArchiveContents = [
-	'trustedlogin-vendor.php',
+	'trustedlogin-connector.php',
 	'readme.txt',
 	'php',
 	'vendor',
@@ -22,7 +22,7 @@ const distArchiveContents = [
 	'src/trustedlogin-dist.css'
 ];
 
-const pluginFile = 'trustedlogin-vendor.php';
+const pluginFile = 'trustedlogin-connector.php';
 const pluginPrefix = 'trustedlogin-connector';
 const pluginVersion = await getPluginVersion();
 

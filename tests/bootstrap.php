@@ -31,7 +31,7 @@ require_once $_tests_dir . '/includes/functions.php';
  */
 function _manually_load_plugin()
 {
-	require dirname(dirname(__FILE__)) . '/trustedlogin-vendor.php';
+	require dirname(dirname(__FILE__)) . '/trustedlogin-connector.php';
 	try {
 		$dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 		$dotenv->load();
