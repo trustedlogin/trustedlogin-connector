@@ -1,5 +1,5 @@
 {
-  "name": "@trustedlogin/trustedlogin-vendor",
+  "name": "@trustedlogin/trustedlogin-connector",
   "private": true,
   "version": "0.14.0",
   "license": "GPL-2.0-or-later",
