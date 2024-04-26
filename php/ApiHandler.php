@@ -237,7 +237,8 @@ class ApiHandler
 		$headers  = $this->getAdditionalHeader();
 
 		$verification = $this->apiSend($url, $body, $method, $headers);
-		$this->log( wp_json_encode($verification),__METHOD__.':'.__LINE__, 'debug',$headers);
+
+		$this->log( 'Verification results:', __METHOD__ . ':' . __LINE__, 'debug', [ '$verification' => $verification ] );
 
 		if (is_wp_error($verification)) {
 			return new WP_Error(
@@ -255,8 +256,6 @@ class ApiHandler
 		}
 
 		$status = wp_remote_retrieve_response_code($verification);
-
-		$this->log( 'Verification status returned: ' . $status, __METHOD__, 'debug' );
 
 		switch ($status) {
 			case 400:
