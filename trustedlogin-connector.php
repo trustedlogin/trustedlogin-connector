@@ -96,7 +96,11 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 	add_action( 'admin_init', [ $return_screen, 'callback' ] );
 
 }else{
-	error_log( sprintf( esc_html__( 'Cannot load TrustedLogin Connector plugin: %s', 'trustedlogin-connector' ), esc_html__( 'Autoloader not found.', 'trustedlogin-connector' ) ) );
+	error_log( sprintf(
+		// translators: %s is the error message.
+		esc_html__( 'Cannot load TrustedLogin Connector plugin: %s', 'trustedlogin-connector' ),
+		esc_html__( 'Autoloader not found.', 'trustedlogin-connector' )
+	) );
 	return;
 }
 

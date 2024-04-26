@@ -27,7 +27,7 @@ trait MocksTLApi
 	 */
 	protected function getEnvelopeData()
 	{
-		return file_get_contents(__DIR__ . '/data/get-envelope.json');
+		return file_get_contents(__DIR__ . '/data/get-envelope.json'); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	}
 
 	/**

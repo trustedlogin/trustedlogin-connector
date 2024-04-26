@@ -58,7 +58,7 @@ class EncryptionTest extends \WP_UnitTestCase
 		$stored_value = get_site_option($option_name);
 
 		$this->assertNotEmpty($stored_value);
-		$this->assertEquals(json_encode($keys), $stored_value);
+		$this->assertEquals(wp_json_encode($keys), $stored_value);
 
 		delete_site_option($option_name);
 	}

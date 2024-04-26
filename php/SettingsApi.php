@@ -159,7 +159,9 @@ class SettingsApi
 	 * Get team setting, by id
 	 *
 	 * @since 0.10.0
-	 * @param string|int $account_id Account to search for
+	 * @throws \Exception If account not found.
+	 *
+	 * @param string|int $account_id Account to search for.
 	 * @return TeamSettings
 	 */
 	public function getByAccountId($account_id)
@@ -171,7 +173,7 @@ class SettingsApi
 		}
 
 		// translators: %s is the account id that wasn't found.
-		throw new \Exception(sprintf( esc_html__( 'Account not found: %s.', 'trustedlogin-connector' ), $account_id ) );
+		throw new \Exception(sprintf( esc_html__( 'Account not found: %s.', 'trustedlogin-connector' ), esc_attr( $account_id ) ) );
 	}
 
 	/*

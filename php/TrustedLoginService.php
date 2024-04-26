@@ -82,7 +82,7 @@ class TrustedLoginService
 		}
 
 		add_action('admin_notices', function () use ($urls_output) {
-			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-connector') . '</h3><ul>' . $urls_output . '</ul></div>';
+			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-connector') . '</h3><ul>' . $urls_output . '</ul></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		});
 	}
 
@@ -202,7 +202,7 @@ class TrustedLoginService
 		$output = $this->get_redirect_form_html($envelope_parts);
 
 		// Use wp_die() to get a nice free template
-		wp_die($output, esc_html__('TrustedLogin redirect&hellip;', 'trustedlogin-connector'), 302);
+		wp_die($output, esc_html__('TrustedLogin redirect&hellip;', 'trustedlogin-connector'), 302); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
