@@ -88,6 +88,19 @@ class EncryptionTest extends \WP_UnitTestCase
 		$this->assertEquals($setting_name, 'should_be_filtered');
 
 		delete_site_option($setting_name);
+
+		/** @see https://github.com/trustedlogin/trustedlogin-connector/commit/ddd47f4 */
+		add_filter('trustedlogin/connector/encryption/keys-option', function () {
+			return 'Should be not valid because it is way too long and this should result in a default value. This is a very long string that should not be used as a setting name. It is way too long. But it is a good test.';
+		});
+
+		$Encryption_Class = new Encryption();
+		$property = new \ReflectionProperty($Encryption_Class, 'key_option_name');
+		$property->setAccessible(true);
+		$setting_name = $property->getValue($Encryption_Class);
+		$this->assertEquals($setting_name, 'trustedlogin_keys', 'The setting name was too long, so it should have been reset to the default value.');
+
+		delete_site_option($setting_name);
 	}
 
 	private function delete_key_option()
