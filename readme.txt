@@ -38,6 +38,9 @@ __Developer Notes:__
 - Renamed actions (deprecated actions will be removed in a future release):
   - `trustedlogin_vendor` to `trustedlogin_connector`
   - `trustedlogin_vendor_settings_saved` to `trustedlogin_connector_settings_saved`
+- Removed the following methods, since they are not needed (they are now handled by the JS `AccessKeyForm` component since 0.13.0):
+  - `TrustedLoginService::handleMultipleSecretIds()`
+  - `TrustedLoginService::maybeRedirectSupport()`
 
 A full list of changes can be found in the [TrustedLogin Connector GitHub repository](https://github.com/trustedlogin/trustedlogin-connector/releases/tag/v1.1.0).
 

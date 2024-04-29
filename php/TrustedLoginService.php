@@ -41,52 +41,6 @@ class TrustedLoginService
 	}
 
 	/**
-	 * Helper: Handles the case where a single accessKey returns more than 1 secretId.
-	 *
-	 * @param string $account_id
-	 * @param array $secret_ids [
-	 *   @type string $siteurl The url of the site the secretId is for.
-	 *   @type string $loginurl The vendor-side redirect link to login via secretId.
-	 * ]
-	 *
-	 * @return void.
-	 */
-	public function handleMultipleSecretIds($account_id, $secret_ids = array())
-	{
-		if (! is_array($secret_ids) || empty($secret_ids)) {
-			return;
-		}
-
-		$valid_secrets = $this->getValidSecrets( $secret_ids, $account_id );
-
-		if (1 === sizeof($valid_secrets)) {
-			reset( $valid_secrets );
-			$this->maybeRedirectSupport( $valid_secrets[0]['id'], $valid_secrets[0]['envelope'] );
-		}
-
-		$urls_output  = '';
-		$url_template = '<li><a href="%1$s" class="%2$s">%3$s</a></li>';
-
-		foreach ( $valid_secrets as $valid_secret ) {
-			$urls_output .= sprintf(
-				$url_template,
-				esc_url($valid_secret['url_parts']['loginurl']),
-				esc_attr('trustedlogin-authlink'),
-				// translators: %s is the site URL that the user will be logged into.
-				sprintf(esc_html__('Log in to %s', 'trustedlogin-connector'), esc_html($url_parts['siteurl']))
-			);
-		}
-
-		if (empty($urls_output)) {
-			return;
-		}
-
-		add_action('admin_notices', function () use ($urls_output) {
-			echo '<div class="notice notice-warning"><h3>' . esc_html__('Choose a site to log into:', 'trustedlogin-connector') . '</h3><ul>' . $urls_output . '</ul></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		});
-	}
-
-	/**
 	 * Ingests an array of secret IDs and returns an array of only valid IDs with extra data.
 	 *
 	 * @since 0.12.0
@@ -137,72 +91,6 @@ class TrustedLoginService
 		}
 
 		return $valid_ids;
-	}
-
-
-	/**
-	 * Helper: If all checks pass, redirect support agent to client site's admin panel
-	 *
-	 * @since 0.4.0
-	 * @since 0.8.0 Added `Encryption->decrypt()` to decrypt envelope from Vault.
-	 *
-	 * @see endpoint_maybe_redirect()
-	 *
-	 * @param string $secret_id collected via endpoint
-	 * @param string $account_id collected via endpoint
-	 * @param array|\WP_Error Envelope, if already fetched. Optional.
-	 *
-	 * @return null
-	 */
-	public function maybeRedirectSupport($secret_id, $account_id, $envelope = null)
-	{
-
-		$this->log("Got to maybeRedirectSupport. ID: $secret_id", __METHOD__, 'debug');
-
-		if (! is_admin()) {
-			$redirect_url = get_site_url();
-		} else {
-			$redirect_url = add_query_arg('page', sanitize_text_field($_GET['page']), admin_url('admin.php')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		}
-		//Get saved settings an then team settings
-		$settings = SettingsApi::fromSaved();
-		try {
-			$teamSettings =  $settings->getByAccountId($account_id);
-		} catch (\Exception $e) {
-			wp_safe_redirect(add_query_arg(array( 'tl-error' => self::REDIRECT_ERROR_STATUS ), $redirect_url), self::REDIRECT_ERROR_STATUS, 'TrustedLogin');
-			exit;
-		}
-		// first check if l can be redirected.
-		if (! $this->verifyUserRole($teamSettings)) {
-			$this->log('User cannot be redirected due to auth_verify_user() returning false.', __METHOD__, 'warning');
-			return;
-		}
-		if (is_null($envelope)) {
-			// Get the envelope
-			$envelope = $this->apiGetEnvelope($secret_id,$account_id);
-		}
-
-		if (empty($envelope)) {
-			wp_safe_redirect($redirect_url, self::REDIRECT_ERROR_STATUS, 'TrustedLogin');
-		}
-
-		if (is_wp_error($envelope)) {
-			$this->log('Error: ' . $envelope->get_error_message(), __METHOD__, 'error');
-			wp_safe_redirect(add_query_arg(array( 'tl-error' => self::REDIRECT_ERROR_STATUS ), $redirect_url), self::REDIRECT_ERROR_STATUS, 'TrustedLogin');
-			exit;
-		}
-
-		$envelope_parts = ( $envelope ) ? $this->envelopeToUrl($envelope, true) : false;
-
-		if (is_wp_error($envelope_parts)) {
-			wp_safe_redirect(add_query_arg(array( 'tl-error' => self::REDIRECT_ERROR_STATUS ), $redirect_url), self::REDIRECT_ERROR_STATUS, 'TrustedLogin');
-			exit;
-		}
-
-		$output = $this->get_redirect_form_html($envelope_parts);
-
-		// Use wp_die() to get a nice free template
-		wp_die($output, esc_html__('TrustedLogin redirect&hellip;', 'trustedlogin-connector'), 302); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
