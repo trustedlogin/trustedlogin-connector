@@ -20,7 +20,7 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
-= 1.1.0 on April 26, 2024 =
+= 1.1.0 on April 29, 2024 =
 
 - **Renamed the plugin file to `trustedlogin-connector.php` - this will require you reactivate the plugin after updating!**
 - Code tweaks to comply with WP Coding Standards
