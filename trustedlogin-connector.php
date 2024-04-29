@@ -137,9 +137,11 @@ function trustedlogin_connector() {
 		return $trustedlogin_connector;
 	}
 
-	return new \TrustedLogin\Vendor\Plugin(
+	$trustedlogin_connector = new \TrustedLogin\Vendor\Plugin(
 		new \TrustedLogin\Vendor\Encryption()
 	);
+
+	return $trustedlogin_connector;
 }
 
 /**
