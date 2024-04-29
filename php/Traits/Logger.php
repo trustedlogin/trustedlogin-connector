@@ -24,9 +24,14 @@ trait Logger {
 	 * @param string $logLevel The log level (e.g., 'info', 'warning', etc.).
 	 * @param array  $context  Additional context to log with the message.
 	 *
-	 * @return void
+	 * @return bool|null True if the message was written to the log file, false if not, null if error logging is disabled.
 	 */
 	public function log( $message, $method, $logLevel = 'info', $context = [] ) {
+
+		if( ! trustedlogin_connector()->getSettings()->isErrorLogggingEnabled() ) {
+			return null;
+		}
+
 		$context  = (array) $context;
 		$logLevel = strtolower( is_string( $logLevel ) ? $logLevel : 'info' );
 		$message  = "[{$this->getTimestamp()}] [{$logLevel}] {$message}";
@@ -37,6 +42,26 @@ trait Logger {
 
 		$logFileName   = $this->getLogFileName();
 		$logFileDir    = dirname( $logFileName );
+
+		// If we're running tests, don't use the WP Filesystem API.
+		if ( ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
+			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+
+			if ( ! file_exists( $logFileName ) ) {
+				wp_mkdir_p( dirname( $logFileName ) ); // Create the directory if it doesn't exist.
+				touch( $logFileName );
+			}
+
+			$file = fopen( $logFileName, 'a' );
+
+			$file_written = fwrite( $file, $message . "\n" );
+			$file_closed = fclose( $file );
+
+			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+
+			return ( $file_written && $file_closed );
+		}
+
 		$wp_filesystem = $this->init_wp_filesystem();
 
 		if ( is_wp_error( $wp_filesystem ) ) {
@@ -55,7 +80,8 @@ trait Logger {
 		// Read existing content and append new message
 		$existing_content = $wp_filesystem->get_contents( $logFileName );
 		$new_content      = $existing_content . $message . "\n";
-		$wp_filesystem->put_contents( $logFileName, $new_content, FS_CHMOD_FILE );
+
+		return $wp_filesystem->put_contents( $logFileName, $new_content, FS_CHMOD_FILE );
 	}
 
 	/**

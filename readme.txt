@@ -25,12 +25,14 @@ TrustedLogin plugin to be installed on the website of the support provider.
 - **Renamed the plugin file to `trustedlogin-connector.php` - this will require you reactivate the plugin after updating!**
 - Code tweaks to comply with WP Coding Standards
 - Updated the textdomain to `trustedlogin-connector`
+- Fixed error logging being enabled even when the setting is disabled
 
 __Developer Notes:__
 
 - Renamed the Composer package to `trustedlogin/trustedlogin-connector`
 - Required PHP version is now 7.2 or higher
 - Logging now uses `WP_Filesystem` to write the log files
+- Logging now returns boolean values for success/failure and `null` for logging is disabled
 - Renamed functions (deprecated functions will be removed in a future release):
   - `trustedlogin_vendor()` to `trustedlogin_connector()`
   - `trusted_login_vendor_prepare_data()` to `trustedlogin_connector_prepare_data()`
