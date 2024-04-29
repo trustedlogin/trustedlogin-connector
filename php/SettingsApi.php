@@ -368,7 +368,7 @@ class SettingsApi
 	/**
 	 * Set the global settings
 	 *
-	 * Values will be merged with existin
+	 * Values will be merged with existing settings.
 	 *
 	 * @param array $globalSettings
 	 * @return $this
@@ -416,6 +416,7 @@ class SettingsApi
 			case 'freescout':
 				$callback = Freescout::actionUrl( $accountId, $helpdesk );
 				break;
+			case 'helpscout':
 			default:
 				$callback = Helpscout::actionUrl( $accountId, $helpdesk );
 				break;
