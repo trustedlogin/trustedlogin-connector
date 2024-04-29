@@ -75,9 +75,8 @@ class EncryptionTest extends \WP_UnitTestCase
 		$this->assertEquals($setting_name, 'trustedlogin_keys');
 		delete_site_option($setting_name);
 
-
 		// Test what happens when filtering the setting name
-		add_filter('trustedlogin/vendor/encryption/keys-option', function () {
+		add_filter('trustedlogin/connector/encryption/keys-option', function () {
 			return 'should_be_filtered';
 		});
 
@@ -146,13 +145,13 @@ class EncryptionTest extends \WP_UnitTestCase
 		$this->assertObjectHasAttribute('public_key', $keys, 'public_key should be returned by getKeys ');
 		$this->assertObjectHasAttribute('private_key', $keys, 'private_key should be returned by getKeys ');
 
-		add_filter('trustedlogin/vendor/encryption/get-keys', '__return_zero');
+		add_filter('trustedlogin/connector/encryption/get-keys', '__return_zero');
 
 		$zero = $method_getKeys->invoke($this->encryption, true);
 
-		$this->assertEquals(0, $zero, 'trustedlogin/vendor/encryption/get-keys filter failed');
+		$this->assertEquals(0, $zero, 'trustedlogin/connector/encryption/get-keys filter failed');
 
-		remove_all_filters('trustedlogin/vendor/encryption/get-keys');
+		remove_all_filters('trustedlogin/connector/encryption/get-keys');
 	}
 
 	/**
@@ -210,7 +209,7 @@ class EncryptionTest extends \WP_UnitTestCase
 		$this->assertWPError($wp_error, 'The signed nonce was made up; this should not have passed.');
 		$this->assertEquals('sodium-error', $wp_error->get_error_code());
 
-		add_filter('trustedlogin/vendor/encryption/get-keys', $bad_range_key = function ($keys) {
+		add_filter('trustedlogin/connector/encryption/get-keys', $bad_range_key = function ($keys) {
 
 			$keys->sign_public_key = 'should be 64 bytes long...';
 
@@ -222,7 +221,7 @@ class EncryptionTest extends \WP_UnitTestCase
 		$this->assertWPError($wp_error, 'The key was not the correct number of characters; this should not have passed.');
 		$this->assertEquals('sodium-error', $wp_error->get_error_code());
 
-		remove_filter('trustedlogin/vendor/encryption/get-keys', $bad_range_key);
+		remove_filter('trustedlogin/connector/encryption/get-keys', $bad_range_key);
 
 		/** @var WP_Error $wp_error */
 		$wp_error = $method_verifySignature->invoke($this->encryption, $signed_nonce, str_shuffle($unsigned_nonce));

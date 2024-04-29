@@ -44,7 +44,12 @@ class Encryption
 		 * @param string $key_option_name The name of the option in the database.
 		 * @param Encryption $this The Encryption object.
 		 */
-		$key_option_name = apply_filters( 'trustedlogin/vendor/encryption/keys-option', $this->key_option_name, $this );
+		$key_option_name = apply_filters( 'trustedlogin/connector/encryption/keys-option', $this->key_option_name, $this );
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$key_option_name = apply_filters_deprecated( 'trustedlogin/vendor/encryption/keys-option', [ $key_option_name, $this ], '1.1', 'trustedlogin/connector/encryption/keys-option' );
 
 		// If the key_option_name is valid, use it.
 		if ( is_string( $key_option_name ) && strlen( $key_option_name ) <= self::MAX_INDEX_LENGTH ) {
@@ -94,10 +99,19 @@ class Encryption
 		/**
 		 * Filter allows site admins to change where the key is fetched from.
 		 *
+		 * @since 1.1
+		 *
 		 * @param \stdClass|WP_Error $keys
 		 * @param Encryption $this
 		 */
-		return apply_filters('trustedlogin/vendor/encryption/get-keys', $keys, $this);
+		$filtered_keys = apply_filters( 'trustedlogin/connector/encryption/get-keys', $keys, $this );
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$filtered_keys = apply_filters_deprecated( 'trustedlogin/vendor/encryption/get-keys', [ $filtered_keys, $this ], '1.1', 'trustedlogin/connector/encryption/get-keys' );
+
+		return $filtered_keys;
 	}
 
 	/**

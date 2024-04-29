@@ -37,9 +37,10 @@ __Developer Notes:__
   - `trustedlogin_vendor()` to `trustedlogin_connector()`
   - `trusted_login_vendor_prepare_data()` to `trustedlogin_connector_prepare_data()`
   - `trustedlogin_vendor_deactivate()` to `trustedlogin_connector_deactivate()`
-- Renamed actions (deprecated actions will be removed in a future release):
+- Renamed hooks (deprecated actions will be removed in a future release):
   - `trustedlogin_vendor` to `trustedlogin_connector`
   - `trustedlogin_vendor_settings_saved` to `trustedlogin_connector_settings_saved`
+  - `trustedlogin/vendor/encryption/keys-option` to `trustedlogin/connector/encryption/keys-option`
 - Removed the following methods, since they are not needed (they are now handled by the JS `AccessKeyForm` component since 0.13.0):
   - `TrustedLoginService::handleMultipleSecretIds()`
   - `TrustedLoginService::maybeRedirectSupport()`

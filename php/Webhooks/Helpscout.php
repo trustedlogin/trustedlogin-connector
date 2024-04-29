@@ -92,10 +92,15 @@ class Helpscout extends Webhook{
 		 * @param string $html
 		 */
 		$html_template = apply_filters(
-			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper',
+			'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/wrapper',
 			'<ul class="c-sb-list c-sb-list--two-line">%1$s</ul>' .
 			'<a href="' . esc_url( admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG ) ) . '"><i class="icon-gear"></i>' . esc_html__( 'Go to Access Key Log-In', 'trustedlogin-connector' ) . '</a>'
 		);
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$html_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper', [ $html_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/wrapper' );
 
 		/**
 		 * Filter: Allows for changing the html output of the individual items html elements.
@@ -103,9 +108,14 @@ class Helpscout extends Webhook{
 		 * @param string $html
 		 */
 		$item_template = apply_filters(
-			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/item',
+			'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/item',
 			'<li class="c-sb-list-item"><span class="c-sb-list-item__label">%4$s <span class="c-sb-list-item__text"><a href="%1$s" target="_blank" title="%3$s"><i class="icon-pointer"></i> %2$s</a></span></span></li>'
 		);
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$item_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/item', [ $item_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/item' );
 
 		/**
 		 * Filter: Allows for changing the html output of the html elements when no items found.
@@ -113,9 +123,14 @@ class Helpscout extends Webhook{
 		 * @param string $html
 		 */
 		$no_items_template = apply_filters(
-			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/no-items',
+			'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/no-items',
 			'<li class="c-sb-list-item">%1$s</li>'
 		);
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$no_items_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/no-items', [ $no_items_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/no-items' );
 
 		// Define the API endpoint
 		$endpoint = 'accounts/' . $account_id . '/sites/';
