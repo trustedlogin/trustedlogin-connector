@@ -1,10 +1,8 @@
 <?php
 namespace TrustedLogin\Vendor\Tests;
 
-use TrustedLogin\Vendor\Endpoint;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\Status\IsIntegrationActive;
-use TrustedLogin\Vendor\Status\IsIntegrationEnabled;
 use TrustedLogin\Vendor\Status\IsTeamConnected;
 use TrustedLogin\Vendor\TeamSettings;
 
@@ -513,7 +511,7 @@ class SettingsApiTest extends \WP_UnitTestCase
 	 * @covers SettingsApi::getIntegrationSettings()
 	 * @covers IsIntegrationActive::check()
 	 */
-	public function testIsIntegrationEnabled(){
+	public function testIsIntegrationActive(){
 		$settings = new SettingsApi([]);
 		$this->assertTrue(
 			IsIntegrationActive::check( 'helpscout')
