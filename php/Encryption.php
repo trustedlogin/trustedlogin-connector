@@ -22,6 +22,17 @@ class Encryption
 	private $key_option_name = 'trustedlogin_keys';
 
 
+	/**
+	 * Maximum length of an index in MySQL.
+	 *
+	 * @since 1.1
+	 *
+	 * @see https://github.com/WordPress/WordPress/commit/b2cf8231059bb1c762a321a0a481f57f47ae9a1b
+	 *
+	 * @const int
+	 */
+	const MAX_INDEX_LENGTH = 191;
+
 	public function __construct()
 	{
 
@@ -30,12 +41,19 @@ class Encryption
 		 *
 		 * @since 0.8.0
 		 *
-		 * @todo Validate string is short enough to be stored in database
-		 *
-		 * @param string
-		 * @param Encryption $this
+		 * @param string $key_option_name The name of the option in the database.
+		 * @param Encryption $this The Encryption object.
 		 */
-		$this->key_option_name = apply_filters('trustedlogin/vendor/encryption/keys-option', $this->key_option_name, $this);
+		$key_option_name = apply_filters( 'trustedlogin/vendor/encryption/keys-option', $this->key_option_name, $this );
+
+		// If the key_option_name is valid, use it.
+		if ( is_string( $key_option_name ) && strlen( $key_option_name ) <= self::MAX_INDEX_LENGTH ) {
+			$this->key_option_name = $key_option_name;
+		} else {
+			$this->log( 'Key option name is too long or not a string. Using default.', __METHOD__, 'error', [
+				'key_option_name' => $key_option_name
+			] );
+		}
 	}
 
 	/**
