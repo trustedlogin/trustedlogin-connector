@@ -39,6 +39,11 @@ trait Logger {
 		$logFileDir    = dirname( $logFileName );
 		$wp_filesystem = $this->init_wp_filesystem();
 
+		if ( is_wp_error( $wp_filesystem ) ) {
+			error_log( $wp_filesystem->get_error_message() );
+			return;
+		}
+
 		if ( ! $wp_filesystem->is_dir( $logFileDir ) ) {
 			$wp_filesystem->mkdir( $logFileDir, FS_CHMOD_DIR ); // Ensure permission compatibility.
 		}
@@ -58,14 +63,20 @@ trait Logger {
 	 *
 	 * @since 1.1
 	 *
-	 * @return \WP_Filesystem_Base The filesystem object.
+	 * @return \WP_Filesystem_Base|\WP_Error The filesystem object.
 	 */
 	private function init_wp_filesystem() {
 		global $wp_filesystem;
 
-		if ( ! $wp_filesystem ) {
+		if ( ! is_object( $wp_filesystem ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
-			WP_Filesystem();
+			$filesystem_initialized = WP_Filesystem();
+		} else {
+			$filesystem_initialized = true;
+		}
+
+		if ( ! $filesystem_initialized ) {
+			return new \WP_Error( 'failed_wp_filesystem_init', esc_html__( 'TrustedLogin logging failed: unable to initialize WP_Filesystem.', 'trustedlogin-connector' ) );
 		}
 
 		return $wp_filesystem;
@@ -90,7 +101,6 @@ trait Logger {
 		}
 
 		return $message . PHP_EOL;
-
 	}
 
 	/**
