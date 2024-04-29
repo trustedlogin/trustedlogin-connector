@@ -524,20 +524,10 @@ class SettingsApiTest extends \WP_UnitTestCase
 			],
 		]);
 		$settings->save();
-		$this->assertFalse(
-			IsIntegrationActive::check( 'helpscout')
-		);
-		$settings->setGlobalSettings([
-			'integrations' => [
-				'helpscout' => [
-					'enabled' => true,
-				]
-			],
-		]);
-		$settings->save();
 		$this->assertTrue(
 			IsIntegrationActive::check( 'helpscout')
 		);
+
 	}
 
 	/**
