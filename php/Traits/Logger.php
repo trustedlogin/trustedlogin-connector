@@ -84,6 +84,29 @@ trait Logger {
 	}
 
 	/**
+	 * Deletes the log file.
+	 *
+	 * @since 1.1
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function deleteLog() {
+		$logFileName = $this->getLogFileName();
+
+		$wp_filesystem = $this->init_wp_filesystem();
+
+		if ( is_wp_error( $wp_filesystem ) ) {
+			error_log( $wp_filesystem->get_error_message() );
+		}
+
+		if ( is_wp_error( $wp_filesystem ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
+			return unlink( $logFileName );
+		}
+
+		return $wp_filesystem->delete( $logFileName );
+	}
+
+	/**
 	 * Initializes the WordPress filesystem API.
 	 *
 	 * @since 1.1

@@ -48,7 +48,6 @@ class LoggerTest extends \WP_UnitTestCase {
 	 * @since 1.1
 	 */
 	public function test_log() {
-
 		$microtime = microtime( false );
 		$message = 'Random message: ' . $microtime;
 		$method = 'method_' . wp_rand();
@@ -80,5 +79,24 @@ class LoggerTest extends \WP_UnitTestCase {
 
 		// Enable logging, which is disabled by default.
 		trustedlogin_connector()->getSettings()->reset( true );
+	}
+
+	/**
+	 * @covers \TrustedLogin\Vendor\Plugin::deleteLog
+	 * @since 1.1
+	 */
+	public function test_deleteLog() {
+
+		$logFileName = $this->TL->getLogFileName();
+
+		// Enable logging, which is disabled by default.
+		trustedlogin_connector()->getSettings()->setGlobalSettings( ['error_logging' => true ] );
+
+		$logged = $this->TL->log( 'Random message', 'method', 'info', [ 'test_context' => [ 'nested' => wp_rand() ] ] );
+		$this->assertTrue( $logged );
+		$this->assertFileExists( $logFileName );
+
+		$this->TL->deleteLog();
+		$this->assertFileDoesNotExist( $logFileName );
 	}
 }

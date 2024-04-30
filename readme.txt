@@ -25,7 +25,8 @@ TrustedLogin plugin to be installed on the website of the support provider.
 - **Renamed the plugin file to `trustedlogin-connector.php` - this will require you reactivate the plugin after updating!**
 - Code tweaks to comply with WP Coding Standards
 - Updated the textdomain to `trustedlogin-connector`
-- Fixed error logging being enabled even when the setting is disabled
+- Fixed error logs being written when the setting is disabled
+- Error logs are now deleted when disabling the Debug Logging setting
 
 __Developer Notes:__
 
