@@ -231,11 +231,17 @@ export const DebugLogSettings = () => {
                 {phpConstantIsSet ? (
                   <span className="text-red-700">
                     {__(
-                      'This setting is currently disabled because the PHP constant "TRUSTEDLOGIN_DEBUG" is set.',
+                      'This setting is currently overridden by the PHP constant "TRUSTEDLOGIN_DEBUG".',
                       "trustedlogin-connector"
                     )}
                   </span>
                 ) : null}
+              </p>
+              <p className="text-sm text-gray-500">
+                {__(
+                  "Disabling the setting will delete the log file.",
+                  "trustedlogin-connector"
+                )}
               </p>
             </div>
           </div>
