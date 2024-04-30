@@ -87,7 +87,7 @@ class ReturnScreen {
 
 	    $html = $this->getTemplate();
 
-		// There is no template, so we cannot continue.
+	    // There is no template, so we cannot continue.
 	    if ( '' === $html ) {
 		    wp_die( sprintf(
 				// translators: %s is the replaced by the error message.
