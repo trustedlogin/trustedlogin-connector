@@ -43,8 +43,14 @@ trait Logger {
 		$logFileName   = $this->getLogFileName();
 		$logFileDir    = dirname( $logFileName );
 
+		$wp_filesystem = $this->init_wp_filesystem();
+
+		if ( is_wp_error( $wp_filesystem ) ) {
+			error_log( $wp_filesystem->get_error_message() );
+		}
+
 		// If we're running tests, don't use the WP Filesystem API.
-		if ( ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
+		if ( is_wp_error( $wp_filesystem ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
 			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
 			if ( ! file_exists( $logFileName ) ) {
@@ -60,13 +66,6 @@ trait Logger {
 			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
 			return ( $file_written && $file_closed );
-		}
-
-		$wp_filesystem = $this->init_wp_filesystem();
-
-		if ( is_wp_error( $wp_filesystem ) ) {
-			error_log( $wp_filesystem->get_error_message() );
-			return;
 		}
 
 		if ( ! $wp_filesystem->is_dir( $logFileDir ) ) {
