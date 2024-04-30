@@ -3,7 +3,7 @@ Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
 Tested up to: 6.5
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,11 @@ TrustedLogin plugin to be installed on the website of the support provider.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.1.1 on April 30, 2024 =
+
+- Added `index.html` files to log directories to prevent potential browsing
+- Deprecated `trustedlogin/vendor/customers/licenses' hook in favor of `trustedlogin/connector/customers/licenses`
 
 = 1.1.0 on April 30, 2024 =
 
