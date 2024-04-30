@@ -35,7 +35,7 @@ export const DangerZone = () => {
   return (
     <>
       {!isResetting ? (
-        <SettingSection title={__("Danger Zone", "trustedlogin-vendor")}>
+        <SettingSection title={__("Danger Zone", "trustedlogin-connector")}>
           {notice && notice.visible ? (
             <Success text={notice.text} />
           ) : null}
@@ -60,14 +60,14 @@ export const DangerZone = () => {
                   <p
                     className="font-medium text-gray-900"
                     id="dangerzone-option-1-label">
-                    {__("Reset encryption keys?", "trustedlogin-vendor")}
+                    {__("Reset encryption keys?", "trustedlogin-connector")}
                   </p>
                   <p
                     className="text-sm text-gray-500"
                     id="dangerzone-option-1-description">
                     {__(
                       "If you reset the encryption keys, all previous authorized logins will be inaccessible.",
-                      "trustedlogin-vendor"
+                      "trustedlogin-connector"
                     )}
                   </p>
                 </div>
@@ -122,10 +122,10 @@ export const DebugLogSettings = () => {
   const withAcitivityLog = false;
   return (
     <SettingSection
-      title={__("Logging", "trustedlogin-vendor")}
+      title={__("Logging", "trustedlogin-connector")}
       subTitle={__(
         "These settings relate to logging TrustedLogin activity, including remote interactions and usage activity.",
-        "trustedlogin-vendor"
+        "trustedlogin-connector"
       )}>
       <ul role="list" className="divide-y divide-gray-200">
         <li className="py-8 flex items-center justify-between">
@@ -219,21 +219,21 @@ export const DebugLogSettings = () => {
             </div>
             <div className="flex flex-col">
               <p className="font-medium text-gray-900" id="debug-option-label">
-                {__("Debug Logging", "trustedlogin-vendor")}
+                {__("Debug Logging", "trustedlogin-connector")}
               </p>
               <p
                 className="text-sm text-gray-500"
                 id="debug-option-description">
                 {__(
                   "When enabled, logs will be saved to the following location:",
-                  "trustedlogin-vendor"
+                  "trustedlogin-connector"
                 )}
                 <code>{tlVendor.log_file_name}</code>
                 {phpConstantIsSet ? (
                   <span className="text-red-700">
                     {__(
                       'This setting is currently disabled because the PHP constant "TRUSTEDLOGIN_DEBUG" is set.',
-                      "trustedlogin-vendor"
+                      "trustedlogin-connector"
                     )}
                   </span>
                 ) : null}
@@ -291,14 +291,14 @@ export const DebugLogSettings = () => {
                 <p
                   className="font-medium text-gray-900"
                   id="activity-log-label">
-                  {__("Activity Log", "trustedlogin-vendor")}
+                  {__("Activity Log", "trustedlogin-connector")}
                 </p>
                 <p
                   className="text-sm text-gray-500"
                   id="activity-log-description">
                   {__(
                     "Activity Log shows a log of users attempting to log into customer sites using Access Keys.",
-                    "trustedlogin-vendor"
+                    "trustedlogin-connector"
                   )}
                 </p>
               </div>

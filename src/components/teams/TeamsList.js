@@ -81,11 +81,11 @@ const TeamsList = () => {
       {isDeleting ? (
         <CenteredLayout>
           <>
-            <TitleDescriptionLink title={__("Are You Sure?", "trustedlogin-vendor")} />
+            <TitleDescriptionLink title={__("Are You Sure?", "trustedlogin-connector")} />
 
             <SubmitAndCancelButtons
               onSubmit={completeDelete}
-              submitText={__("Delete Team", "trustedlogin-vendor")}
+              submitText={__("Delete Team", "trustedlogin-connector")}
               onCancel={cancelDelete}
               link={null}
               linkText={null}
@@ -95,8 +95,8 @@ const TeamsList = () => {
       ) : (
         <div className="flex flex-col px-5 py-6 sm:px-10">
           <PageHeader
-            title={__("Teams", "trustedlogin-vendor")}
-            subTitle={__("Manage your TrustedLogin settings", "trustedlogin-vendor")}
+            title={__("Teams", "trustedlogin-connector")}
+            subTitle={__("Manage your TrustedLogin settings", "trustedlogin-connector")}
             Button={() => (
               <>
                 <PrimaryButton onClick={() => setCurrentView("teams/new")}>
@@ -116,7 +116,7 @@ const TeamsList = () => {
                           strokeLinejoin="round"></path>
                       </g>
                     </svg>
-                    {__("Add Team", "trustedlogin-vendor")}
+                    {__("Add Team", "trustedlogin-connector")}
                   </>
                 </PrimaryButton>
               </>
@@ -140,7 +140,7 @@ const TeamsList = () => {
                           <p
                             className="text-lg font-medium text-gray-900 leading-tight min-w-[6rem]"
                             id="team-option-1-label">
-                            {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not translate', "trustedlogin-vendor").replace('{id}', team.id ) }
+                            {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not translate', "trustedlogin-connector").replace('{id}', team.id ) }
                           </p>
                           <p
                             className="text-sm text-gray-500"
@@ -158,7 +158,7 @@ const TeamsList = () => {
                               setModalTeam(team.id);
                             }}
                             className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                            {__("Configure Help Desk", "trustedlogin-vendor")}
+                            {__("Configure Help Desk", "trustedlogin-connector")}
                           </button>
                         ) : null}
 
@@ -168,12 +168,12 @@ const TeamsList = () => {
                             setCurrentTeam(team.id);
                           }}
                           className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                          {__("Edit", "trustedlogin-vendor")}
+                          {__("Edit", "trustedlogin-connector")}
                         </button>
                         <button
                           onClick={() => startDelete(team.id)}
                           className="text-sm text-red-500 hover:text-red-800 p-2">
-                          {__("Delete", "trustedlogin-vendor")}
+                          {__("Delete", "trustedlogin-connector")}
                         </button>
                       </div>
                     </div>

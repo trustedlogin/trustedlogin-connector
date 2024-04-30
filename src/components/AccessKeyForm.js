@@ -219,10 +219,10 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
     return (
       <Layout
         minimal={minimal}
-        title={__("Select site to log into.", "trustedlogin-vendor")}
+        title={__("Select site to log into.", "trustedlogin-connector")}
         description={__(
           "There are multiple sites associated with this access key.",
-          "trustedlogin-vendor"
+          "trustedlogin-connector"
         )}>
         <>
           <div>
@@ -250,14 +250,14 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
     <>
       <Layout
         minimal={minimal}
-        title={__("Log In Using Access Key", "trustedlogin-vendor")}
+        title={__("Log In Using Access Key", "trustedlogin-connector")}
         description={__(
           "Paste the Access Key to log into the connected website.",
-          "trustedlogin-vendor"
+          "trustedlogin-connector"
         )}>
         <>
           <form
-            aria-label={__("Log In Using Access Key", "trustedlogin-vendor")}
+            aria-label={__("Log In Using Access Key", "trustedlogin-connector")}
             onSubmit={handler}
             id="access-key-form"
             method={"POST"}
@@ -307,7 +307,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                     <SelectFieldArea
                       name="ak_account_id"
                       id="ak_account_id"
-                      label={__("Account ID", "trustedlogin-vendor")}
+                      label={__("Account ID", "trustedlogin-connector")}
                       value={accountId}
                       onChange={(e) => setAccountId(e.target.value)}>
                       <>
@@ -329,7 +329,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                     <InputFieldArea
                       name="ak"
                       id="ak"
-                      label={__("Access Key", "trustedlogin-vendor")}>
+                      label={__("Access Key", "trustedlogin-connector")}>
                       <input
                         value={accessKey}
                         onChange={(e) => setAccessKey(e.target.value)}
@@ -342,7 +342,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                         className="block w-full pl-4 pr-10 py-4 sm:text-md border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500"
                         placeholder={__(
                           "Paste key received from customer",
-                          "trustedlogin-vendor"
+                          "trustedlogin-connector"
                         )}
                       />
                     </InputFieldArea>
@@ -355,7 +355,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                       <input
                         type="submit"
                         className="inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
-                        value={__("Log In", "trustedlogin-vendor")}
+                        value={__("Log In", "trustedlogin-connector")}
                       />
                     )}
                   </>

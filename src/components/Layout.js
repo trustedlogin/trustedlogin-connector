@@ -32,7 +32,7 @@ export const TopBar = ({ status }) => {
                 fill="currentColor"
               />
             </svg>
-            <span className="hidden sm:inline-flex">{__("Need Help?","trustedlogin-vendor")}</span>
+            <span className="hidden sm:inline-flex">{__("Need Help?","trustedlogin-connector")}</span>
           </a>
         </div>
       </header>

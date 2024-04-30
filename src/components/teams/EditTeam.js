@@ -26,7 +26,7 @@ export const HelpDeskSelect = ({ value, onChange, options = null }) => {
       onChange={onChange}>
       {helpDeskOptions.length ? (
         <>
-          <option>{__("Select a Help Desk", "trustedlogin-vendor")}</option>
+          <option>{__("Select a Help Desk", "trustedlogin-connector")}</option>
           {helpDeskOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -34,7 +34,7 @@ export const HelpDeskSelect = ({ value, onChange, options = null }) => {
           ))}
         </>
       ) : (
-        <option>{__("No Helpdesks Active", "trustedlogin-vendor")}</option>
+        <option>{__("No Helpdesks Active", "trustedlogin-connector")}</option>
       )}
     </SelectField>
   );
@@ -111,7 +111,7 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
           <TitleDescriptionLink
             title={formTitle}
             link={"https://app.trustedlogin.com/settings#/teams"}
-            linkText={__("Where can I find this info?", "trustedlogin-vendor")}
+            linkText={__("Where can I find this info?", "trustedlogin-connector")}
           />
 
           <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">

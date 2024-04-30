@@ -58,14 +58,14 @@ export const FreescoutLogo = ({ width = 36, height = 44 }) => (
 const HelpDeskConfigs = {
   'helpscout': {
     link: "#",
-    linkText: __("Learn how to set up a TrustedLogin Help Scout widget.", "trustedlogin-vendor"),
-    description: __("Enter these values into a Custom App 'Dynamic Content' widget in Help Scout.", "trustedlogin-vendor"),
+    linkText: __("Learn how to set up a TrustedLogin Help Scout widget.", "trustedlogin-connector"),
+    description: __("Enter these values into a Custom App 'Dynamic Content' widget in Help Scout.", "trustedlogin-connector"),
     goLink: "https://secure.helpscout.net/apps/custom/",
-    goLinkText: __("Create a Custom App in Help Scout", "trustedlogin-vendor"),
+    goLinkText: __("Create a Custom App in Help Scout", "trustedlogin-connector"),
   },
   'freescout': {
     link: "#",
-    linkText: __("Learn how to set up a TrustedLogin Free Scout widget.", "trustedlogin-vendor"),
+    linkText: __("Learn how to set up a TrustedLogin Free Scout widget.", "trustedlogin-connector"),
     description: [
         __("Place module source to Modules folder of your FreeScout installation", "text-domain"),
         __("Enable module in Modules admin panel", "text-domain"),
@@ -73,7 +73,7 @@ const HelpDeskConfigs = {
         __("Finally, go to your Mailbox Settings, select TrustedLogin, enable the TrustedLogin widget.", "text-domain")
     ],
     goLink: "https://github.com/trustedlogin/freescout-module",
-    goLinkText: __("Setup the TrustedLogin Freescout Module.", "trustedlogin-vendor"),
+    goLinkText: __("Setup the TrustedLogin Freescout Module.", "trustedlogin-connector"),
   }
 };
 
@@ -233,7 +233,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
             <button
                 onClick={() => copyToClipboard(secret)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
-                title={__("Copy secret key", "trustedlogin-vendor")}
+                title={__("Copy secret key", "trustedlogin-connector")}
                 data-form-type="action,search">
               <svg
                   width="16"
@@ -255,7 +255,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
           <label
               htmlFor="callback_url"
               className="block text-sm font-medium text-gray-700">
-            {__("Callback URL", "trustedlogin-vendor")}
+            {__("Callback URL", "trustedlogin-connector")}
           </label>
           <div className="mt-2 relative rounded-lg">
             <input
@@ -269,7 +269,7 @@ export const TeamDetails = ({ team, helpdeskName }) => {
             <button
                 onClick={() => copyToClipboard(callback)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
-                title={__("Copy Callback URL", "trustedlogin-vendor")}
+                title={__("Copy Callback URL", "trustedlogin-connector")}
                 data-form-type="action,search">
               <svg
                   width="16"
@@ -314,15 +314,15 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpsco
   const helpdeskTitle = useMemo(() => {
     switch (helpDesk) {
       case "freescout":
-        return __("FreeScout", "trustedlogin-vendor");
+        return __("FreeScout", "trustedlogin-connector");
       default:
       case "helpscout":
-        return __("Help Scout", "trustedlogin-vendor");
+        return __("Help Scout", "trustedlogin-connector");
     }
   }, [helpDesk]);
 
   // Use memoized helpdeskTitle to create title
-  const title = useMemo(() => `${__("Configure Help Desk", "trustedlogin-vendor")} ${helpdeskTitle}`, [helpdeskTitle]);
+  const title = useMemo(() => `${__("Configure Help Desk", "trustedlogin-connector")} ${helpdeskTitle}`, [helpdeskTitle]);
 
   // Check if the helpDesk value is a valid key in HelpDeskConfigs
   if (!HelpDeskConfigs.hasOwnProperty(helpDesk)) {
@@ -396,7 +396,7 @@ export default function ConfigureIntegration({ isOpen, setIsOpen, children, titl
                       onClick={() => setIsOpen(false)}
                       type="button"
                       className="bg-white rounded-lg text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500">
-                    <span className="sr-only">{__("Close", "trustedlogin-vendor")}</span>
+                    <span className="sr-only">{__("Close", "trustedlogin-connector")}</span>
                     <CloseIcon />
                   </button>
                 </div>
@@ -430,7 +430,7 @@ export default function ConfigureIntegration({ isOpen, setIsOpen, children, titl
                       type="button"
                       className="mt-3 mr-4 w-2/5 inline-flex justify-center items-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                       data-form-type="other">
-                    {__("Close", "trustedlogin-vendor")}                  </button>
+                    {__("Close", "trustedlogin-connector")}                  </button>
                   <a
                       href={goLink}
                       type="button"

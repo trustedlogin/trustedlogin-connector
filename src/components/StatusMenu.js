@@ -51,7 +51,7 @@ const TeamMenuItem = ({ team, toggleStatus }) => {
                     <p
                         className="text-sm font-medium text-gray-900 min-w-[6rem]"
                         id="team-option-1-label">
-                        {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not translate', "trustedlogin-vendor").replace('{id}', team.id ) }
+                        {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not translate', "trustedlogin-connector").replace('{id}', team.id ) }
                     </p>
                 </div>
             </div>
@@ -65,7 +65,7 @@ const TeamMenuItem = ({ team, toggleStatus }) => {
                         viewBox="0 0 8 8">
                         <circle cx="4" cy="4" r="3" />
                     </svg>
-                    <span className="border-r pr-2 mr-2 leading-none">{__("Connected", "trustedlogin-vendor")}</span>
+                    <span className="border-r pr-2 mr-2 leading-none">{__("Connected", "trustedlogin-connector")}</span>
                     <svg
                         className="text-gray-500"
                         width="12"
@@ -89,7 +89,7 @@ const TeamMenuItem = ({ team, toggleStatus }) => {
                         viewBox="0 0 8 8">
                         <circle cx="4" cy="4" r="3" />
                     </svg>
-                    <span className="border-r pr-2 mr-2 leading-none">{__("Not Connected", "trustedlogin-vendor")}</span>
+                    <span className="border-r pr-2 mr-2 leading-none">{__("Not Connected", "trustedlogin-connector")}</span>
                     <svg
                         className="text-gray-500"
                         width="12"
@@ -135,7 +135,7 @@ export const StatusMenuButton = ({ toggleStatus }) => {
                 </svg>
                 <span className="hidden sm:inline-flex">
           <span className="mx-1 text-gray-900 font-medium">
-            {__("All teams connected", "trustedlogin-vendor")}
+            {__("All teams connected", "trustedlogin-connector")}
           </span>
         </span>
                 <svg
@@ -221,14 +221,14 @@ const StatusMenu = ({ toggleStatus, isStatusOpen }) => {
                             <div className="flex py-6 border-b items-center justify-between">
                                 <div className="flex items-center">
                                     <h2 className="leading-tight text-lg text-gray-900">
-                                        {__("Teams", "trustedlogin-vendor")}
+                                        {__("Teams", "trustedlogin-connector")}
                                     </h2>
                                 </div>
                                 <div className="inline-flex items-center">
                                     <button
                                         className="text-sm text-blue-tl"
                                         onClick={onViewTeams}>
-                                        {__("View all Teams", "trustedlogin-vendor")}
+                                        {__("View all Teams", "trustedlogin-connector")}
                                     </button>
                                     <svg
                                         className="ml-3"
@@ -260,7 +260,7 @@ const StatusMenu = ({ toggleStatus, isStatusOpen }) => {
                             </ul>
                             <div className="mb-8 inline-flex items-center">
                                 <a className="text-sm text-blue-tl" href="https://docs.trustedlogin.com/Vendor/intro">
-                                    {__("Need help? View our Documentation", "trustedlogin-vendor")}
+                                    {__("Need help? View our Documentation", "trustedlogin-connector")}
                                 </a>
                                 <svg
                                     className="ml-3"

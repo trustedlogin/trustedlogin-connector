@@ -109,7 +109,7 @@ export const IntegrationComponent = ({ helpdesk }) => {
             id={integration.id}
             isEnabled={integration.isEnabled}
             name={integration.name}
-            description={__(integration.description, "trustedlogin-vendor")}
+            description={__(integration.description, "trustedlogin-connector")}
             Icon={integration.IconSVG}
         />
       </>

@@ -107,7 +107,7 @@ const createUsers = async () => {
 };
 
 //Activate {slug} plugin
-//activatePlugin({ slug: "trustedlogin-vendor" })
+//activatePlugin({ slug: "trustedlogin-connector" })
 //activatePlugin({ slug: "akismet" })
 const activatePlugin = async ({ slug }) => {
   log("Activating plugin");
@@ -179,7 +179,7 @@ async function main() {
         break;
       case "--activate":
         activatePlugin({
-          slug: "trustedlogin-vendor",
+          slug: "trustedlogin-connector",
         })
           .then(exitSuccess)
           .catch(exitError);

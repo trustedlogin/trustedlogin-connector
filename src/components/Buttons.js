@@ -27,7 +27,7 @@ export const SubmitAndCancelButtons = ({
   onSubmit,
   onCancel,
   submitText,
-  cancelText = __("Cancel", "trustedlogin-vendor"),
+  cancelText = __("Cancel", "trustedlogin-connector"),
 }) => (
   <div className="pt-8 mt-4 border-t">
     <div className="flex justify-end">
