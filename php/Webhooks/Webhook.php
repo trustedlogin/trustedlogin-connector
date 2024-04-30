@@ -80,12 +80,12 @@ abstract class Webhook {
 
     /**
 	 * Returns license keys associated with customer email addresses.
-	 *	 *
+	 *
 	 * @param array $customer_emails Array of email addresses Help Scout associates with the customer.
 	 *
 	 * @return array Array of license keys associated with the passed emails.
 	 */
-	protected function getLicensesByEmails( $customer_emails ) {
+	protected function getLicensesByEmails( array $customer_emails ) {
 
         $licenses = [];
         if( $this->isEDDStore() && $this->eddHasLicensing()) {
@@ -107,16 +107,25 @@ abstract class Webhook {
                 }
             }
         }
+
 		/**
 		 * Filter: allow for other addons to generate the licenses array
 		 *
-		 * @since 0.6.0
+		 * @since 1.1.1
 		 *
 		 * @param \EDD_SL_License[]|false $licenses
-		 * @param string $email
+		 * @param array $customer_emails Array of email addresses associated with a customer, passed by the support desk widget.
 		 *
 		 * @return array
 		 */
-		return apply_filters( 'trustedlogin/vendor/customers/licenses', $licenses, $customer_emails );
+		$licenses = apply_filters( 'trustedlogin/connector/customers/licenses', $licenses, $customer_emails );
+
+		/**
+		 * @since 0.6.0
+		 * @depecated 1.1.1
+		 */
+		$licenses = apply_filters_deprecated( 'trustedlogin/vendor/customers/licenses', [ $licenses, $customer_emails ], '1.1.1', 'trustedlogin/connector/customers/licenses' );
+
+		return $licenses;
     }
 }

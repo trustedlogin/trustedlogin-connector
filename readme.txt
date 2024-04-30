@@ -20,6 +20,9 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
+
+- Deprecated `trustedlogin/vendor/customers/licenses' hook in favor of `trustedlogin/connector/customers/licenses`
+
 = 1.1.0 on April 30, 2024 =
 
 - **Renamed the plugin file to `trustedlogin-connector.php` - this will require you reactivate the plugin after updating!**
