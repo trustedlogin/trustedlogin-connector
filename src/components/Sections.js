@@ -79,7 +79,7 @@ export const DangerZone = () => {
         </SettingSection>
       ) : (
         <CenteredLayout>
-          <TitleDescriptionLink title={__("Are You Sure?")} />
+          <TitleDescriptionLink title={__("Are You Sure?", "trustedlogin-connector")} />
           <SubmitAndCancelButtons
             onSubmit={onDelete}
             submitText={"Reset Keys"}

@@ -159,7 +159,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
             setErrorMessage(err.message);
           } else {
             setErrorMessage(
-              __("There was an error processing the access key.")
+              __("There was an error processing the access key.", "trustedlogin-connector")
             );
           }
         })
@@ -193,13 +193,13 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
           }
           setIsLoading(false);
           setErrorMessage(
-            __("There was an error while logging in with the access key.")
+            __("There was an error while logging in with the access key.", "trustedlogin-connector")
           );
         })
         .catch((err) => {
           setIsLoading(false);
           setErrorMessage(
-            __("There was an error while logging in with the access key.")
+            __("There was an error while logging in with the access key.", "trustedlogin-connector")
           );
         });
     }
@@ -273,7 +273,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
               {redirectSite ? (
                 <>
                   <div className={"text-center"}>
-                    {__("Redirecting…", "trustedlogin")}
+                    {__("Redirecting…", "trustedlogin-connector")}
                   </div>
                   <input type="hidden" name="action" value={"trustedlogin"} />
                   <input
