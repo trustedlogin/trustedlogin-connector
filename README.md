@@ -1,6 +1,5 @@
 # TrustedLogin Vendor
 
-[![Built With Plugin Machine](https://img.shields.io/badge/Built%20With-Plugin%20Machine-lightgrey)](https://pluginmachine.com)
 [![WordPress Tests](https://github.com/trustedlogin/vendor/actions/workflows/wordpress.yml/badge.svg)](https://github.com/trustedlogin/vendor/actions/workflows/wordpress.yml)
 [![Backwards Compatiblity](https://github.com/trustedlogin/vendor/actions/workflows/compat.yml/badge.svg)](https://github.com/trustedlogin/vendor/actions/workflows/compat.yml)
 [![JavaScript Tests](https://github.com/trustedlogin/vendor/actions/workflows/test-js.yml/badge.svg)](https://github.com/trustedlogin/vendor/actions/workflows/test-js.yml)
