@@ -100,7 +100,7 @@ trait Logger {
 		}
 
 		if ( is_wp_error( $wp_filesystem ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
-			return unlink( $logFileName );
+			return unlink( $logFileName ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Using unlink() because it provides a return value.
 		}
 
 		return $wp_filesystem->delete( $logFileName );
