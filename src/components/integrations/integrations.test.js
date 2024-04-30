@@ -1,12 +1,15 @@
 import { render } from "@testing-library/react";
 import { IntegrationComponent } from "./Integration";
-import {ConfigureHelpDesk} from "./ConfigureIntegration";
+import { ConfigureHelpDesk } from "./ConfigureIntegration";
 import Provider from "../TestProvider";
 describe("IntegrationComponent", () => {
   it("renders and matches snapshot", () => {
-    const { container } = render(<IntegrationComponent helpdesk={'helpscout'} />, {
-      wrapper: Provider,
-    });
+    const { container } = render(
+      <IntegrationComponent helpdesk={"helpscout"} />,
+      {
+        wrapper: Provider,
+      }
+    );
     expect(container).toMatchSnapshot();
   });
 });
@@ -35,7 +38,11 @@ describe("ConfigureHelpDesk", () => {
   });
   it("renders and matches snapshot while closed", () => {
     const { container } = render(
-      <ConfigureHelpDesk isOpen={false} setIsOpen={jest.fn()} helpDesk={'helpscout'} />,
+      <ConfigureHelpDesk
+        isOpen={false}
+        setIsOpen={jest.fn()}
+        helpDesk={"helpscout"}
+      />,
       {
         wrapper: Provider,
       }
@@ -45,7 +52,11 @@ describe("ConfigureHelpDesk", () => {
 
   it("renders and matches snapshot while open", () => {
     const { container } = render(
-      <ConfigureHelpDesk isOpen={true} setIsOpen={jest.fn()} helpDesk={'helpscout'} />,
+      <ConfigureHelpDesk
+        isOpen={true}
+        setIsOpen={jest.fn()}
+        helpDesk={"helpscout"}
+      />,
       {
         wrapper: Provider,
       }

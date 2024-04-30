@@ -22,14 +22,14 @@ const StepOne = () => {
     <>
       <>
         <TitleDescriptionLink
-          title={__("Link your TrustedLogin account", "trustedlogin-vendor")}
+          title={__("Link your TrustedLogin account", "trustedlogin-connector")}
         />
         <div className="flex flex-1 flex-col space-y-6">
           <div>
             <label
               htmlFor="account-id"
               className="block text-sm font-medium text-gray-700">
-              {__("Account ID", "trustedlogin-vendor")}
+              {__("Account ID", "trustedlogin-connector")}
             </label>
             <div className="mt-2 relative rounded-lg">
               <input
@@ -45,7 +45,7 @@ const StepOne = () => {
             <label
               htmlFor="public_key"
               className="block text-sm font-medium text-gray-700">
-              {__("Public Key", "trustedlogin-vendor")}
+              {__("Public Key", "trustedlogin-connector")}
             </label>
             <div className="mt-2 relative rounded-lg">
               <input
@@ -61,12 +61,12 @@ const StepOne = () => {
             <button
               type="button"
               className="w-full inline-flex justify-center rounded-lg border border-transparent px-4 py-2.5 bg-blue-tl text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm">
-              {__("Continue", "trustedlogin-vendor")}
+              {__("Continue", "trustedlogin-connector")}
             </button>
             <button
               type="button"
               className="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm">
-              {__("Skip", "trustedlogin-vendor")}
+              {__("Skip", "trustedlogin-connector")}
             </button>
           </div>
         </div>
@@ -108,17 +108,22 @@ const StepTwo = () => {
     <>
       <div className="max-w-sm mx-auto mb-8 justify-center text-center">
         <h2 className="mt-4 text-2xl text-gray-900">
-          {__("Create your first team", "trustedlogin-vendor")}
+          {__("Create your first team", "trustedlogin-connector")}
         </h2>
         <p className="mt-2 mb-4 text-sm text-gray-500">
           {__(
             "Each team supports a project in TrustedLogin.",
-            "trustedlogin-vendor"
+            "trustedlogin-connector"
           )}
         </p>
-        <a className="text-blue-tl text-sm" href="https://app.trustedlogin.com/settings#/teams" target="_blank">
-          {__("Where can I find this info?", "trustedlogin-vendor")}
-          <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-vendor")}</span>
+        <a
+          className="text-blue-tl text-sm"
+          href="https://app.trustedlogin.com/settings#/teams"
+          target="_blank">
+          {__("Where can I find this info?", "trustedlogin-connector")}
+          <span className="screen-reader-text">
+            {__("(Link opens in a new window)", "trustedlogin-connector")}
+          </span>
         </a>
       </div>
       <form
@@ -153,7 +158,7 @@ const StepTwo = () => {
         <SelectField
           id={teamFields.helpdesk.id}
           label={teamFields.helpdesk.label}>
-          <option>{__("Select a Help Desk", "trustedlogin-vendor")}</option>
+          <option>{__("Select a Help Desk", "trustedlogin-connector")}</option>
           <option value={"helpscout"}>Help Scout</option>
           <option value={"freescout"}>FreeScout</option>
         </SelectField>
@@ -162,7 +167,7 @@ const StepTwo = () => {
             onClick={handleSave}
             type="button"
             className="w-full inline-flex justify-center rounded-lg border border-transparent px-4 py-2.5 bg-blue-tl text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm">
-            {__("Continue", "trustedlogin-vendor")}
+            {__("Continue", "trustedlogin-connector")}
           </button>
         </div>
       </form>
@@ -304,16 +309,19 @@ export const OnboardingLayout = ({
                             <Aside.CurrentStep
                               title={__(
                                 "Link your account",
-                                "trustedlogin-vendor"
+                                "trustedlogin-connector"
                               )}
                             />
                             <Aside.FutureStep
-                              title={__("Create Team", "trustedlogin-vendor")}
+                              title={__(
+                                "Create Team",
+                                "trustedlogin-connector"
+                              )}
                             />
                             <Aside.FutureStep
                               title={__(
                                 "Configure Help Desk",
-                                "trustedlogin-vendor"
+                                "trustedlogin-connector"
                               )}
                             />
                           </ol>
@@ -321,12 +329,19 @@ export const OnboardingLayout = ({
                       </div>
                     </div>
                     <div className="inline-flex items-center justify-center">
-                      <a className="text-sm text-blue-tl" href="https://docs.trustedlogin.com/Vendor/intro">
+                      <a
+                        className="text-sm text-blue-tl"
+                        href="https://docs.trustedlogin.com/Vendor/intro">
                         {__(
                           "Need Help? View our Documentation",
-                          "trustedlogin-vendor"
+                          "trustedlogin-connector"
                         )}
-                        <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-vendor")}</span>
+                        <span className="screen-reader-text">
+                          {__(
+                            "(Link opens in a new window)",
+                            "trustedlogin-connector"
+                          )}
+                        </span>
                       </a>
                       <svg
                         className="ml-3"

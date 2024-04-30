@@ -3,7 +3,7 @@ import { HorizontalLogo } from "./TrustedLoginLogo";
 import { useState, useMemo } from "react";
 import { useView } from "../hooks/useView";
 import StatusMenu, { StatusMenuButton } from "./StatusMenu";
-import {__, _x} from "@wordpress/i18n";
+import { __, _x } from "@wordpress/i18n";
 export const TopBar = ({ status }) => {
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [isHelpMenuOpen, setIsHelpMenuOpen] = useState(false);
@@ -19,7 +19,9 @@ export const TopBar = ({ status }) => {
         </div>
         <div className="relative flex items-center space-x-2">
           <StatusMenu toggleStatus={toggleStatus} isStatusOpen={isStatusOpen} />
-          <a href="https://docs.trustedlogin.com/Vendor/intro" className="inline-flex items-center px-3.5 h-10 border border-gray-300 text-sm leading-4 font-medium rounded-lg text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500">
+          <a
+            href="https://docs.trustedlogin.com/Vendor/intro"
+            className="inline-flex items-center px-3.5 h-10 border border-gray-300 text-sm leading-4 font-medium rounded-lg text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500">
             <svg
               className="-ml-0.5 h-4 w-4 sm:mr-2"
               width="14"
@@ -32,7 +34,9 @@ export const TopBar = ({ status }) => {
                 fill="currentColor"
               />
             </svg>
-            <span className="hidden sm:inline-flex">{__("Need Help?","trustedlogin-vendor")}</span>
+            <span className="hidden sm:inline-flex">
+              {__("Need Help?", "trustedlogin-connector")}
+            </span>
           </a>
         </div>
       </header>
@@ -84,7 +88,7 @@ export const PageHeader = ({ title, subTitle, Button }) => {
                 fill="currentColor"
               />
             </svg>
-            {__('Reset All', 'trustedlogin-vendor' )}
+            {__("Reset All", "trustedlogin-connector")}
           </SecondaryButton>
         )}
       </div>
@@ -111,9 +115,7 @@ export const CenteredLayout = ({
           <h2 className="mt-4 text-2xl text-gray-900">{title}</h2>
         ) : null}
         {subTitle ? (
-          <p className="mt-2 mb-8 text-sm text-gray-500">
-            {subTitle}
-          </p>
+          <p className="mt-2 mb-8 text-sm text-gray-500">{subTitle}</p>
         ) : null}
         {children}
       </div>

@@ -3,17 +3,16 @@
  * Plugin Name: TrustedLogin Connector
  * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
- * Version: 1.0.0
- * Requires PHP: 7.1
- * Author: Katz Web Services, Inc.
+ * Version: 1.1
+ * Requires PHP: 7.2
+ * Author: TrustedLogin
  * Author URI: https://www.trustedlogin.com
- * Text Domain: trustedlogin-vendor
+ * Text Domain: trustedlogin-connector
  * License: GPL v2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Copyright: © 2020 Katz Web Services, Inc.
  */
 
-use TrustedLogin\Vendor\ErrorHandler;
 use TrustedLogin\Vendor\AccessKeyLogin;
 use TrustedLogin\Vendor\Reset;
 use TrustedLogin\Vendor\SettingsApi;
@@ -25,11 +24,12 @@ if (!defined('ABSPATH')) {
 }
 // Exit if accessed directly
 
-define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '1.0.0' );
+define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '1.1' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
-if( ! defined( 'TRUSTEDLOGIN_API_URL')){
+if( ! defined( 'TRUSTEDLOGIN_API_URL')) {
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
 }
+
 //Set this to true, in wp-config.php to log all PHP errors/warnings/notices to trustedlogin.log
 // Code: define( 'TRUSTEDLOGIN_DEBUG', true );
 if( ! defined( 'TRUSTEDLOGIN_DEBUG') ){
@@ -44,15 +44,15 @@ $path = plugin_dir_path(__FILE__);
  * Initialization plugin
  */
 //Set register deactivation hook
-register_deactivation_hook( __FILE__, 'trustedlogin_vendor_deactivate' );
-//Include files and call trustedlogin_vendor
+register_deactivation_hook( __FILE__, 'trustedlogin_connector_deactivate' );
+//Include files and call trustedlogin_connector() function.
 if( file_exists( $path . 'vendor/autoload.php' ) ){
 	include_once $path . 'vendor/autoload.php';
 	//Include admin init file
 	include_once dirname( __FILE__ ) . '/src/trustedlogin-settings/init.php';
 
 	//This will initialize the plugin
-	$plugin = trustedlogin_vendor();
+	$plugin = trustedlogin_connector();
 
 	//Maybe register error handler
 	if( TRUSTEDLOGIN_DEBUG || $plugin->getSettings()->isErrorLogggingEnabled() ){
@@ -61,64 +61,111 @@ if( file_exists( $path . 'vendor/autoload.php' ) ){
 
 	/**
 	 * Runs when plugin is ready.
-	 *
-	 * @var TrustedLogin\Vendor\Plugin $plugin
+	 * @deprecated 1.1 Use "trustedlogin_connector" action instead.
+	 * @param TrustedLogin\Vendor\Plugin $plugin
 	 */
-	do_action( 'trustedlogin_vendor', $plugin );
+	do_action_deprecated( 'trustedlogin_vendor', [ $plugin ], '1.1', 'trustedlogin_connector' );
+
+	/**
+	 * Runs when plugin is ready.
+	 * @since 1.1
+	 * @param TrustedLogin\Vendor\Plugin $plugin
+	 */
+	do_action( 'trustedlogin_connector', $plugin );
 
     //Add REST API endpoints
 	add_action( 'rest_api_init', [$plugin, 'restApiInit']);
-    //Handle access key login if requests.
+
+	//Handle access key login if requests.
 	add_action( 'template_redirect',[\TrustedLogin\Vendor\MaybeRedirect::class, 'handle']);
+
 	//Handle the "Reset All" button in UI
 	add_action( 'admin_init',[\TrustedLogin\Vendor\MaybeRedirect::class, 'adminInit']);
-	if( file_exists(__DIR__. "/build/index.html")){
-		//Handle webhook/helpdesk return
-		add_action( 'admin_init',[
-			new \TrustedLogin\Vendor\ReturnScreen(
-				file_get_contents(__DIR__. "/build/index.html"),
-				trustedlogin_vendor()->getSettings()
-			),
-			'callback'
-		]);
-	}
 
+	$return_screen = new \TrustedLogin\Vendor\ReturnScreen(
+		trustedlogin_connector()->getSettings()
+	);
 
+	/**
+	 * Handle the request to log in to client sites from help desks.
+	 *
+	 * This request will be validated by {@see \TrustedLogin\Vendor\ReturnScreen::shouldHandle()}.
+	 *
+	 * The reason for this is to not pass any details about the  all GET parameters from the URL.
+	 */
+	add_action( 'admin_init', [ $return_screen, 'callback' ] );
 
 }else{
-	throw new \Exception('Autoloader not found.');
+	error_log( sprintf(
+		// translators: %s is the error message.
+		esc_html__( 'Cannot load TrustedLogin Connector plugin: %s', 'trustedlogin-connector' ),
+		esc_html__( 'Autoloader not found.', 'trustedlogin-connector' )
+	) );
+	return;
 }
 
 /**
- * Deactivation function
+ * Deactivation function.
+ * @since 1.1
+ * @return void
  */
-function trustedlogin_vendor_deactivate() {
+function trustedlogin_connector_deactivate() {
 	delete_option( 'tl_permalinks_flushed' );
 	delete_option( 'trustedlogin_vendor_config' );
 }
 
-
 /**
- * Accesor for main plugin container
- *
- * @return \TrustedLogin\Vendor\Plugin;
+ * Deactivation function.
+ * @deprecated 1.1 Use {@see trustedlogin_connector_deactivate()} instead.
  */
-function trustedlogin_vendor(){
-	/** @var \TrustedLogin\Vendor\Plugin */
-	static $trustedlogin_vendor;
-	if( ! $trustedlogin_vendor ){
-		$trustedlogin_vendor = new \TrustedLogin\Vendor\Plugin(
-			new \TrustedLogin\Vendor\Encryption()
-		);
-	}
-	return $trustedlogin_vendor;
+function trustedlogin_vendor_deactivate(){
+	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector_deactivate' );
+	trustedlogin_connector_deactivate();
 }
 
 
 /**
- * Get data to set window.tlVendor in client with
+ * Accessor for main plugin container.
+ *
+ * @return \TrustedLogin\Vendor\Plugin;
  */
-function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
+function trustedlogin_connector() {
+	/** @var \TrustedLogin\Vendor\Plugin */
+	static $trustedlogin_connector;
+
+	if ( $trustedlogin_connector ) {
+		return $trustedlogin_connector;
+	}
+
+	$trustedlogin_connector = new \TrustedLogin\Vendor\Plugin(
+		new \TrustedLogin\Vendor\Encryption()
+	);
+
+	return $trustedlogin_connector;
+}
+
+/**
+ * Accessor for main plugin container.
+ *
+ * @deprecated 1.1 Use {@see trustedlogin_connector()} instead.
+ *
+ * @return \TrustedLogin\Vendor\Plugin;
+ */
+function trustedlogin_vendor(){
+	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector()' );
+	return trustedlogin_connector();
+}
+
+/**
+ * Get data to set window.tlVendor object in the dashboard.
+ *
+ * @since 1.1.0
+ *
+ * @param SettingsApi $settingsApi
+ *
+ * @return array
+ */
+function trustedlogin_connector_prepare_data( SettingsApi $settingsApi){
 	$accessKey = AccessKeyLogin::fromRequest(true);
 	$accountId = AccessKeyLogin::fromRequest(false);
 	$helpdesk  = $settingsApi->toArray()['teams'][0]['helpdesk'][0] ?? 'helpscout';
@@ -136,8 +183,8 @@ function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
 			AccessKeyLogin::NONCE_NAME => wp_create_nonce( AccessKeyLogin::NONCE_ACTION ),
 		],
 		'settings' => $settingsApi->toResponseData(),
-		//https://github.com/trustedlogin/vendor/issues/131
-		'log_file_name' => trustedlogin_vendor()->getLogFileName( false ),
+		/** @see https://github.com/trustedlogin/trustedlogin-connector/issues/131 Pass full log path to the app. */
+		'log_file_name' => trustedlogin_connector()->getLogFileName( false ),
 	];
 
 	//Check if we can preset redirectData in form
@@ -158,4 +205,15 @@ function trusted_login_vendor_prepare_data( SettingsApi $settingsApi){
 
 	}
 	return $data;
+}
+
+/**
+ * @deprecated 1.1 Use {@see trustedlogin_connector_prepare_data()} instead.
+ * @param SettingsApi $settingsApi
+ *
+ * @return array
+ */
+function trusted_login_vendor_prepare_data(SettingsApi $settingsApi){
+	_deprecated_function( __FUNCTION__, '1.1', 'trustedlogin_connector_prepare_data()' );
+	return trustedlogin_connector_prepare_data( $settingsApi );
 }

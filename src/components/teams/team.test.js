@@ -52,7 +52,7 @@ describe("EditTeam", () => {
     });
     act(() => {
       fireEvent.change(getByLabelText(teamFields.account_id.label), {
-        target: { value: "account3" },
+        target: { value: "12345" },
       });
       fireEvent.change(getByLabelText(teamFields.private_key.label), {
         target: { value: "secret" },
@@ -70,7 +70,7 @@ describe("EditTeam", () => {
     });
     expect(onClickSave).toBeCalledTimes(1);
     const lastCall = onClickSave.mock.calls[0][0];
-    expect(lastCall[teamFields.account_id.id]).toEqual("account3");
+    expect(lastCall[teamFields.account_id.id]).toEqual("12345");
     expect(lastCall[teamFields.public_key.id]).toEqual("public");
     expect(lastCall[teamFields.private_key.id]).toEqual("secret");
   });
@@ -109,16 +109,22 @@ describe("HelpDeskSelect", () => {
     const { getByLabelText } = render(<HelpDeskSelect options={options} />, {
       wrapper: Provider,
     });
-    expect(getByLabelText(teamFields.helpdesk.label).value).toBe("Select a Help Desk");
+    expect(getByLabelText(teamFields.helpdesk.label).value).toBe(
+      "Select a Help Desk"
+    );
   });
   it("Sets default value", () => {
     const handleChange = jest.fn();
 
     const { getByLabelText } = render(
-        <HelpDeskSelect value={"helpscout"} options={options} onChange={handleChange} />,
-        {
-          wrapper: Provider,
-        }
+      <HelpDeskSelect
+        value={"helpscout"}
+        options={options}
+        onChange={handleChange}
+      />,
+      {
+        wrapper: Provider,
+      }
     );
     expect(getByLabelText(teamFields.helpdesk.label).value).toBe("helpscout");
   });

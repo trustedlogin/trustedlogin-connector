@@ -16,7 +16,7 @@ trait MocksTLApi
 	{
 
 		$sender = new MocksSendsApiRequests();
-		trustedlogin_vendor()->setApiSender(
+		trustedlogin_connector()->setApiSender(
 			$sender
 		);
 	}
@@ -27,7 +27,7 @@ trait MocksTLApi
 	 */
 	protected function getEnvelopeData()
 	{
-		return file_get_contents(__DIR__ . '/data/get-envelope.json');
+		return file_get_contents(__DIR__ . '/data/get-envelope.json'); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	}
 
 	/**
@@ -35,7 +35,7 @@ trait MocksTLApi
 	 */
 	protected function resetTlApiMock()
 	{
-		trustedlogin_vendor()->setApiSender(
+		trustedlogin_connector()->setApiSender(
 			new ApiSend()
 		);
 	}

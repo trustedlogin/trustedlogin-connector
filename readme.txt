@@ -2,8 +2,8 @@
 Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
-Tested up to: 6.3.1
-Stable tag: 1.0.0
+Tested up to: 6.5
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,34 @@ TrustedLogin plugin to be installed on the website of the support provider.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.1.0 on April 30, 2024 =
+
+- **Renamed the plugin file to `trustedlogin-connector.php` - this will require you reactivate the plugin after updating!**
+- Updated code to better comply with WP Coding Standards
+- Fixed error logs being written when the setting is disabled
+- Error logs are now deleted when disabling the Debug Logging setting
+
+__Developer Notes:__
+
+- Required PHP version is now 7.2 or higher
+- Logging now uses `WP_Filesystem` to write the log files
+- Logging now returns boolean values for success/failure and `null` for logging is disabled
+- Updated the translation textdomain to `trustedlogin-connector`
+- Renamed the Composer package to `trustedlogin/trustedlogin-connector`
+- Renamed functions (deprecated functions will be removed in a future release):
+  - `trustedlogin_vendor()` to `trustedlogin_connector()`
+  - `trusted_login_vendor_prepare_data()` to `trustedlogin_connector_prepare_data()`
+  - `trustedlogin_vendor_deactivate()` to `trustedlogin_connector_deactivate()`
+- Renamed hooks (deprecated actions will be removed in a future release):
+  - `trustedlogin_vendor` to `trustedlogin_connector`
+  - `trustedlogin_vendor_settings_saved` to `trustedlogin_connector_settings_saved`
+  - `trustedlogin/vendor/encryption/keys-option` to `trustedlogin/connector/encryption/keys-option`
+- Removed the following methods, since they are not needed (they are now handled by the JS `AccessKeyForm` component since 0.13.0):
+  - `TrustedLoginService::handleMultipleSecretIds()`
+  - `TrustedLoginService::maybeRedirectSupport()`
+
+A full list of changes can be found in the [TrustedLogin Connector GitHub repository](https://github.com/trustedlogin/trustedlogin-connector/releases/tag/v1.1.0).
 
 = 1.0.0 on January 26, 2024 =
 

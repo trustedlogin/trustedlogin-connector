@@ -47,7 +47,7 @@ class Helpscout extends Webhook{
 		}
 
 		// Get account_id from request.
-		$account_id = $_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] ?? null;
+		$account_id = $_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] ?? null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		// Decode the data from JSON.
 		$data_obj = json_decode( $data, false );
@@ -84,7 +84,7 @@ class Helpscout extends Webhook{
 		$licenses = $this->getLicensesByEmails( $customer_emails );
 
 		// Get API Handler
-		$saas_api = trustedlogin_vendor()->getApiHandler( $account_id );
+		$saas_api = trustedlogin_connector()->getApiHandler( $account_id );
 
 		/**
 		 * Filter: Allows for changing the html output of the wrapper html elements.
@@ -92,10 +92,15 @@ class Helpscout extends Webhook{
 		 * @param string $html
 		 */
 		$html_template = apply_filters(
-			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper',
+			'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/wrapper',
 			'<ul class="c-sb-list c-sb-list--two-line">%1$s</ul>' .
-			'<a href="' . esc_url( admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG ) ) . '"><i class="icon-gear"></i>' . esc_html__( 'Go to Access Key Log-In', 'trustedlogin-vendor' ) . '</a>'
+			'<a href="' . esc_url( admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG ) ) . '"><i class="icon-gear"></i>' . esc_html__( 'Go to Access Key Log-In', 'trustedlogin-connector' ) . '</a>'
 		);
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$html_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper', [ $html_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/wrapper' );
 
 		/**
 		 * Filter: Allows for changing the html output of the individual items html elements.
@@ -103,9 +108,14 @@ class Helpscout extends Webhook{
 		 * @param string $html
 		 */
 		$item_template = apply_filters(
-			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/item',
+			'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/item',
 			'<li class="c-sb-list-item"><span class="c-sb-list-item__label">%4$s <span class="c-sb-list-item__text"><a href="%1$s" target="_blank" title="%3$s"><i class="icon-pointer"></i> %2$s</a></span></span></li>'
 		);
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$item_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/item', [ $item_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/item' );
 
 		/**
 		 * Filter: Allows for changing the html output of the html elements when no items found.
@@ -113,9 +123,14 @@ class Helpscout extends Webhook{
 		 * @param string $html
 		 */
 		$no_items_template = apply_filters(
-			'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/no-items',
+			'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/no-items',
 			'<li class="c-sb-list-item">%1$s</li>'
 		);
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$no_items_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/no-items', [ $no_items_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/no-items' );
 
 		// Define the API endpoint
 		$endpoint = 'accounts/' . $account_id . '/sites/';
@@ -155,7 +170,7 @@ class Helpscout extends Webhook{
 		if ( empty( $item_html ) ) {
 			$item_html = sprintf(
 				$no_items_template,
-				esc_html__( 'No TrustedLogin sessions authorized for this user.', 'trustedlogin-vendor' )
+				esc_html__( 'No TrustedLogin sessions authorized for this user.', 'trustedlogin-connector' )
 			);
 		}
 
@@ -204,8 +219,8 @@ class Helpscout extends Webhook{
 	 */
 	private function build_error_message( int $status, string $errorMessage, string $instruction, ?string $extraMessage = null ): array {
 		// Generate the HTML error message.
-		$error_text = '<p class="red">' . esc_html__( $errorMessage, 'trustedlogin-vendor' ) . '</p>';
-		$error_text .= '<p>' . esc_html__( $instruction, 'trustedlogin-vendor' ) . '</p>';
+		$error_text = '<p class="red">' . esc_html( $errorMessage ) . '</p>';
+		$error_text .= '<p>' . esc_html( $instruction ) . '</p>';
 
 		// Prepare the response array.
 		$response = [ 'html' => $error_text, 'status' => $status ];
@@ -310,9 +325,11 @@ class Helpscout extends Webhook{
 				$item_html .= sprintf(
 					$item_template,
 					esc_url( $url ),
-					esc_html__( 'Access Website', 'trustedlogin-vendor' ),
-					sprintf( esc_html__( 'Access Key: %s', 'trustedlogin-vendor' ), $key ),
-					sprintf( esc_html__( 'License is %s', 'trustedlogin-vendor' ), ucwords( esc_html( $statuses[ $key ] ) ) )
+					esc_html__( 'Access Website', 'trustedlogin-connector' ),
+					// translators: %s is replaced with the access key.
+					sprintf( esc_html__( 'Access Key: %s', 'trustedlogin-connector' ), $key ),
+					// translators: %s is replaced with the license status.
+					sprintf( esc_html__( 'License is %s', 'trustedlogin-connector' ), ucwords( esc_html( $statuses[ $key ] ) ) )
 				);
 			}
 		}
@@ -338,7 +355,7 @@ class Helpscout extends Webhook{
 		}
 
 		return hash_equals( $signature, $this->makeSignature(
-            is_array($data) ? json_encode($data) : $data
+            is_array($data) ? wp_json_encode( $data ) : $data
         ) );
 	}
 

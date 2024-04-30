@@ -15,7 +15,7 @@ class MocksSendsApiRequests implements SendsApiRequests {
      */
     protected function getEnvelopeData()
     {
-        return file_get_contents(__DIR__ . '/data/get-envelope.json');
+        return file_get_contents(__DIR__ . '/data/get-envelope.json');  // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
     }
 
     protected function strEndsWith($string, $search)
@@ -44,10 +44,10 @@ class MocksSendsApiRequests implements SendsApiRequests {
         }
         //Mock
         if ($this->strEndsWith(
-            str_replace(\trustedlogin_vendor()->getApiUrl(), '', $url),
+            str_replace(\trustedlogin_connector()->getApiUrl(), '', $url),
             '/sites/'
         )) {
-            $json = file_get_contents(__DIR__ . '/data/sites-200.json');
+            $json = file_get_contents(__DIR__ . '/data/sites-200.json');  // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
             return [
                 'body' => $json
             ];

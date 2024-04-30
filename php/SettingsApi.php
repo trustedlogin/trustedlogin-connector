@@ -133,14 +133,19 @@ class SettingsApi
 			$data[] = $_setting;
 		}
 
-		update_option(self::TEAM_SETTING_NAME, json_encode($data));
-		update_option(self::GLOBAL_SETTING_NAME,json_encode( $this->getGlobalSettings()));
+		update_option( self::TEAM_SETTING_NAME, wp_json_encode( $data ) );
+		update_option( self::GLOBAL_SETTING_NAME, wp_json_encode( $this->getGlobalSettings() ) );
 		$count = self::count();
 
 		/**
 		 * Fires after settings are saved.
 		 */
-		do_action( 'trustedlogin_vendor_settings_saved', $count );
+		do_action( 'trustedlogin_connector_settings_saved', $count );
+
+		/**
+		 * @deprecated 1.1
+		 */
+		do_action_deprecated( 'trustedlogin_vendor_settings_saved', [ $count ], '1.1', 'trustedlogin_connector_settings_saved' );
 
 		//When saving settings, maybe mark onboarding complete
 		if( $count ){
@@ -154,7 +159,9 @@ class SettingsApi
 	 * Get team setting, by id
 	 *
 	 * @since 0.10.0
-	 * @param string|int $account_id Account to search for
+	 * @throws \Exception If account not found.
+	 *
+	 * @param string|int $account_id Account to search for.
 	 * @return TeamSettings
 	 */
 	public function getByAccountId($account_id)
@@ -165,7 +172,8 @@ class SettingsApi
 			}
 		}
 
-		throw new \Exception($account_id. ' Not found');
+		// translators: %s is the account id that wasn't found.
+		throw new \Exception(sprintf( esc_html__( 'Account not found: %s.', 'trustedlogin-connector' ), esc_attr( $account_id ) ) );
 	}
 
 	/*
@@ -183,7 +191,7 @@ class SettingsApi
 				return $this;
 			}
 		}
-		throw new \Exception('Canot save, Account not found');
+		throw new \Exception( esc_html__( 'Cannot save; account not found.', 'trustedlogin-connector' ) );
 	}
 
 	/**
@@ -205,7 +213,7 @@ class SettingsApi
 	/**
 	 * Add or update a setting to collection
 	 * @since 0.10.0
-	 * @param TeamSetting $setting
+	 * @param TeamSettings $setting
 	 * @return $this
 	 */
 	public function addSetting(TeamSettings $setting)
@@ -320,7 +328,7 @@ class SettingsApi
 			$data,
 			[
 				'debug_mode' => $debugMode,
-				'error_logging' => $this->getGlobalSettings()['error_logging'] ?? false,
+				'error_logging' => $this->isErrorLogggingEnabled(),
 				'integrations' => $this->getIntegrationSettings(),
 			]
 		);
@@ -360,7 +368,7 @@ class SettingsApi
 	/**
 	 * Set the global settings
 	 *
-	 * Values will be merged with existin
+	 * Values will be merged with existing settings.
 	 *
 	 * @param array $globalSettings
 	 * @return $this
@@ -408,6 +416,7 @@ class SettingsApi
 			case 'freescout':
 				$callback = Freescout::actionUrl( $accountId, $helpdesk );
 				break;
+			case 'helpscout':
 			default:
 				$callback = Helpscout::actionUrl( $accountId, $helpdesk );
 				break;

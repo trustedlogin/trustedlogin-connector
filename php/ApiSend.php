@@ -57,7 +57,7 @@ class ApiSend implements SendsApiRequests
 		);
 
 		if ($data) {
-			$request_atts['body'] = json_encode($data);
+			$request_atts['body'] = wp_json_encode( $data );
 		}
 
 		$response = wp_remote_request($url, $request_atts);

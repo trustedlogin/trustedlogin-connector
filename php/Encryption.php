@@ -22,6 +22,17 @@ class Encryption
 	private $key_option_name = 'trustedlogin_keys';
 
 
+	/**
+	 * Maximum length of an index in MySQL.
+	 *
+	 * @since 1.1
+	 *
+	 * @see https://github.com/WordPress/WordPress/commit/b2cf8231059bb1c762a321a0a481f57f47ae9a1b
+	 *
+	 * @const int
+	 */
+	const MAX_INDEX_LENGTH = 191;
+
 	public function __construct()
 	{
 
@@ -30,12 +41,24 @@ class Encryption
 		 *
 		 * @since 0.8.0
 		 *
-		 * @todo Validate string is short enough to be stored in database
-		 *
-		 * @param string
-		 * @param Encryption $this
+		 * @param string $key_option_name The name of the option in the database.
+		 * @param Encryption $this The Encryption object.
 		 */
-		$this->key_option_name = apply_filters('trustedlogin/vendor/encryption/keys-option', $this->key_option_name, $this);
+		$key_option_name = apply_filters( 'trustedlogin/connector/encryption/keys-option', $this->key_option_name, $this );
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$key_option_name = apply_filters_deprecated( 'trustedlogin/vendor/encryption/keys-option', [ $key_option_name, $this ], '1.1', 'trustedlogin/connector/encryption/keys-option' );
+
+		// If the key_option_name is valid, use it.
+		if ( is_string( $key_option_name ) && strlen( $key_option_name ) <= self::MAX_INDEX_LENGTH ) {
+			$this->key_option_name = $key_option_name;
+		} else {
+			$this->log( 'Key option name is too long or not a string. Using default.', __METHOD__, 'error', [
+				'key_option_name' => $key_option_name
+			] );
+		}
 	}
 
 	/**
@@ -76,10 +99,19 @@ class Encryption
 		/**
 		 * Filter allows site admins to change where the key is fetched from.
 		 *
+		 * @since 1.1
+		 *
 		 * @param \stdClass|WP_Error $keys
 		 * @param Encryption $this
 		 */
-		return apply_filters('trustedlogin/vendor/encryption/get-keys', $keys, $this);
+		$filtered_keys = apply_filters( 'trustedlogin/connector/encryption/get-keys', $keys, $this );
+
+		/**
+		 * @deprecated 1.1
+		 */
+		$filtered_keys = apply_filters_deprecated( 'trustedlogin/vendor/encryption/get-keys', [ $filtered_keys, $this ], '1.1', 'trustedlogin/connector/encryption/get-keys' );
+
+		return $filtered_keys;
 	}
 
 	/**
@@ -150,7 +182,7 @@ class Encryption
 	private function updateKeys($keys)
 	{
 
-		$keys_db_ready = json_encode($keys);
+		$keys_db_ready = wp_json_encode($keys);
 
 		if (! $keys_db_ready) {
 			return new \WP_Error('json_error', 'Could not encode keys to JSON.', $keys);

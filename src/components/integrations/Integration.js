@@ -1,30 +1,38 @@
 import { useMemo, useState } from "react";
 import { __ } from "@wordpress/i18n";
 import { useSettings } from "../../hooks/useSettings";
-import {FreescoutLogo, HelpscoutLogo} from "./ConfigureIntegration";
+import { FreescoutLogo, HelpscoutLogo } from "./ConfigureIntegration";
 
 const integrationData = {
-  'helpscout': {
+  helpscout: {
     id: "helpscout",
     isEnabled: true,
-    name: __("Help Scout", 'trustedlogin-vendor'),
-    description: __("Customer support platform, knowledge base tool, and an contact widget for customer service.", 'trustedlogin-vendor'),
+    name: __("Help Scout", "trustedlogin-connector"),
+    description: __(
+      "Customer support platform, knowledge base tool, and an contact widget for customer service.",
+      "trustedlogin-connector"
+    ),
     IconSVG: HelpscoutLogo,
   },
-  'freescout': {
+  freescout: {
     id: "freescout",
     isEnabled: false,
-    name: __("FreeScout", 'trustedlogin-vendor'),
-    description: __("FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.", 'trustedlogin-vendor'),
+    name: __("FreeScout", "trustedlogin-connector"),
+    description: __(
+      "FreeScout is a self-hosted, open-source customer support solution, equipped with email-ticketing, a customizable knowledge base tool, and various modules for enhanced customer service functionality.",
+      "trustedlogin-connector"
+    ),
     IconSVG: FreescoutLogo,
-  }
+  },
 };
 
 const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
   const { settings, setSettings, onSaveIntegrationSettings } = useSettings();
 
   const isEnabled = useMemo(() => {
-    return settings.integrations[id] ? settings.integrations[id].enabled : false;
+    return settings.integrations[id]
+      ? settings.integrations[id].enabled
+      : false;
   }, [settings.integrations]);
 
   const buttonClassName = useMemo(() => {
@@ -45,7 +53,9 @@ const Integration = ({ Icon, name, description, id, toggleOpenState }) => {
         ...settings.integrations,
         [id]: {
           ...settings.integrations[id],
-          enabled: settings.integrations[id] ? !settings.integrations[id].enabled : true,
+          enabled: settings.integrations[id]
+            ? !settings.integrations[id].enabled
+            : true,
         },
       },
     };
@@ -103,15 +113,15 @@ export const IntegrationComponent = ({ helpdesk }) => {
   const integration = integrationData[helpdesk];
 
   return (
-      <>
-        <Integration
-            toggleOpenState={() => setIsOpen(!isOpen)}
-            id={integration.id}
-            isEnabled={integration.isEnabled}
-            name={integration.name}
-            description={__(integration.description, "trustedlogin-vendor")}
-            Icon={integration.IconSVG}
-        />
-      </>
+    <>
+      <Integration
+        toggleOpenState={() => setIsOpen(!isOpen)}
+        id={integration.id}
+        isEnabled={integration.isEnabled}
+        name={integration.name}
+        description={__(integration.description, "trustedlogin-connector")}
+        Icon={integration.IconSVG}
+      />
+    </>
   );
 };

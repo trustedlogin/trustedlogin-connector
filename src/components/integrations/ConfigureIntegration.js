@@ -31,23 +31,23 @@ export const HelpscoutLogo = ({ width = 36, height = 44 }) => (
  * @param {number} [height=44] - height of the SVG, defaults to 44
  */
 export const FreescoutLogo = ({ width = 36, height = 44 }) => (
-    <svg
-        width={width}
-        height={height}
-        viewBox="0 0 96 96"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-      <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M0,48l0,3.6c0,12.7,7.7,21.6,18.7,21.6h1.8c4.9,0,9.8-2.8,13.3-6.8c3.9,3,8.8,4.9,14.2,4.9
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 96 96"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M0,48l0,3.6c0,12.7,7.7,21.6,18.7,21.6h1.8c4.9,0,9.8-2.8,13.3-6.8c3.9,3,8.8,4.9,14.2,4.9
         c12.9,0,23.3-10.5,23.3-23.3S60.9,24.7,48,24.7c-12.9,0-23.3,10.5-23.3,23.3v7.5c-0.1,1.3-2.8,3.9-4.1,4h-1.8c-4.4,0-5-4.9-5-7.8
         V48c0-18.9,15.4-34.3,34.3-34.3c18.9,0,34.3,15.4,34.3,34.3c0,18.9-15.4,34.3-34.3,34.3c-7,0-11.9-2-15.2-3.5l-7.4,11.6
         C30.6,93.2,38.2,96,48,96c26.5,0,48-21.5,48-48C96,21.5,74.5,0,48,0C21.5,0,0,21.5,0,48z M38.4,48c0-5.3,4.3-9.6,9.6-9.6
         c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6C42.7,57.6,38.4,53.3,38.4,48z"
-          fill="#0078d7"
-      />
-    </svg>
+      fill="#0078d7"
+    />
+  </svg>
 );
 
 /**
@@ -56,25 +56,49 @@ export const FreescoutLogo = ({ width = 36, height = 44 }) => (
  * Each configuration includes link, linkText, description, goLink, and goLinkText.
  */
 const HelpDeskConfigs = {
-  'helpscout': {
+  helpscout: {
     link: "#",
-    linkText: __("Learn how to set up a TrustedLogin Help Scout widget.", "trustedlogin-vendor"),
-    description: __("Enter these values into a Custom App 'Dynamic Content' widget in Help Scout.", "trustedlogin-vendor"),
+    linkText: __(
+      "Learn how to set up a TrustedLogin Help Scout widget.",
+      "trustedlogin-connector"
+    ),
+    description: __(
+      "Enter these values into a Custom App 'Dynamic Content' widget in Help Scout.",
+      "trustedlogin-connector"
+    ),
     goLink: "https://secure.helpscout.net/apps/custom/",
-    goLinkText: __("Create a Custom App in Help Scout", "trustedlogin-vendor"),
+    goLinkText: __(
+      "Create a Custom App in Help Scout",
+      "trustedlogin-connector"
+    ),
   },
-  'freescout': {
+  freescout: {
     link: "#",
-    linkText: __("Learn how to set up a TrustedLogin Free Scout widget.", "trustedlogin-vendor"),
+    linkText: __(
+      "Learn how to set up a TrustedLogin Free Scout widget.",
+      "trustedlogin-connector"
+    ),
     description: [
-        __("Place module source to Modules folder of your FreeScout installation", "text-domain"),
-        __("Enable module in Modules admin panel", "text-domain"),
-        __("Go to Settings -> Modules -> TrustedLogin and enter these values.", "text-domain"),
-        __("Finally, go to your Mailbox Settings, select TrustedLogin, enable the TrustedLogin widget.", "text-domain")
+      __(
+        "Place module source to Modules folder of your FreeScout installation",
+        "text-domain"
+      ),
+      __("Enable module in Modules admin panel", "text-domain"),
+      __(
+        "Go to Settings -> Modules -> TrustedLogin and enter these values.",
+        "text-domain"
+      ),
+      __(
+        "Finally, go to your Mailbox Settings, select TrustedLogin, enable the TrustedLogin widget.",
+        "text-domain"
+      ),
     ],
     goLink: "https://github.com/trustedlogin/freescout-module",
-    goLinkText: __("Setup the TrustedLogin Freescout Module.", "trustedlogin-vendor"),
-  }
+    goLinkText: __(
+      "Setup the TrustedLogin Freescout Module.",
+      "trustedlogin-connector"
+    ),
+  },
 };
 
 /**
@@ -82,9 +106,17 @@ const HelpDeskConfigs = {
  * This component renders an SVG 'close' (X) icon.
  */
 const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M6 18L18 6M6 6l12 12"></path>
+  </svg>
 );
 
 /**
@@ -92,9 +124,19 @@ const CloseIcon = () => (
  * This component renders an SVG 'go' (arrow) icon.
  */
 const GoIcon = () => (
-    <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1.37528 9.12479L9.62486 0.87521M9.62486 0.87521H1.37528M9.62486 0.87521V9.12479" stroke="white" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round"></path>
-    </svg>
+  <svg
+    width="11"
+    height="10"
+    viewBox="0 0 11 10"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M1.37528 9.12479L9.62486 0.87521M9.62486 0.87521H1.37528M9.62486 0.87521V9.12479"
+      stroke="white"
+      strokeWidth="1.67"
+      strokeLinecap="round"
+      strokeLinejoin="round"></path>
+  </svg>
 );
 
 /**
@@ -121,7 +163,9 @@ export const TeamDetails = ({ team, helpdeskName }) => {
     if (!team || !team.hasOwnProperty("helpdesk")) {
       return null;
     }
-    if (-1 !== team.helpdesk.findIndex((helpdesk) => helpdeskName === helpdesk)) {
+    if (
+      -1 !== team.helpdesk.findIndex((helpdesk) => helpdeskName === helpdesk)
+    ) {
       return team.helpdesk_settings[helpdeskName].secret;
     } else {
       return null;
@@ -140,7 +184,9 @@ export const TeamDetails = ({ team, helpdeskName }) => {
     if (!team || !team.hasOwnProperty("helpdesk")) {
       return null;
     }
-    if (-1 !== team.helpdesk.findIndex((helpdesk) => helpdeskName === helpdesk)) {
+    if (
+      -1 !== team.helpdesk.findIndex((helpdesk) => helpdeskName === helpdesk)
+    ) {
       return team.helpdesk_settings[helpdeskName].callback;
     } else {
       return null;
@@ -153,141 +199,153 @@ export const TeamDetails = ({ team, helpdeskName }) => {
    * @param {string} value - The value to copy to clipboard.
    */
   function copyToClipboard(value) {
-
     // Query for the "clipboard-write" permission
-    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-
-      // If the permission is granted or the user is prompted
-      if (result.state === "granted" || result.state === "prompt") {
-        // Attempt to write the text to the clipboard
-        navigator.clipboard.writeText(value).then(
+    navigator.permissions
+      .query({ name: "clipboard-write" })
+      .then((result) => {
+        // If the permission is granted or the user is prompted
+        if (result.state === "granted" || result.state === "prompt") {
+          // Attempt to write the text to the clipboard
+          navigator.clipboard.writeText(value).then(
             function () {
               /* clipboard successfully set */
             },
             function () {
               /* clipboard write failed */
             }
+          );
+        }
+      })
+      .catch((err) => {
+        // Fallback for Safari and Firefox
+        console.warn(
+          "Falling back to direct clipboard write due to error:",
+          err
         );
-      }
-    }).catch((err) => {
 
-      // Fallback for Safari and Firefox
-      console.warn("Falling back to direct clipboard write due to error:", err);
-
-      // Attempt to write the text to the clipboard
-      navigator.clipboard.writeText(value).then(
-          function () {
-            console.log("Clipboard successfully set in fallback.");
-          },
-          function (nested_err) {
-            console.error("Clipboard write failed in fallback.", { nested_err, value });
-          }
-      ).catch((nested_err) => {
-        console.error("Final error during clipboard write.", { nested_err, err, value });
+        // Attempt to write the text to the clipboard
+        navigator.clipboard
+          .writeText(value)
+          .then(
+            function () {
+              console.log("Clipboard successfully set in fallback.");
+            },
+            function (nested_err) {
+              console.error("Clipboard write failed in fallback.", {
+                nested_err,
+                value,
+              });
+            }
+          )
+          .catch((nested_err) => {
+            console.error("Final error during clipboard write.", {
+              nested_err,
+              err,
+              value,
+            });
+          });
       });
-
-    });
   }
 
   return (
-      <div className="flex flex-1 flex-col space-y-6">
-        <div>
-          <div className="flex items-center justify-between">
-            <label
-                htmlFor="secret_key"
-                className="block text-sm font-medium text-gray-700">
-              Secret Key
-            </label>
-            <button
-                onClick={() => {
-                  resetTeamIntegration(team.account_id, helpdeskName);
-                }}
-                className="flex items-center font-medium text-sm text-red-700"
-                title="Warning: will issue new key and cannot be undone">
-              <svg
-                  className="mr-1"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M4.49995 4.50002C6.39995 2.60002 9.59995 2.60002 11.5 4.50002C12.2 5.20002 12.7 6.20002 12.9 7.20002L14.9 6.90002C14.7 5.40002 14 4.10002 13 3.10002C10.3 0.400024 5.89995 0.400024 3.09995 3.10002L0.899951 0.900024L0.199951 7.30002L6.59995 6.60002L4.49995 4.50002Z"
-                    fill="#B00000"></path>
-                <path
-                    d="M15.8 8.70001L9.39997 9.40001L11.5 11.5C9.59998 13.4 6.39998 13.4 4.49998 11.5C3.79998 10.8 3.29998 9.80001 3.09998 8.80001L1.09998 9.10001C1.29998 10.6 1.99998 11.9 2.99998 12.9C4.39998 14.3 6.09998 14.9 7.89998 14.9C9.69998 14.9 11.5 14.2 12.8 12.9L15 15.1L15.8 8.70001Z"
-                    fill="#B00000"></path>
-              </svg>
-              Refresh
-            </button>
-          </div>
-          <div className="mt-2 relative rounded-lg">
-            <input
-                type="text"
-                name="secret_key"
-                id="secret_key"
-                className="block w-full pl-3 pr-10 py-2.5 sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500"
-                defaultValue={secret}
-                disabled={true}
-            />
-            <button
-                onClick={() => copyToClipboard(secret)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
-                title={__("Copy secret key", "trustedlogin-vendor")}
-                data-form-type="action,search">
-              <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M11 12H1C0.447 12 0 11.553 0 11V1C0 0.448 0.447 0 1 0H11C11.553 0 12 0.448 12 1V11C12 11.553 11.553 12 11 12Z"
-                    fill="currentColor"></path>
-                <path
-                    d="M15 16H4V14H14V4H16V15C16 15.553 15.553 16 15 16Z"
-                    fill="currentColor"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div>
+    <div className="flex flex-1 flex-col space-y-6">
+      <div>
+        <div className="flex items-center justify-between">
           <label
-              htmlFor="callback_url"
-              className="block text-sm font-medium text-gray-700">
-            {__("Callback URL", "trustedlogin-vendor")}
+            htmlFor="secret_key"
+            className="block text-sm font-medium text-gray-700">
+            Secret Key
           </label>
-          <div className="mt-2 relative rounded-lg">
-            <input
-                type="text"
-                name="callback_url"
-                id="callback_url"
-                className="block w-full pl-3 pr-10 py-2.5 sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500"
-                defaultValue={callback}
-                disabled={true}
-            />
-            <button
-                onClick={() => copyToClipboard(callback)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
-                title={__("Copy Callback URL", "trustedlogin-vendor")}
-                data-form-type="action,search">
-              <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M11 12H1C0.447 12 0 11.553 0 11V1C0 0.448 0.447 0 1 0H11C11.553 0 12 0.448 12 1V11C12 11.553 11.553 12 11 12Z"
-                    fill="currentColor"></path>
-                <path
-                    d="M15 16H4V14H14V4H16V15C16 15.553 15.553 16 15 16Z"
-                    fill="currentColor"></path>
-              </svg>
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              resetTeamIntegration(team.account_id, helpdeskName);
+            }}
+            className="flex items-center font-medium text-sm text-red-700"
+            title="Warning: will issue new key and cannot be undone">
+            <svg
+              className="mr-1"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M4.49995 4.50002C6.39995 2.60002 9.59995 2.60002 11.5 4.50002C12.2 5.20002 12.7 6.20002 12.9 7.20002L14.9 6.90002C14.7 5.40002 14 4.10002 13 3.10002C10.3 0.400024 5.89995 0.400024 3.09995 3.10002L0.899951 0.900024L0.199951 7.30002L6.59995 6.60002L4.49995 4.50002Z"
+                fill="#B00000"></path>
+              <path
+                d="M15.8 8.70001L9.39997 9.40001L11.5 11.5C9.59998 13.4 6.39998 13.4 4.49998 11.5C3.79998 10.8 3.29998 9.80001 3.09998 8.80001L1.09998 9.10001C1.29998 10.6 1.99998 11.9 2.99998 12.9C4.39998 14.3 6.09998 14.9 7.89998 14.9C9.69998 14.9 11.5 14.2 12.8 12.9L15 15.1L15.8 8.70001Z"
+                fill="#B00000"></path>
+            </svg>
+            Refresh
+          </button>
+        </div>
+        <div className="mt-2 relative rounded-lg">
+          <input
+            type="text"
+            name="secret_key"
+            id="secret_key"
+            className="block w-full pl-3 pr-10 py-2.5 sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500"
+            defaultValue={secret}
+            disabled={true}
+          />
+          <button
+            onClick={() => copyToClipboard(secret)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
+            title={__("Copy secret key", "trustedlogin-connector")}
+            data-form-type="action,search">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M11 12H1C0.447 12 0 11.553 0 11V1C0 0.448 0.447 0 1 0H11C11.553 0 12 0.448 12 1V11C12 11.553 11.553 12 11 12Z"
+                fill="currentColor"></path>
+              <path
+                d="M15 16H4V14H14V4H16V15C16 15.553 15.553 16 15 16Z"
+                fill="currentColor"></path>
+            </svg>
+          </button>
         </div>
       </div>
+      <div>
+        <label
+          htmlFor="callback_url"
+          className="block text-sm font-medium text-gray-700">
+          {__("Callback URL", "trustedlogin-connector")}
+        </label>
+        <div className="mt-2 relative rounded-lg">
+          <input
+            type="text"
+            name="callback_url"
+            id="callback_url"
+            className="block w-full pl-3 pr-10 py-2.5 sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500"
+            defaultValue={callback}
+            disabled={true}
+          />
+          <button
+            onClick={() => copyToClipboard(callback)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-sky-500"
+            title={__("Copy Callback URL", "trustedlogin-connector")}
+            data-form-type="action,search">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M11 12H1C0.447 12 0 11.553 0 11V1C0 0.448 0.447 0 1 0H11C11.553 0 12 0.448 12 1V11C12 11.553 11.553 12 11 12Z"
+                fill="currentColor"></path>
+              <path
+                d="M15 16H4V14H14V4H16V15C16 15.553 15.553 16 15 16Z"
+                fill="currentColor"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -302,7 +360,12 @@ export const TeamDetails = ({ team, helpdeskName }) => {
  * @param {Object} props.team - The team data.
  * @param {string} props.helpDesk - The name of the help desk.
  */
-export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpscout" }) {
+export function ConfigureHelpDesk({
+  isOpen,
+  setIsOpen,
+  team,
+  helpDesk = "helpscout",
+}) {
   /**
    * `useMemo` hook is used to memoize the value returned by the function.
    * This value will only recalculate when [helpdeskName] changes.
@@ -314,15 +377,19 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpsco
   const helpdeskTitle = useMemo(() => {
     switch (helpDesk) {
       case "freescout":
-        return __("FreeScout", "trustedlogin-vendor");
+        return __("FreeScout", "trustedlogin-connector");
       default:
       case "helpscout":
-        return __("Help Scout", "trustedlogin-vendor");
+        return __("Help Scout", "trustedlogin-connector");
     }
   }, [helpDesk]);
 
   // Use memoized helpdeskTitle to create title
-  const title = useMemo(() => `${__("Configure Help Desk", "trustedlogin-vendor")} ${helpdeskTitle}`, [helpdeskTitle]);
+  const title = useMemo(
+    () =>
+      `${__("Configure Help Desk", "trustedlogin-connector")} ${helpdeskTitle}`,
+    [helpdeskTitle]
+  );
 
   // Check if the helpDesk value is a valid key in HelpDeskConfigs
   if (!HelpDeskConfigs.hasOwnProperty(helpDesk)) {
@@ -335,24 +402,23 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpsco
     linkText = "",
     description = "",
     goLink = "#",
-    goLinkText = ""
+    goLinkText = "",
   } = HelpDeskConfigs[helpDesk] || {};
 
   // Render ConfigureIntegration component with necessary props and children
   return (
-      <ConfigureIntegration
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          title={title}
-          link={link}
-          linkText={linkText}
-          description={description}
-          goLink={goLink}
-          goLinkText={goLinkText}
-          helpDesk={helpDesk}
-      >
-        <TeamDetails team={team} helpdeskName={helpDesk} />
-      </ConfigureIntegration>
+    <ConfigureIntegration
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      title={title}
+      link={link}
+      linkText={linkText}
+      description={description}
+      goLink={goLink}
+      goLinkText={goLinkText}
+      helpDesk={helpDesk}>
+      <TeamDetails team={team} helpdeskName={helpDesk} />
+    </ConfigureIntegration>
   );
 }
 
@@ -372,78 +438,92 @@ export function ConfigureHelpDesk({ isOpen, setIsOpen, team, helpDesk = "helpsco
  * @param {String} props.helpDesk - The type of the helpdesk
  * @see https://headlessui.dev/react/dialog
  */
-export default function ConfigureIntegration({ isOpen, setIsOpen, children, title, description, infoLink, infoLinkText, goLink, goLinkText, helpDesk }) {
+export default function ConfigureIntegration({
+  isOpen,
+  setIsOpen,
+  children,
+  title,
+  description,
+  infoLink,
+  infoLinkText,
+  goLink,
+  goLinkText,
+  helpDesk,
+}) {
   const logos = {
-    'helpscout': HelpscoutLogo,
-    'freescout': FreescoutLogo
+    helpscout: HelpscoutLogo,
+    freescout: FreescoutLogo,
   };
 
   const Logo = logos[helpDesk];
 
   return (
-      <Dialog
-          open={isOpen}
-          onClose={() => setIsOpen(false)}
-          className="fixed z-10 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="relative bg-white rounded max-w-sm mx-auto">
-            <Dialog.Title className={"sr-only"}>{title}</Dialog.Title>
-            <>
-              <div className="inline-block align-middle bg-white rounded-lg p-8 text-left overflow-hidden shadow-xl transform transition-all">
-                <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
-                  <button
-                      onClick={() => setIsOpen(false)}
-                      type="button"
-                      className="bg-white rounded-lg text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500">
-                    <span className="sr-only">{__("Close", "trustedlogin-vendor")}</span>
-                    <CloseIcon />
-                  </button>
+    <Dialog
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      className="fixed z-10 inset-0 overflow-y-auto">
+      <div className="flex items-center justify-center min-h-screen">
+        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+        <div className="relative bg-white rounded max-w-sm mx-auto">
+          <Dialog.Title className={"sr-only"}>{title}</Dialog.Title>
+          <>
+            <div className="inline-block align-middle bg-white rounded-lg p-8 text-left overflow-hidden shadow-xl transform transition-all">
+              <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  type="button"
+                  className="bg-white rounded-lg text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500">
+                  <span className="sr-only">
+                    {__("Close", "trustedlogin-connector")}
+                  </span>
+                  <CloseIcon />
+                </button>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex mx-auto border h-20 w-20 items-center justify-center rounded-lg">
+                  <Logo />
                 </div>
-                <div className="flex flex-col">
-                  <div className="flex mx-auto border h-20 w-20 items-center justify-center rounded-lg">
-                    <Logo />
-                  </div>
-                  <div className="max-w-sm mx-auto mt-2 mb-8 justify-center text-center">
-                    <h2 className="mt-4 text-2xl text-gray-900">{title}</h2>
-                    {Array.isArray(description) ? (
-                        <ol className="mt-2 mb-4 text-sm text-gray-500 text-left list-decimal">
-                          {description.map((item, index) => (
-                              <li key={index}>{item}</li>
-                          ))}
-                        </ol>
-                    ) : (
-                        <p className="mt-2 mb-4 text-sm text-gray-500">
-                          {description}
-                        </p>
-                    )}
-                    <a className="text-blue-tl text-sm" href={infoLink}>
-                      {infoLinkText}
-                    </a>
-                  </div>
-                </div>
-
-                {children}
-                <div className="mt-6 flex sm:mt-8">
-                  <button
-                      onClick={() => setIsOpen(false)}
-                      type="button"
-                      className="mt-3 mr-4 w-2/5 inline-flex justify-center items-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                      data-form-type="other">
-                    {__("Close", "trustedlogin-vendor")}                  </button>
-                  <a
-                      href={goLink}
-                      type="button"
-                      className="w-3/5 inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2.5 bg-blue-tl text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
-                      data-form-type="action,search">
-                    {goLinkText}
-                    <GoIcon />
+                <div className="max-w-sm mx-auto mt-2 mb-8 justify-center text-center">
+                  <h2 className="mt-4 text-2xl text-gray-900">{title}</h2>
+                  {Array.isArray(description) ? (
+                    <ol className="mt-2 mb-4 text-sm text-gray-500 text-left list-decimal">
+                      {description.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <p className="mt-2 mb-4 text-sm text-gray-500">
+                      {description}
+                    </p>
+                  )}
+                  <a className="text-blue-tl text-sm" href={infoLink}>
+                    {infoLinkText}
                   </a>
                 </div>
               </div>
-            </>
-          </div>
+
+              {children}
+              <div className="mt-6 flex sm:mt-8">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  type="button"
+                  className="mt-3 mr-4 w-2/5 inline-flex justify-center items-center rounded-lg border border-gray-300 px-4 py-2.5 bg-white text-base font-medium text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                  data-form-type="other">
+                  {__("Close", "trustedlogin-connector")}{" "}
+                </button>
+                <a
+                  href={goLink}
+                  type="button"
+                  className="w-3/5 inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2.5 bg-blue-tl text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
+                  data-form-type="action,search">
+                  {goLinkText}
+                  <GoIcon />
+                </a>
+              </div>
+            </div>
+          </>
         </div>
-      </Dialog>
+      </div>
+    </Dialog>
   );
 }

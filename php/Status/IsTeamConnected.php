@@ -26,7 +26,7 @@ class IsTeamConnected {
      * This is not as good as \Endpoints\Settings::verifyAccountId()
      */
     public static function check(TeamSettings $team){
-        $check = \trustedlogin_vendor()
+        $check = \trustedlogin_connector()
             ->verifyAccount($team);
 
         if( $check){

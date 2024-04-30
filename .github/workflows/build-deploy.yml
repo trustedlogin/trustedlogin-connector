@@ -1,0 +1,81 @@
+name: Build and deploy
+
+on:
+  pull_request:
+    types: [ opened, closed, merged,synchronize ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Set commit SHA
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            COMMIT_SHA="${{ github.sha }}"
+          fi
+          echo "COMMIT_SHA=${COMMIT_SHA:0:7}" >> $GITHUB_ENV
+      - name: Build CSS and JS first
+        run: yarn && yarn build
+      - name: Install Composer dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: '7.2'
+          dev: no
+          args: --prefer-dist
+      - name: Configure S3cmd tool
+        uses: s3-actions/s3cmd@v1.6.1
+        with:
+          provider: digitalocean
+          region: 'sfo3'
+          access_key: ${{ secrets.DIGITALOCEAN_SPACES_ACCESS_KEY }}
+          secret_key: ${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY }}
+      - name: Create distribution archive
+        id: package_dist_archive
+        run: npm run package:dist ${COMMIT_SHA}
+      - name: Upload distribution archive to DigitalOcean
+        id: upload_dist_archive
+        run: |
+          set -e
+          s3cmd put ${DIST_ARCHIVE} --acl-public s3://trustedlogin/github-trustedlogin-connector-builds/${DIST_ARCHIVE} > s3cmd_output.txt
+          URL=$(awk '/Public URL of the object is/{print $NF}' s3cmd_output.txt)
+          echo "DIST_ARCHIVE_URL=$URL" >> $GITHUB_ENV
+      - name: Update PR with a link to the distribution archive
+        run: |
+          npx zx bin/add-build-file-link-to-pr.mjs ${{ github.repository }} ${COMMIT_SHA} $DIST_ARCHIVE_URL
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create InstaWP site (not used at the moment)
+        uses: instawp/wordpress-testing-automation@main
+        id: create-wp
+        if: false
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          INSTAWP_TOKEN: ${{secrets.INSTAWP_TOKEN}}
+          INSTAWP_DOMAIN: ${{secrets.INSTAWP_DOMAIN}}
+          INSTAWP_TEMPLATE_SLUG: vendor
+          REPO_ID: 4
+          INSTAWP_ACTION: create-site-template
+          ARTIFACT_URL: ${{ env.DIST_ARCHIVE_URL }}
+      - name: InstaWP URL
+        run: echo URL ${{ steps.create-wp.outputs.instawp_url }}
+        shell: bash
+
+  destroy-wp-after-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: instawp/wordpress-testing-automation@main
+        if: github.event.action == 'closed' || github.event.action == 'merged'
+        id: destroy-wp
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          INSTAWP_TOKEN: ${{secrets.INSTAWP_TOKEN}}
+          INSTAWP_DOMAIN: ${{secrets.INSTAWP_DOMAIN}}
+          INSTAWP_TEMPLATE_SLUG: vendor
+          REPO_ID: 4
+          INSTAWP_ACTION: destroy-site

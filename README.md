@@ -150,7 +150,7 @@ The root namespace is `TrustedLoginVendor`.
 ### Container
 
 ```php
-$container = trustedlogin_vendor();
+$container = trustedlogin_connector();
 ```
 
 ### TrustedLoginService
@@ -159,7 +159,7 @@ Interactions with TrustedLogin are in the `TrustedLoginService`. You can get thi
 
 ```php
 $service = new TrustedLoginService(
-    trustedlogin_vendor()
+    trustedlogin_connector()
 );
 ```
 

@@ -19,7 +19,7 @@ class PublicKey extends Endpoint
 	/** @inheritdoc */
 	public function get(\WP_REST_Request $request)
 	{
-		$public_key = \trustedlogin_vendor()->getPublicKey();
+		$public_key = \trustedlogin_connector()->getPublicKey();
 
 		$response = new \WP_REST_Response();
 

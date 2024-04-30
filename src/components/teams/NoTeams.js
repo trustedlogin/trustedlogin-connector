@@ -39,9 +39,7 @@ const NoTeams = () => {
         </>
       )}
       title={"Create your first team"}
-      subtitle={
-        "Add a support team, as configured in TrustedLogin."
-      }>
+      subtitle={"Add a support team, as configured in TrustedLogin."}>
       <button
         onClick={() => setCurrentView("teams/new")}
         type="button"

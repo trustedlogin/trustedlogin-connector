@@ -31,7 +31,7 @@ class ResetEncryption extends Settings
 	 */
 	public function update(\WP_REST_Request $request)
 	{
-		$encryption =\trustedlogin_vendor()
+		$encryption =\trustedlogin_connector()
 			->getEncryption();
 		//Delete keys
 		$encryption->deleteKeys();

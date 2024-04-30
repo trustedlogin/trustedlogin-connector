@@ -25,7 +25,7 @@ class Reset {
 
        $logFile = $this->getLogFileName();
        if( file_exists($logFile) ){
-           unlink($logFile);
+	       wp_delete_file($logFile);
        }
 
        return $plugin;

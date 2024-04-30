@@ -50,7 +50,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 	{
 		$data = ['hi' => 'roy'];
 		$helpscout = new Helpscout( 'secret' );
-		$signature = $helpscout->makeSignature( json_encode( $data ) );
+		$signature = $helpscout->makeSignature( wp_json_encode( $data ) );
 		$this->assertTrue(
 			$helpscout->verify_request( $data, $signature )
 
@@ -96,7 +96,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 			'account_id' => self::ACCOUNT_ID
 		];
 		//Encode that data.
-		$encodedData = json_encode( $data );
+		$encodedData = wp_json_encode( $data );
 		//Sign that data.
 		$signature = $helpscout->makeSignature(
 			$encodedData

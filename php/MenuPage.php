@@ -126,7 +126,7 @@ class MenuPage {
      */
     public function addMenuPage(){
 
-        $name = $this->childName ?? __('TrustedLogin', 'trustedlogin-vendor');
+        $name = $this->childName ?? __('TrustedLogin', 'trustedlogin-connector');
 
         // Default capability for the menu page.
         $capability = 'manage_options';
@@ -168,11 +168,11 @@ class MenuPage {
             return;
         }
         //Remove admin notices added correctly
-        //see: https://github.com/trustedlogin/vendor/issues/35
+        //see: https://github.com/trustedlogin/trustedlogin-connector/issues/35
         remove_all_actions('admin_notices');
         remove_all_actions('all_admin_notices');
         if( isset(
-            $_REQUEST[MaybeRedirect::REDIRECT_KEY]
+            $_REQUEST[MaybeRedirect::REDIRECT_KEY] // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         ) ){
             return;
         }
@@ -194,7 +194,7 @@ class MenuPage {
             );
         }
         //React root
-        printf( '<div id="%s"></div>',self::REACT_ROOT_ID)  ;
+        printf( '<div id="%s"></div>',self::REACT_ROOT_ID); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
 }

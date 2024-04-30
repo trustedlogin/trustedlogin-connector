@@ -53,18 +53,23 @@ class Logging extends Settings
 	 */
 	public function update(\WP_REST_Request $request)
 	{
+		$error_logging_setting = (bool) $request->get_param('error', false);
+
 		$settingsApi = SettingsApi::fromSaved();
 		$settingsApi->setGlobalSettings(
 			array_merge(
 				$settingsApi->getGlobalSettings(),
 				[
-					'error_logging' => (bool)$request->get_param('error', false)
+					'error_logging' => $error_logging_setting
 				]
 			)
-
 		);
-		$settingsApi->save();
 
+		if ( ! $error_logging_setting ) {
+			trustedlogin_connector()->deleteLog();
+		}
+
+		$settingsApi->save();
 
 		return $this->createResponse($settingsApi);
 	}
@@ -73,7 +78,7 @@ class Logging extends Settings
 	protected function createResponse(SettingsApi $settingsApi){
 		return rest_ensure_response(
 			[
-				'error_logging' => $settingsApi->getGlobalSettings()['error_logging'] ?? false,
+				'error_logging' => $settingsApi->isErrorLogggingEnabled(),
 			]
 		);
 	}

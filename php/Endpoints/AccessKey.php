@@ -35,7 +35,7 @@ class AccessKey extends Endpoint
 
 		if (! $valid) {
 			$this->log('Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error');
-			return new \WP_Error('bad_nonce', esc_html__('The nonce was not set for the request.', 'trustedlogin-vendor'));
+			return new \WP_Error('bad_nonce', esc_html__('The nonce was not set for the request.', 'trustedlogin-connector'));
 
 		}
 		return true;

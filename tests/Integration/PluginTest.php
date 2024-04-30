@@ -19,7 +19,7 @@ class PluginTest extends TestCase
 	{
 
 		$this->assertNotEmpty(
-			trustedlogin_vendor()->getPublicKey()
+			trustedlogin_connector()->getPublicKey()
 		);
 	}
 
@@ -30,7 +30,7 @@ class PluginTest extends TestCase
 	{
 
 		$this->assertNotEmpty(
-			trustedlogin_vendor()->getSignatureKey()
+			trustedlogin_connector()->getSignatureKey()
 		);
 	}
 
@@ -54,7 +54,7 @@ class PluginTest extends TestCase
 			)
 			->save();
 
-		$handler = trustedlogin_vendor()->getApiHandler(
+		$handler = trustedlogin_connector()->getApiHandler(
 			'6a',
 			'https://test.com'
 		);
@@ -72,13 +72,13 @@ class PluginTest extends TestCase
 	public function testGetEncryption()
 	{
 		$this->assertSame(
-			trustedlogin_vendor()->getEncryption(),
-			trustedlogin_vendor()->getEncryption()
+			trustedlogin_connector()->getEncryption(),
+			trustedlogin_connector()->getEncryption()
 		);
 
 		$this->assertSame(
-			trustedlogin_vendor()->getEncryption()->getPublicKey(),
-			trustedlogin_vendor()->getEncryption()->getPublicKey()
+			trustedlogin_connector()->getEncryption()->getPublicKey(),
+			trustedlogin_connector()->getEncryption()->getPublicKey()
 		);
 	}
 
@@ -94,7 +94,7 @@ class PluginTest extends TestCase
 				$this->method = $method;
 			}
 		};
-		trustedlogin_vendor()->setApiSender(
+		trustedlogin_connector()->setApiSender(
 			$sender
 		);
 		//Add a team
@@ -111,7 +111,7 @@ class PluginTest extends TestCase
 			)
 			->save();
 
-		$handler = trustedlogin_vendor()->getApiHandler(
+		$handler = trustedlogin_connector()->getApiHandler(
 			'6a',
 			'https://test.com'
 		);
