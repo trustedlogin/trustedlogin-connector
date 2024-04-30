@@ -12,7 +12,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 	use MocksTLApi;
 
 	const ACCOUNT_ID = 'test-tl-service';
-	const ACCESS_KEY = 'a218';
+	const ACCESS_KEY = 'a218a218a218a218a218218218218218a218a218a218a218a218218218218218';
 	public function setUp()
 	{
 		$this->setTlApiMock();
@@ -142,25 +142,27 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 
 
 		//login - we test authentication in self::testVerifyRequest()
-		wp_set_current_user(self::factory()->user->create());
-
+		wp_set_current_user(self::factory()->user->create( [ 'role' => 'administrator' ] ));
 
 		//Set encryption keys to same vendor keys as test envelope was encrypted with.
-		add_filter('trustedlogin/vendor/encryption/get-keys', function () {
+		add_filter('trustedlogin/connector/encryption/get-keys', function () {
 			return $this->getEncryptionKeys();
 		});
 
-		$this->markTestIncomplete('Breaks after this.');
-		//Run handler, expect it to return the envelope, as an array
-		$output = $handler->handle();
-		$this->assertIsArray( $output );
+		//Run handler, expect it to return the envelope(s), as an array
+		$results = $handler->handle();
+
+		$this->assertIsArray( $results );
+
+		$result = reset( $results );
+
 		//With the right things in it
-		$this->assertArrayHasKey( 'loginurl', $output);
+		$this->assertArrayHasKey( 'loginurl', $result);
 		$this->assertTrue(
-			(bool)filter_var($output['loginurl'], FILTER_VALIDATE_URL)
+			(bool)filter_var($result['loginurl'], FILTER_VALIDATE_URL)
 		);
-		$this->assertArrayHasKey( 'siteurl', $output);
-		$this->assertSame( 'https://trustedlogin.support', $output['siteurl']);
+		$this->assertArrayHasKey( 'siteurl', $result);
+		$this->assertSame( 'https://trustedlogin.support', $result['siteurl']);
 	}
 
 	/**

@@ -328,7 +328,7 @@ class SettingsApi
 			$data,
 			[
 				'debug_mode' => $debugMode,
-				'error_logging' => $this->getGlobalSettings()['error_logging'] ?? false,
+				'error_logging' => $this->isErrorLogggingEnabled(),
 				'integrations' => $this->getIntegrationSettings(),
 			]
 		);

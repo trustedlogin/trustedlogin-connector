@@ -67,9 +67,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 		$this->assertIsArray(
 			$r
 		);
-		$this->assertNotEmpty($r);(
-			$r
-		);
+		$this->assertNotEmpty($r);
 	}
 
 	 /**
@@ -96,9 +94,8 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 	 */
 	public function testEnvelopeToUrl()
 	{
-		$this->markTestSkipped('Needs fixed');
 		//Set encryption keys to same vendor keys as test envelope was encrypted with.
-		add_filter('trustedlogin/vendor/encryption/get-keys', function () {
+		add_filter('trustedlogin/connector/encryption/get-keys', function () {
 			return $this->getEncryptionKeys();
 		});
 		$service = new TrustedLoginService(
