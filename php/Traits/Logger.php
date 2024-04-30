@@ -45,6 +45,8 @@ trait Logger {
 
 		$wp_filesystem = $this->init_wp_filesystem();
 
+		$this->prevent_directory_browsing( $logFileDir );
+
 		if ( is_wp_error( $wp_filesystem ) ) {
 			error_log( $wp_filesystem->get_error_message() );
 		}
@@ -116,18 +118,60 @@ trait Logger {
 	private function init_wp_filesystem() {
 		global $wp_filesystem;
 
-		if ( ! is_object( $wp_filesystem ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
-			$filesystem_initialized = WP_Filesystem();
-		} else {
-			$filesystem_initialized = true;
+		if ( $wp_filesystem instanceof \WP_Filesystem_Base ) {
+			return $wp_filesystem;
 		}
+
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+
+		$filesystem_initialized = WP_Filesystem();
 
 		if ( ! $filesystem_initialized ) {
 			return new \WP_Error( 'failed_wp_filesystem_init', esc_html__( 'TrustedLogin logging failed: unable to initialize WP_Filesystem.', 'trustedlogin-connector' ) );
 		}
 
 		return $wp_filesystem;
+	}
+
+	/**
+	 * Prevent browsing a directory by adding an index.html file to it
+	 *
+	 * Code inspired by @see wp_privacy_generate_personal_data_export_file()
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param string $dirpath Path to directory to protect (in this case, logging).
+	 *
+	 * @return bool True: File exists or was created; False: file could not be created.
+	 */
+	private function prevent_directory_browsing( $dirpath ) {
+
+		if( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) {
+			return false;
+		}
+
+		$wp_filesystem = $this->init_wp_filesystem();
+
+		if ( is_wp_error( $wp_filesystem ) ) {
+			return false;
+		}
+
+		// Protect export folder from browsing.
+		$index_pathname = trailingslashit( $dirpath ) . 'index.html';
+
+		if ( $wp_filesystem->exists( $index_pathname ) ) {
+			return true;
+		}
+
+		$file_content = '<!-- Silence is golden. TrustedLogin is also pretty great. Learn more: https://www.trustedlogin.com/about/easy-and-safe/ -->';
+
+		$file_was_saved = $wp_filesystem->put_contents( $index_pathname, $file_content );
+
+		if ( ! $file_was_saved ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -236,5 +280,6 @@ trait Logger {
 
 		return wp_normalize_path( trailingslashit( $upload_dir['basedir'] ) . $this->getLogFileDirectoryName() . '/' ) . 'vendor-' . $hash . '.log';
 	}
+
 
 }

@@ -21,6 +21,7 @@ TrustedLogin plugin to be installed on the website of the support provider.
 == Changelog ==
 
 
+- Added `index.html` files to log directories to prevent potential browsing
 - Deprecated `trustedlogin/vendor/customers/licenses' hook in favor of `trustedlogin/connector/customers/licenses`
 
 = 1.1.0 on April 30, 2024 =
