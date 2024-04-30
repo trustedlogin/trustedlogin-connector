@@ -2,10 +2,10 @@ import { useMemo, useState, Fragment } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import { useView } from "../../hooks/useView";
 import { PrimaryButton, SubmitAndCancelButtons } from "../Buttons";
-import {ConfigureHelpDesk} from "../integrations/ConfigureIntegration";
+import { ConfigureHelpDesk } from "../integrations/ConfigureIntegration";
 import { CenteredLayout, PageHeader } from "../Layout";
 import TitleDescriptionLink from "../TitleDescriptionLink";
-import {__, _x} from "@wordpress/i18n";
+import { __, _x } from "@wordpress/i18n";
 /**
  * Show list of teams
  *
@@ -21,7 +21,10 @@ const TeamsList = () => {
   const teams = useMemo(() => settings.teams, [settings]);
   const [modalTeam, setModalTeam] = useState(null);
   const shouldShowConfigureButton = (team) => {
-    return team.helpdesk && ["helpscout", "freescout"].includes(team.helpdesk[0].toLowerCase());
+    return (
+      team.helpdesk &&
+      ["helpscout", "freescout"].includes(team.helpdesk[0].toLowerCase())
+    );
   };
 
   /**
@@ -62,26 +65,31 @@ const TeamsList = () => {
           const { id = null, helpdesk = [] } = team;
 
           // Get the first helpdesk, or "helpscout" if helpdesk is an empty array
-          const firstHelpDesk = Array.isArray(helpdesk) && helpdesk.length > 0 ? helpdesk[0] : "helpscout";
+          const firstHelpDesk =
+            Array.isArray(helpdesk) && helpdesk.length > 0
+              ? helpdesk[0]
+              : "helpscout";
 
           return (
-              <Fragment key={id}>
-                <ConfigureHelpDesk
-                    isOpen={modalTeam === id}
-                    setIsOpen={() => {
-                      setModalTeam(null);
-                    }}
-                    team={team}
-                    helpDesk={firstHelpDesk}
-                />
-              </Fragment>
+            <Fragment key={id}>
+              <ConfigureHelpDesk
+                isOpen={modalTeam === id}
+                setIsOpen={() => {
+                  setModalTeam(null);
+                }}
+                team={team}
+                helpDesk={firstHelpDesk}
+              />
+            </Fragment>
           );
         })}
       </>
       {isDeleting ? (
         <CenteredLayout>
           <>
-            <TitleDescriptionLink title={__("Are You Sure?", "trustedlogin-connector")} />
+            <TitleDescriptionLink
+              title={__("Are You Sure?", "trustedlogin-connector")}
+            />
 
             <SubmitAndCancelButtons
               onSubmit={completeDelete}
@@ -96,7 +104,10 @@ const TeamsList = () => {
         <div className="flex flex-col px-5 py-6 sm:px-10">
           <PageHeader
             title={__("Teams", "trustedlogin-connector")}
-            subTitle={__("Manage your TrustedLogin settings", "trustedlogin-connector")}
+            subTitle={__(
+              "Manage your TrustedLogin settings",
+              "trustedlogin-connector"
+            )}
             Button={() => (
               <>
                 <PrimaryButton onClick={() => setCurrentView("teams/new")}>
@@ -140,7 +151,13 @@ const TeamsList = () => {
                           <p
                             className="text-lg font-medium text-gray-900 leading-tight min-w-[6rem]"
                             id="team-option-1-label">
-                            {team.name ? team.name : _x("Team {id}", '{id} is replaced dynamically; do not translate', "trustedlogin-connector").replace('{id}', team.id ) }
+                            {team.name
+                              ? team.name
+                              : _x(
+                                  "Team {id}",
+                                  "{id} is replaced dynamically; do not translate",
+                                  "trustedlogin-connector"
+                                ).replace("{id}", team.id)}
                           </p>
                           <p
                             className="text-sm text-gray-500"
@@ -158,7 +175,10 @@ const TeamsList = () => {
                               setModalTeam(team.id);
                             }}
                             className="text-sm text-blue-tl hover:text-navy-tl p-2">
-                            {__("Configure Help Desk", "trustedlogin-connector")}
+                            {__(
+                              "Configure Help Desk",
+                              "trustedlogin-connector"
+                            )}
                           </button>
                         ) : null}
 

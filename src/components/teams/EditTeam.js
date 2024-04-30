@@ -50,7 +50,9 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
   const [account_id, setAccount_id] = useState(team?.account_id);
   const [public_key, setPublic_key] = useState(team?.public_key);
   const [private_key, setPrivate_key] = useState(team?.private_key);
-  const [selectedHelpDesk, setSelectedHelpDesk] = useState(team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? '');
+  const [selectedHelpDesk, setSelectedHelpDesk] = useState(
+    team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? ""
+  );
 
   // Update local state when team changes
   useEffect(() => {
@@ -58,7 +60,9 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
     setPublic_key(team?.public_key);
     setPrivate_key(team?.private_key);
     set_approved_roles(team?.approved_roles);
-    setSelectedHelpDesk(team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? '');
+    setSelectedHelpDesk(
+      team?.helpdesk?.[0] ?? teamFields?.helpdesk?.defaultValue ?? ""
+    );
   }, [team]);
 
   //When form is submitted, collect the data and pass it to onClickSave
@@ -111,37 +115,40 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
           <TitleDescriptionLink
             title={formTitle}
             link={"https://app.trustedlogin.com/settings#/teams"}
-            linkText={__("Where can I find this info?", "trustedlogin-connector")}
+            linkText={__(
+              "Where can I find this info?",
+              "trustedlogin-connector"
+            )}
           />
 
           <div className="flex flex-col py-6 space-y-6 sm:space-y-0 sm:space-x-12 sm:flex-row">
             <div className="flex flex-col space-y-6 sm:flex-1">
               <InputField
-                  type={"number"}
-                  name={teamFields.account_id.id}
-                  id={teamFields.account_id.id}
-                  label={teamFields.account_id.label}
-                  value={account_id}
-                  onChange={(e) => setAccount_id(e.target.valueAsNumber)}
-                  required={true}
+                type={"number"}
+                name={teamFields.account_id.id}
+                id={teamFields.account_id.id}
+                label={teamFields.account_id.label}
+                value={account_id}
+                onChange={(e) => setAccount_id(e.target.valueAsNumber)}
+                required={true}
               />
               <InputField
-                  type="text"
-                  name={teamFields.public_key.id}
-                  id={teamFields.public_key.id}
-                  label={teamFields.public_key.label}
-                  value={public_key}
-                  onChange={(e) => setPublic_key(e.target.value)}
-                  required={true}
+                type="text"
+                name={teamFields.public_key.id}
+                id={teamFields.public_key.id}
+                label={teamFields.public_key.label}
+                value={public_key}
+                onChange={(e) => setPublic_key(e.target.value)}
+                required={true}
               />
               <InputField
-                  type="text"
-                  name={teamFields.private_key.id}
-                  id={teamFields.private_key.id}
-                  label={teamFields.private_key.label}
-                  value={private_key}
-                  onChange={(e) => setPrivate_key(e.target.value)}
-                  required={true}
+                type="text"
+                name={teamFields.private_key.id}
+                id={teamFields.private_key.id}
+                label={teamFields.private_key.label}
+                value={private_key}
+                onChange={(e) => setPrivate_key(e.target.value)}
+                required={true}
               />
             </div>
             <div className="flex flex-col space-y-6 sm:flex-1">
@@ -155,8 +162,8 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
                 />
               </SelectFieldArea>
               <HelpDeskSelect
-                  value={selectedHelpDesk}
-                  onChange={(e) => setSelectedHelpDesk(e.target.value)}
+                value={selectedHelpDesk}
+                onChange={(e) => setSelectedHelpDesk(e.target.value)}
               />
             </div>
           </div>

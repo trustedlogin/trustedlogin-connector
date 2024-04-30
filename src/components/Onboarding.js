@@ -116,9 +116,14 @@ const StepTwo = () => {
             "trustedlogin-connector"
           )}
         </p>
-        <a className="text-blue-tl text-sm" href="https://app.trustedlogin.com/settings#/teams" target="_blank">
+        <a
+          className="text-blue-tl text-sm"
+          href="https://app.trustedlogin.com/settings#/teams"
+          target="_blank">
           {__("Where can I find this info?", "trustedlogin-connector")}
-          <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-connector")}</span>
+          <span className="screen-reader-text">
+            {__("(Link opens in a new window)", "trustedlogin-connector")}
+          </span>
         </a>
       </div>
       <form
@@ -308,7 +313,10 @@ export const OnboardingLayout = ({
                               )}
                             />
                             <Aside.FutureStep
-                              title={__("Create Team", "trustedlogin-connector")}
+                              title={__(
+                                "Create Team",
+                                "trustedlogin-connector"
+                              )}
                             />
                             <Aside.FutureStep
                               title={__(
@@ -321,12 +329,19 @@ export const OnboardingLayout = ({
                       </div>
                     </div>
                     <div className="inline-flex items-center justify-center">
-                      <a className="text-sm text-blue-tl" href="https://docs.trustedlogin.com/Vendor/intro">
+                      <a
+                        className="text-sm text-blue-tl"
+                        href="https://docs.trustedlogin.com/Vendor/intro">
                         {__(
                           "Need Help? View our Documentation",
                           "trustedlogin-connector"
                         )}
-                        <span className="screen-reader-text">{__("(Link opens in a new window)", "trustedlogin-connector")}</span>
+                        <span className="screen-reader-text">
+                          {__(
+                            "(Link opens in a new window)",
+                            "trustedlogin-connector"
+                          )}
+                        </span>
                       </a>
                       <svg
                         className="ml-3"

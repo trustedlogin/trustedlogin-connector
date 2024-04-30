@@ -1,4 +1,4 @@
-import {__, _x} from "@wordpress/i18n";
+import { __, _x } from "@wordpress/i18n";
 
 export const Button = ({ children, onClick, className, type }) => (
   <button onClick={onClick} type={type} className={className}>

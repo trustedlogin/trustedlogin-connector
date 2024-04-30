@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {__, _x} from "@wordpress/i18n";
+import { __, _x } from "@wordpress/i18n";
 
 export const ToastError = ({
   heading,
@@ -55,14 +55,14 @@ export const ToastError = ({
                   <a
                     href={learnMoreLink}
                     className="bg-white rounded-md text-sm font-medium text-red-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {__('Learn more', 'trustedlogin-connector')}
+                    {__("Learn more", "trustedlogin-connector")}
                   </a>
                 ) : null}
                 {retryClick ? (
                   <button
                     onClick={retryClick}
                     className="tl-error-retry bg-white rounded-md text-sm font-medium text-red-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {__('Try again', 'trustedlogin-connector')}
+                    {__("Try again", "trustedlogin-connector")}
                     <span aria-hidden="true">→</span>
                   </button>
                 ) : null}
@@ -74,7 +74,9 @@ export const ToastError = ({
               <button
                 onClick={() => setIsDismissed(true)}
                 className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <span className="sr-only">{__('Close', 'trustedlogin-connector')}</span>
+                <span className="sr-only">
+                  {__("Close", "trustedlogin-connector")}
+                </span>
                 <svg
                   className="h-5 w-5"
                   xmlns="http://www.w3.org/2000/svg"
@@ -129,15 +131,15 @@ export const PageError = ({ onClick, text }) => {
           strokeWidth="8"></rect>
       </svg>
       <h2 className="mt-4 text-2xl text-gray-900">
-        {__('Uh oh!', 'trustedlogin-connector')}
+        {__("Uh oh!", "trustedlogin-connector")}
         <br />
-        {__('Something went wrong.', 'trustedlogin-connector')}
+        {__("Something went wrong.", "trustedlogin-connector")}
       </h2>
       {text ? <p className="mt-2 mb-8 text-sm text-gray-500">{text}</p> : null}
       <button
         onClick={onClick}
         className="tl-error-retry inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-lg text-white bg-red-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500 sm:text-sm">
-        {__('Try again', 'trustedlogin-connector')}
+        {__("Try again", "trustedlogin-connector")}
       </button>
     </div>
   );
@@ -190,14 +192,14 @@ export const ScreenError = ({
                   <a
                     href={learnMoreLink}
                     className="py-1.5 rounded-md text-sm font-medium text-red-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-red-600">
-                    {__('Learn more', 'trustedlogin-connector')}
+                    {__("Learn more", "trustedlogin-connector")}
                   </a>
                 ) : null}
                 {retryClick ? (
                   <button
                     onClick={retryClick}
                     className="tl-error-retry ml-3 py-1.5 rounded-md text-sm font-medium text-red-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-red-600">
-                    {__('Try again', 'trustedlogin-connector')}
+                    {__("Try again", "trustedlogin-connector")}
                     <span aria-hidden="true">→</span>
                   </button>
                 ) : null}
@@ -212,7 +214,9 @@ export const ScreenError = ({
                 onClick={() => setIsDismissed(true)}
                 type="button"
                 className="inline-flex rounded-md p-1.5 text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-red-600">
-                <span className="sr-only">{__('Dismiss', 'trustedlogin-connector')}</span>
+                <span className="sr-only">
+                  {__("Dismiss", "trustedlogin-connector")}
+                </span>
                 <svg
                   className="h-5 w-5"
                   xmlns="http://www.w3.org/2000/svg"
