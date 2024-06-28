@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { __, _x } from "@wordpress/i18n";
+import React, { useState, useEffect } from "react";
+import { __ } from "@wordpress/i18n";
 
 export const ToastError = ({
   heading,
@@ -9,11 +9,26 @@ export const ToastError = ({
   isDismissible = false,
 }) => {
   const [isDismissed, setIsDismissed] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
+  const handleDismiss = () => {
+    setVisible(false);
+    setTimeout(() => setIsDismissed(true), 300); // Match the duration of the fade-out animation
+  };
+
   if (isDismissed) {
     return null;
   }
+
   return (
-    <div className="tl-error max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+    <div
+      className={`tl-error max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out mb-2 ${
+        visible ? "slide-in" : "slide-out"
+      }`}>
       <div className="p-4">
         <div className="flex items-start">
           <div className="flex-shrink-0">
@@ -72,7 +87,7 @@ export const ToastError = ({
           {isDismissible ? (
             <div className="ml-4 flex-shrink-0 flex">
               <button
-                onClick={() => setIsDismissed(true)}
+                onClick={handleDismiss}
                 className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <span className="sr-only">
                   {__("Close", "trustedlogin-connector")}
@@ -96,6 +111,7 @@ export const ToastError = ({
     </div>
   );
 };
+
 //Error that takes up the whole screen
 //Use below TopBar
 export const PageError = ({ onClick, text }) => {

@@ -51,6 +51,7 @@ class TeamSettings
 			'debug_enabled'    => 'on',
 			'enable_audit_log' => 'on',
 			IsTeamConnected::KEY => false,
+			'message' => '',
 			'status' => false,
 			'name' => '',
 			self::HELPDESK_SETTINGS => [

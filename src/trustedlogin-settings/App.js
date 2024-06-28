@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { StrictMode } from "react";
 import TrustedLoginSettings from "../components/TrustedLoginSettings";
-import SettingsProvider from "../hooks/useSettings";
+import { SettingsProvider } from "../hooks/useSettings";
 
 export default function App({
   getSettings,
