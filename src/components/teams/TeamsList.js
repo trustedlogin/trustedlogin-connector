@@ -15,7 +15,7 @@ import { ToastError } from "../Errors";
  * @returns {JSX.Element}
  */
 const TeamsList = () => {
-  const { settings, removeTeam, loading } = useSettings();
+  const { settings, removeTeam, setTeam, loading } = useSettings();
   //Has user clicked delete, but not confirmed?
   const [isDeleting, setIsDeleting] = useState(false);
   //Track team to delete, if confirmed.
@@ -67,6 +67,13 @@ const TeamsList = () => {
   const goToAccessKey = (teamId) => {
     setCurrentTeam(teamId);
     setCurrentView("teams/access_key");
+  };
+
+  /**
+   * Trigger Update for a team.
+   */
+  const handleUpdate = (team) => {
+    setTeam({ ...team, updated: true }, true);
   };
 
   useEffect(() => {
@@ -235,6 +242,25 @@ const TeamsList = () => {
                             className="text-sm text-blue-tl hover:text-navy-tl p-2">
                             {__("Edit", "trustedlogin-connector")}
                           </button>
+
+                          <button
+                              onClick={() => handleUpdate(team)}
+                              className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2"
+                                stroke="currentColor"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z"/>
+                              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
+                              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
+                            </svg>
+                          </button>
+
                           <button
                             onClick={() => startDelete(team.id)}
                             className="text-sm text-red-500 hover:text-red-800 p-2">
