@@ -9,6 +9,7 @@ import { SubmitAndCancelButtons } from "../Buttons";
 import RoleMultiSelect from "../RoleMultiSelect";
 import TitleDescriptionLink from "../TitleDescriptionLink";
 import { useSettings } from "../../hooks/useSettings";
+import Spinner from "../Spinner";
 
 //HelpDesk select
 export const HelpDeskSelect = ({ value, onChange, options = null }) => {
@@ -42,6 +43,7 @@ export const HelpDeskSelect = ({ value, onChange, options = null }) => {
 
 //Edit or create team
 const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
+  const { loading } = useSettings();
   const { setCurrentView } = useView();
   const formRef = useRef();
   //useState for approved_roles, because that works.
@@ -82,6 +84,7 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
   };
   return (
     <>
+      {loading && <Spinner size={150} />}
       <form
         className="flex px-5 pt-20 sm:px-10"
         ref={formRef}

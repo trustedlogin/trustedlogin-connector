@@ -256,43 +256,57 @@ class ApiHandler
 		}
 
 		$status = wp_remote_retrieve_response_code($verification);
-
-		switch ($status) {
-			case 400:
-			case 403:
-				return new WP_Error(
-					'verify-failed-' . $status,
-					__('Could not verify API and Private keys, please confirm the provided keys.', 'trustedlogin-connector')
-				);
-				break;
-			case 404:
-				return new WP_Error(
-					'verify-failed-404',
-					__('Account not found, please check the ID provided.', 'trustedlogin-connector')
-				);
-				break;
-			case 405:
-				return new WP_Error(
-					'verify-failed-405',
-					sprintf(
-						// translators: %1$s is the HTTP method used, %2$s is the URL.
-						__('Incorrect method (%1$s) used for %2$s', 'trustedlogin-connector'),
-						/* %1$s */ $method,
-						/* %2$s */ $url
-					)
-				);
-			case 500:
-				return new WP_Error(
-					'verify-failed-500',
-					// translators: %d is the HTTP status code.
-					sprintf(__('Status %d returned', 'trustedlogin-connector'), $status)
-				);
-				break;
-		}
-
 		$body = wp_remote_retrieve_body($verification);
 
 		$body = json_decode($body);
+
+		if ( $status > 399 ) {
+			switch ( $status ) {
+				case 402:
+					return new WP_Error(
+						'verify-failed-402',
+						__( 'You do not have a valid TrustedLogin subscription.', 'trustedlogin-connector' )
+					);
+					break;
+				case 400:
+				case 403:
+					return new WP_Error(
+						'verify-failed-' . $status,
+						__( 'Could not verify API and Private keys, please confirm the provided keys.', 'trustedlogin-connector' )
+					);
+					break;
+				case 404:
+					return new WP_Error(
+						'verify-failed-404',
+						__( 'Account not found, please check the ID provided.', 'trustedlogin-connector' )
+					);
+					break;
+				case 405:
+					return new WP_Error(
+						'verify-failed-405',
+						sprintf(
+						// translators: %1$s is the HTTP method used, %2$s is the URL.
+							__( 'Incorrect method (%1$s) used for %2$s', 'trustedlogin-connector' ),
+							/* %1$s */ $method,
+							/* %2$s */ $url
+						)
+					);
+				case 500:
+					return new WP_Error(
+						'verify-failed-500',
+						// translators: %d is the HTTP status code.
+						sprintf( __( 'Status %d returned', 'trustedlogin-connector' ), $status )
+					);
+					break;
+				default:
+					return new WP_Error(
+						'verify-failed-' . $status,
+						// translators: %s is the Response message if available otherwise the HTTP status code.
+						sprintf( __( "The TrustedLogin Service Responded with:\n%s\nIf the problem continues please contact support.", 'trustedlogin-connector' ), $body['message'] ?? $status )
+					);
+			}
+		}
+
 		$this->log( 'Verification response on line ' . __LINE__ . ':', __METHOD__, 'debug', $body );
 
 		if (! $body) {
