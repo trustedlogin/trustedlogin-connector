@@ -227,7 +227,7 @@ const TeamsList = () => {
         errorMessages.map((error, index) => (
           <ToastError
             key={index}
-            heading={"Oops something went wrong with " + error.name}
+            heading={__("Oops something went wrong with %s", "trustedlogin-connector").replace("%s", error.name)}
             text={error.message}
             isDismissible={true}
           />
