@@ -301,7 +301,7 @@ class ApiHandler
 				default:
 					return new WP_Error(
 						'verify-failed-' . $status,
-						// translators: %d is the HTTP status code.
+						// translators: %s is the Response message if available otherwise the HTTP status code.
 						sprintf( __( "The TrustedLogin Service Responded with:\n%s\nIf the problem continues please contact support.", 'trustedlogin-connector' ), $body['message'] ?? $status )
 					);
 			}
