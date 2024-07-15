@@ -46,6 +46,9 @@ const TeamsList = () => {
    */
   const completeDelete = () => {
     removeTeam(teamDeleting, () => {
+      setErrorMessages((prevErrors) =>
+          prevErrors.filter((error) => error.id !== teamDeleting)
+      );
       cancelDelete();
     });
   };
@@ -83,6 +86,8 @@ const TeamsList = () => {
             };
           })
         );
+      } else {
+        setErrorMessages([]);
       }
     }
     setPreviousLoading(loading);
@@ -200,7 +205,7 @@ const TeamsList = () => {
                                     )}
                                     .
                                   </p>
-                                  <p>{message}.</p>
+                                  <p>{/[.!?]$/.test(message) ? message : `${message}.`}</p>
                                 </div>
                               </>
                             )}
