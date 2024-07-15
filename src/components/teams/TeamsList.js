@@ -59,7 +59,7 @@ const TeamsList = () => {
               name:
                 team.name !== ""
                   ? team.name
-                  : __("Team", "trustedlogin-connector") + " " + team.id,
+                  : _x("Team %s", "trustedlogin-connector").replace("%s", team.id),
               account_id: team.account_id,
             };
           })
