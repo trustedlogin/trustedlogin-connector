@@ -9,9 +9,16 @@ import { __, _x } from "@wordpress/i18n";
 import Spinner from "../Spinner";
 import { ToastError } from "../Errors";
 
+/**
+ * Show list of teams
+ *
+ * @returns {JSX.Element}
+ */
 const TeamsList = () => {
-  const { settings, removeTeam, loading } = useSettings();
+  const { settings, removeTeam, setTeam, loading } = useSettings();
+  //Has user clicked delete, but not confirmed?
   const [isDeleting, setIsDeleting] = useState(false);
+  //Track team to delete, if confirmed.
   const [teamDeleting, setTeamDeleting] = useState(null);
   const { setCurrentView, setCurrentTeam } = useView();
   const teams = useMemo(() => settings.teams, [settings]);
@@ -26,25 +33,47 @@ const TeamsList = () => {
     );
   };
 
+  /**
+   * Cancel delete process
+   */
   const cancelDelete = () => {
     setIsDeleting(false);
     setTeamDeleting(null);
   };
 
+  /**
+   * Completes the deletion of a team
+   */
   const completeDelete = () => {
     removeTeam(teamDeleting, () => {
+      setErrorMessages((prevErrors) =>
+          prevErrors.filter((error) => error.id !== teamDeleting)
+      );
       cancelDelete();
     });
   };
 
+  /**
+   * Displays the confirmation and stores ID of team to be deleted
+   */
   const startDelete = (teamId) => {
     setIsDeleting(true);
     setTeamDeleting(teamId);
   };
 
+  /**
+   * Navigate to the AccessKey View.
+   */
   const goToAccessKey = (teamId) => {
     setCurrentTeam(teamId);
     setCurrentView("teams/access_key");
+  };
+
+  /**
+   * Trigger Update for a team.
+   */
+  const handleUpdate = (team) => {
+    setTeam({ ...team, updated: true }, true);
   };
 
   useEffect(() => {
@@ -64,6 +93,8 @@ const TeamsList = () => {
             };
           })
         );
+      } else {
+        setErrorMessages([]);
       }
     }
     setPreviousLoading(loading);
@@ -123,7 +154,10 @@ const TeamsList = () => {
           <div className="flex flex-col justify-center w-full bg-white rounded-lg shadow">
             <ul role="list" className="divide-y divide-gray-200 px-5 sm:px-8">
               {teams.map((team) => {
+                // Destructure id and helpdesk from team, provide default values in case they're undefined
                 const { id = null, helpdesk = [], status, message } = team;
+
+                // Get the first helpdesk, or "helpscout" if helpdesk is an empty array
                 const firstHelpDesk =
                   Array.isArray(helpdesk) && helpdesk.length > 0
                     ? helpdesk[0]
@@ -178,7 +212,7 @@ const TeamsList = () => {
                                     )}
                                     .
                                   </p>
-                                  <p>{message}.</p>
+                                  <p>{/[.!?]$/.test(message) ? message : `${message}.`}</p>
                                 </div>
                               </>
                             )}
@@ -208,6 +242,25 @@ const TeamsList = () => {
                             className="text-sm text-blue-tl hover:text-navy-tl p-2">
                             {__("Edit", "trustedlogin-connector")}
                           </button>
+
+                          <button
+                              onClick={() => handleUpdate(team)}
+                              className="text-sm text-blue-tl hover:text-navy-tl p-2">
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2"
+                                stroke="currentColor"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z"/>
+                              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
+                              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
+                            </svg>
+                          </button>
+
                           <button
                             onClick={() => startDelete(team.id)}
                             className="text-sm text-red-500 hover:text-red-800 p-2">
