@@ -331,7 +331,9 @@ export const OnboardingLayout = ({
                     <div className="inline-flex items-center justify-center">
                       <a
                         className="text-sm text-blue-tl"
-                        href="https://docs.trustedlogin.com/Vendor/intro">
+                        target={"_blank"}
+                        href="https://docs.trustedlogin.com/Connector/intro"
+                      >
                         {__(
                           "Need Help? View our Documentation",
                           "trustedlogin-connector"

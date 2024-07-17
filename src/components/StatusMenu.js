@@ -271,7 +271,9 @@ const StatusMenu = ({ toggleStatus, isStatusOpen }) => {
               <div className="mb-8 inline-flex items-center">
                 <a
                   className="text-sm text-blue-tl"
-                  href="https://docs.trustedlogin.com/Vendor/intro">
+                  target={"_blank"}
+                  href="https://docs.trustedlogin.com/Connector/intro"
+                >
                   {__(
                     "Need help? View our Documentation",
                     "trustedlogin-connector"

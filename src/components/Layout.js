@@ -20,7 +20,8 @@ export const TopBar = ({ status }) => {
         <div className="relative flex items-center space-x-2">
           <StatusMenu toggleStatus={toggleStatus} isStatusOpen={isStatusOpen} />
           <a
-            href="https://docs.trustedlogin.com/Vendor/intro"
+            target={"_blank"}
+            href="https://docs.trustedlogin.com/Connector/intro"
             className="inline-flex items-center px-3.5 h-10 border border-gray-300 text-sm leading-4 font-medium rounded-lg text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500">
             <svg
               className="-ml-0.5 h-4 w-4 sm:mr-2"
