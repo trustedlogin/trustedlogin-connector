@@ -118,7 +118,7 @@ const StepTwo = () => {
         </p>
         <a
           className="text-blue-tl text-sm"
-          href="https://app.trustedlogin.com/settings#/teams"
+          href="https://app.trustedlogin.com/admin/teams"
           target="_blank">
           {__("Where can I find this info?", "trustedlogin-connector")}
           <span className="screen-reader-text">

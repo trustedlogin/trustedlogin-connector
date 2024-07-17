@@ -117,7 +117,7 @@ const EditTeam = ({ team = null, onClickSave, formTitle = "Update Team" }) => {
           </svg>
           <TitleDescriptionLink
             title={formTitle}
-            link={"https://app.trustedlogin.com/settings#/teams"}
+            link={"https://app.trustedlogin.com/admin/teams"}
             linkText={__(
               "Where can I find this info?",
               "trustedlogin-connector"
