@@ -1,24 +1,27 @@
 const defaultConfig = require("@wordpress/scripts/config/webpack.config");
 const path = require("path");
-const isProduction = "production" === process.env.NODE_ENV;
+const isProduction = process.env.NODE_ENV === "production";
 
 let entry = {};
-let entryPoint = "trustedlogin-settings";
+const entryPoint = "trustedlogin-settings";
 entry[`admin-page-${entryPoint}`] = path.resolve(
-  process.cwd(),
-  `src/${entryPoint}/index.js`
+    process.cwd(),
+    `src/${entryPoint}/index.js`
 );
 
 module.exports = {
-  mode: isProduction ? "production" : "development",
   ...defaultConfig,
-  module: {
-    ...defaultConfig.module,
-    rules: [...defaultConfig.module.rules],
-  },
+  mode: isProduction ? "production" : "development",
   entry,
   output: {
     filename: "[name].js",
     path: path.join(__dirname, "./wpbuild"),
   },
+  module: {
+    ...defaultConfig.module,
+    rules: [
+      ...defaultConfig.module.rules,
+    ],
+  },
+  devtool: isProduction ? false : 'source-map',
 };
