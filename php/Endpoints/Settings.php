@@ -117,6 +117,7 @@ class Settings extends Endpoint
 				false
 			);
 			$team->set( IsTeamConnected::STATUS_KEY, 'error' );
+			$team->set( 'message', $r->get_error_message() );
 		}
 
 		return ! is_wp_error($r);

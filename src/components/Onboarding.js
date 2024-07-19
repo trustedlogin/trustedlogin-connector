@@ -118,7 +118,7 @@ const StepTwo = () => {
         </p>
         <a
           className="text-blue-tl text-sm"
-          href="https://app.trustedlogin.com/settings#/teams"
+          href="https://app.trustedlogin.com/admin/teams"
           target="_blank">
           {__("Where can I find this info?", "trustedlogin-connector")}
           <span className="screen-reader-text">
@@ -331,7 +331,9 @@ export const OnboardingLayout = ({
                     <div className="inline-flex items-center justify-center">
                       <a
                         className="text-sm text-blue-tl"
-                        href="https://docs.trustedlogin.com/Vendor/intro">
+                        target={"_blank"}
+                        href="https://docs.trustedlogin.com/Connector/intro"
+                      >
                         {__(
                           "Need Help? View our Documentation",
                           "trustedlogin-connector"
