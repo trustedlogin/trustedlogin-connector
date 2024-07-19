@@ -207,7 +207,7 @@ const TeamsList = () => {
                                   role="alert">
                                   <p className="font-bold">
                                     {__(
-                                      "Oops something went wrong",
+                                      "Something went wrong",
                                       "trustedlogin-connector"
                                     )}
                                     .
@@ -280,7 +280,7 @@ const TeamsList = () => {
         errorMessages.map((error, index) => (
           <ToastError
             key={index}
-            heading={__("Oops something went wrong with %s", "trustedlogin-connector").replace("%s", error.name)}
+            heading={__("Something went wrong with %s", "trustedlogin-connector").replace("%s", error.name)}
             text={error.message}
             isDismissible={true}
           />

@@ -270,30 +270,33 @@ const StatusMenu = ({ toggleStatus, isStatusOpen }) => {
               </ul>
               <div className="mb-8 inline-flex items-center">
                 <a
-                  className="text-sm text-blue-tl"
-                  target={"_blank"}
-                  href="https://docs.trustedlogin.com/Connector/intro"
+                    className="text-sm text-blue-tl"
+                    target={"_blank"}
+                    href="https://docs.trustedlogin.com/Connector/intro"
                 >
                   {__(
-                    "Need help? View our Documentation",
-                    "trustedlogin-connector"
+                      "Need help? View our Documentation",
+                      "trustedlogin-connector"
                   )}
                 </a>
                 <svg
-                  className="ml-3"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
+                    className="ml-3"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                   <path
-                    d="M1.16663 7.00008H12.8333M12.8333 7.00008L6.99996 1.16675M12.8333 7.00008L6.99996 12.8334"
-                    stroke="#00AADD"
-                    strokeWidth="1.67"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                      d="M1.16663 7.00008H12.8333M12.8333 7.00008L6.99996 1.16675M12.8333 7.00008L6.99996 12.8334"
+                      stroke="#00AADD"
+                      strokeWidth="1.67"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                   />
                 </svg>
+                <span className="screen-reader-text">
+                  {__("(Link opens in a new window)", "trustedlogin-connector")}
+                </span>
               </div>
             </div>
           </div>
