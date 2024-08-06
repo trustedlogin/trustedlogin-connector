@@ -20,12 +20,13 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
-= 1.2 on August 5, 2024 =
+= 1.2 on August 6, 2024 =
 
 - Added support for free trials
 - Added a loading indicator when adding, updating, or deleting a team
 - Improved handling errors returned from TrustedLogin app
 - Fixed inability to connect to a team using the dropdown when there are multiple teams
+- Fixed error when creating a file that prevents directory browsing in the log directory
 
 = 1.1.1 on April 30, 2024 =
 

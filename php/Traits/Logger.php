@@ -163,6 +163,12 @@ trait Logger {
 			return true;
 		}
 
+		$file_created = $wp_filesystem->touch( $index_pathname );
+
+		if ( ! $file_created ) {
+			return false;
+		}
+
 		$file_content = '<!-- Silence is golden. TrustedLogin is also pretty great. Learn more: https://www.trustedlogin.com/about/easy-and-safe/ -->';
 
 		$file_was_saved = $wp_filesystem->put_contents( $index_pathname, $file_content );
