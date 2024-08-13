@@ -66,11 +66,11 @@ class ApiHandler
 	{
 		$this->apiSender = $apiSender;
 		$defaults = [
-			'private_key' => null,
-			'public_key'  => null,
-			'debug_mode'  => false,
-			'type'        => 'saas',
-			'api_url' => 'https://app.trustedlogin.com/api/v1/',
+			'private_key'   => null,
+			'public_key'    => null,
+			'debug_mode'    => false,
+			'type'          => 'saas',
+			'api_url'       => TRUSTEDLOGIN_API_URL,
 			'auth_required' => true,
 		];
 
