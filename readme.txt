@@ -2,8 +2,8 @@
 Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
-Tested up to: 6.5
-Stable tag: 1.1.1
+Tested up to: 6.6
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
-= 1.2 on August 6, 2024 =
+= 1.2 on August 13, 2024 =
 
 - Added support for free trials
 - Added a loading indicator when adding, updating, or deleting a team
