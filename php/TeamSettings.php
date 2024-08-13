@@ -40,24 +40,6 @@ class TeamSettings {
 	 *
 	 * @param array $values Values to set
 	 */
-<< << << < Updated upstream
-public function __construct( array $values = array() ) {
-	$this->defaults = array(
-		'account_id'            => '',
-		'private_key'           => '',
-		'public_key'            => '',
-		'helpdesk'              => 'helpscout',
-		'approved_roles'        => array( 'administrator' ),
-		'debug_enabled'         => 'on',
-		'enable_audit_log'      => 'on',
-		IsTeamConnected::KEY    => false,
-		'message'               => '',
-		'status'                => false,
-		'name'                  => '',
-		self::HELPDESK_SETTINGS => array(),
-	);
-	$this->reset( $values );
-	=== === =
 	public function __construct( array $values = array() ) {
 		$this->defaults = array(
 			'account_id'            => '',
@@ -68,12 +50,11 @@ public function __construct( array $values = array() ) {
 			'debug_enabled'         => 'on',
 			'enable_audit_log'      => 'on',
 			IsTeamConnected::KEY    => false,
+			'message'               => '',
 			'status'                => false,
 			'name'                  => '',
 			self::HELPDESK_SETTINGS => array(),
 		);
-		$this->reset( $values );
-		>> >> >> > Stashed changes
 	}
 
 	public function toArray() {
