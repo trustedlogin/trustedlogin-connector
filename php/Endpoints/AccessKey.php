@@ -6,74 +6,73 @@ use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\AccessKeyLogin;
 use TrustedLogin\Vendor\Traits\Logger;
 
-class AccessKey extends Endpoint
-{
+class AccessKey extends Endpoint {
+
 	use Logger;
 
 	/** @inheritdoc */
-	protected function route()
-	{
+	protected function route() {
 		return 'access_key';
 	}
 
 
 	/** @inheritdoc */
-	public function get(\WP_REST_Request $request)
-	{
-		//This should never happen, but just in case
-		return [];
+	public function get( \WP_REST_Request $request ) {
+		// This should never happen, but just in case
+		return array();
 	}
 
 	/** @inheritdoc */
-	public function authorize(\WP_REST_Request $request)
-	{
+	public function authorize( \WP_REST_Request $request ) {
 		// Valid nonce?
 		$valid = wp_verify_nonce(
-			$request->get_param(AccessKeyLogin::NONCE_NAME ),
+			$request->get_param( AccessKeyLogin::NONCE_NAME ),
 			AccessKeyLogin::NONCE_ACTION
 		);
 
-		if (! $valid) {
-			$this->log('Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error');
-			return new \WP_Error('bad_nonce', esc_html__('The nonce was not set for the request.', 'trustedlogin-connector'));
-
+		if ( ! $valid ) {
+			$this->log( 'Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error' );
+			return new \WP_Error( 'bad_nonce', esc_html__( 'The nonce was not set for the request.', 'trustedlogin-connector' ) );
 		}
 		return true;
 	}
 
-	public function updateArgs(){
-		return [
+	public function updateArgs() {
+		return array(
 			AccessKeyLogin::ACCESS_KEY_INPUT_NAME => array(
 				'required' => true,
-				'type' => 'string',
+				'type'     => 'string',
 			),
 			AccessKeyLogin::ACCOUNT_ID_INPUT_NAME => array(
 				'required' => true,
-				'type' => 'string',
+				'type'     => 'string',
 			),
-			AccessKeyLogin::NONCE_NAME => array(
+			AccessKeyLogin::NONCE_NAME            => array(
 				'required' => true,
-				'type' => 'string',
+				'type'     => 'string',
 			),
-		];
+		);
 	}
 
-	public function update(\WP_REST_Request $request ){
+	public function update( \WP_REST_Request $request ) {
 		$handler = new AccessKeyLogin();
-		$parts = $handler->handle(
-			[
+		$parts   = $handler->handle(
+			array(
 				AccessKeyLogin::ACCESS_KEY_INPUT_NAME =>
-					$request->get_param(AccessKeyLogin::ACCESS_KEY_INPUT_NAME ),
+					$request->get_param( AccessKeyLogin::ACCESS_KEY_INPUT_NAME ),
 				AccessKeyLogin::ACCOUNT_ID_INPUT_NAME =>
-					$request->get_param(AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ),
-			]
+					$request->get_param( AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ),
+			)
 		);
-		if( is_wp_error($parts) ){
+		if ( is_wp_error( $parts ) ) {
 			return $parts;
 		}
-		return new \WP_REST_Response([
-			'success' => true,
-			'data' => $parts,
-		], 200);
+		return new \WP_REST_Response(
+			array(
+				'success' => true,
+				'data'    => $parts,
+			),
+			200
+		);
 	}
 }

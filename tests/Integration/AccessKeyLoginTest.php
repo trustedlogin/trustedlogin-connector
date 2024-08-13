@@ -107,7 +107,8 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 		$this->assertTrue(
 			is_wp_error(
 				$ak->verifyGrantAccessRequest()
-			));
+			)
+		);
 
 		//Set valid nonce
 		$_REQUEST[AccessKeyLogin::NONCE_NAME ] = wp_create_nonce(AccessKeyLogin::NONCE_ACTION);
@@ -142,7 +143,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 
 
 		//login - we test authentication in self::testVerifyRequest()
-		wp_set_current_user(self::factory()->user->create( [ 'role' => 'administrator' ] ));
+		wp_set_current_user(self::factory()->user->create([ 'role' => 'administrator' ]));
 
 		//Set encryption keys to same vendor keys as test envelope was encrypted with.
 		add_filter('trustedlogin/connector/encryption/get-keys', function () {
@@ -152,35 +153,36 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 		//Run handler, expect it to return the envelope(s), as an array
 		$results = $handler->handle();
 
-		$this->assertIsArray( $results );
+		$this->assertIsArray($results);
 
-		$result = reset( $results );
+		$result = reset($results);
 
 		//With the right things in it
-		$this->assertArrayHasKey( 'loginurl', $result);
+		$this->assertArrayHasKey('loginurl', $result);
 		$this->assertTrue(
 			(bool)filter_var($result['loginurl'], FILTER_VALIDATE_URL)
 		);
-		$this->assertArrayHasKey( 'siteurl', $result);
-		$this->assertSame( 'https://trustedlogin.support', $result['siteurl']);
+		$this->assertArrayHasKey('siteurl', $result);
+		$this->assertSame('https://trustedlogin.support', $result['siteurl']);
 	}
 
 	/**
 	 * @covers AccessKeyLogin::url()
 	 */
-	public function testUrl(){
+	public function testUrl()
+	{
 		$this->assertTrue(
-			(bool)filter_var(AccessKeyLogin::url('arms','helpscout'), FILTER_VALIDATE_URL)
+			(bool)filter_var(AccessKeyLogin::url('arms', 'helpscout'), FILTER_VALIDATE_URL)
 		);
 	}
 
 	/**
 	 * @covers AccessKeyLogin::makeSecret()
 	 */
-	public function testMakeSecret(){
+	public function testMakeSecret()
+	{
 		$this->assertTrue(
 			is_string(AccessKeyLogin::makeSecret())
 		);
 	}
-
 }

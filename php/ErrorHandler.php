@@ -3,6 +3,7 @@
 namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Traits\Logger;
+
 /**
  * When in debug mode, log all errors to our log
  *
@@ -10,21 +11,22 @@ use TrustedLogin\Vendor\Traits\Logger;
  */
 class ErrorHandler {
 
-    use Logger;
+
+	use Logger;
 
 	/**
 	 * Register error handlers
 	 *
 	 * @see https://github.com/inpsyde/Wonolog/blob/b1af1bcc8bdec2bd153a323bbbf507166c9c8e1b/src/Controller.php#L103-L106
 	 */
-	public static function register(){
+	public static function register() {
 
 		$controller = new static();
-		register_shutdown_function( [ $controller, 'onFatal', ] );
-		set_error_handler( [ $controller, 'onError' ], E_ALL|E_STRICT );
-		set_exception_handler( [ $controller, 'onException', ] );
+		register_shutdown_function( array( $controller, 'onFatal' ) );
+		set_error_handler( array( $controller, 'onError' ), E_ALL | E_STRICT );
+		set_exception_handler( array( $controller, 'onException' ) );
 	}
-    /**
+	/**
 	 * Error handler.
 	 *
 	 * @param  int        $num
@@ -35,8 +37,8 @@ class ErrorHandler {
 	 *
 	 * @return bool
 	 */
-	public function onError( $num, $str, $file, $line, $context = [] ) {
-        $this->log( implode(' ',  [$num,$str, "$file:$line"] ),__METHOD__, 'error',$context );
+	public function onError( $num, $str, $file, $line, $context = array() ) {
+		$this->log( implode( ' ', array( $num, $str, "$file:$line" ) ), __METHOD__, 'error', $context );
 		return false;
 	}
 
@@ -49,7 +51,7 @@ class ErrorHandler {
 	 */
 	public function onException( $e ) {
 
-        $this->onError( $e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine() );
+		$this->onError( $e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine() );
 
 		throw $e;
 	}
@@ -64,19 +66,27 @@ class ErrorHandler {
 			return;
 		}
 
-		$error = array_merge( [ 'type' => -1, 'message' => '', 'file' => '', 'line' => 0 ], $last_error );
+		$error = array_merge(
+			array(
+				'type'    => -1,
+				'message' => '',
+				'file'    => '',
+				'line'    => 0,
+			),
+			$last_error
+		);
 
-		$fatals = [
+		$fatals = array(
 			E_ERROR,
 			E_PARSE,
 			E_CORE_ERROR,
 			E_CORE_WARNING,
 			E_COMPILE_ERROR,
 			E_COMPILE_WARNING,
-		];
+		);
 
-		if ( in_array( $error[ 'type' ], $fatals, TRUE ) ) {
-			$this->onError( $error[ 'type' ], $error[ 'message' ], $error[ 'file' ], $error[ 'line' ] );
+		if ( in_array( $error['type'], $fatals, true ) ) {
+			$this->onError( $error['type'], $error['message'], $error['file'], $error['line'] );
 		}
 	}
 }

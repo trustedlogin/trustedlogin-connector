@@ -4,25 +4,26 @@ namespace TrustedLogin\Vendor\Webhooks;
 
 use TrustedLogin\Vendor\AccessKeyLogin;
 
-class Helpscout extends Webhook{
+class Helpscout extends Webhook {
 
-    /**
-     * Get slug for this webhook.
-     *
-     * @return string
-     */
-    public static function getProviderName(){
-        return 'helpscout';
-    }
 
-    /**
-     * Get name for this webhook with capitals.
-     *
-     * @return string
-     */
-    public static function getProviderNameCapitalized(){
-        return 'HelpScout';
-    }
+	/**
+	 * Get slug for this webhook.
+	 *
+	 * @return string
+	 */
+	public static function getProviderName() {
+		return 'helpscout';
+	}
+
+	/**
+	 * Get name for this webhook with capitals.
+	 *
+	 * @return string
+	 */
+	public static function getProviderNameCapitalized() {
+		return 'HelpScout';
+	}
 
 	/**
 	 * Generates the output for the Help Scout widget.
@@ -68,13 +69,16 @@ class Helpscout extends Webhook{
 		// Get response for the widget and return it.
 		$return_html = $this->get_widget_response( $customer_emails, $account_id );
 
-		return [ 'html' => $return_html, 'status' => 200 ];
+		return array(
+			'html'   => $return_html,
+			'status' => 200,
+		);
 	}
 
 	/**
 	 * Get HTML for the Help Scout widget.
 	 *
-	 * @param array $customer_emails List of customer emails.
+	 * @param array  $customer_emails List of customer emails.
 	 * @param string $account_id Account ID.
 	 *
 	 * @return string The HTML response.
@@ -100,7 +104,7 @@ class Helpscout extends Webhook{
 		/**
 		 * @deprecated 1.1
 		 */
-		$html_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper', [ $html_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/wrapper' );
+		$html_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/wrapper', array( $html_template ), '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/wrapper' );
 
 		/**
 		 * Filter: Allows for changing the html output of the individual items html elements.
@@ -115,7 +119,7 @@ class Helpscout extends Webhook{
 		/**
 		 * @deprecated 1.1
 		 */
-		$item_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/item', [ $item_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/item' );
+		$item_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/item', array( $item_template ), '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/item' );
 
 		/**
 		 * Filter: Allows for changing the html output of the html elements when no items found.
@@ -130,7 +134,7 @@ class Helpscout extends Webhook{
 		/**
 		 * @deprecated 1.1
 		 */
-		$no_items_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/no-items', [ $no_items_template ], '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/no-items' );
+		$no_items_template = apply_filters_deprecated( 'trustedlogin/vendor/helpdesk/' . $this->getProviderName() . '/template/no-items', array( $no_items_template ), '1.1', 'trustedlogin/connector/helpdesk/' . $this->getProviderName() . '/template/no-items' );
 
 		// Define the API endpoint
 		$endpoint = 'accounts/' . $account_id . '/sites/';
@@ -151,7 +155,7 @@ class Helpscout extends Webhook{
 			$response = $saas_api->call( $endpoint, $data, 'POST' );
 
 			// If the API call returns an error, get the error message
-			if( true === $response ) {
+			if ( true === $response ) {
 				$item_html = '';
 			} elseif ( is_wp_error( $response ) ) {
 				$item_html = $response->get_error_message();
@@ -191,14 +195,14 @@ class Helpscout extends Webhook{
 		// Get the provider name with capitals.
 		$provider_name_capitalized = $this->getProviderNameCapitalized();
 		// Check different locations for the signature, return when found.
-		if ( isset( $_SERVER["X-{$provider_name}-SIGNATURE"] ) ) {
-			return $_SERVER["X-{$provider_name}-SIGNATURE"];
-		} elseif ( isset( $_SERVER["HTTP_X_{$provider_name}_SIGNATURE"] ) ) {
-			return $_SERVER["HTTP_X_{$provider_name}_SIGNATURE"];
+		if ( isset( $_SERVER[ "X-{$provider_name}-SIGNATURE" ] ) ) {
+			return $_SERVER[ "X-{$provider_name}-SIGNATURE" ];
+		} elseif ( isset( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] ) ) {
+			return $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ];
 		} elseif ( function_exists( 'apache_request_headers' ) ) {
 			$headers = apache_request_headers();
 
-			return $headers["X-{$provider_name_capitalized}-Signature"] ?? null;
+			return $headers[ "X-{$provider_name_capitalized}-Signature" ] ?? null;
 		}
 
 		// If we couldn't find the signature, we return null.
@@ -210,20 +214,23 @@ class Helpscout extends Webhook{
 	 *
 	 * @since 0.15.0
 	 *
-	 * @param int $status HTTP status code.
-	 * @param string $errorMessage Error message text.
-	 * @param string $instruction Instruction text for user.
+	 * @param int         $status HTTP status code.
+	 * @param string      $errorMessage Error message text.
+	 * @param string      $instruction Instruction text for user.
 	 * @param string|null $extraMessage Optional extra message.
 	 *
 	 * @return array An associative array containing the error message.
 	 */
 	private function build_error_message( int $status, string $errorMessage, string $instruction, ?string $extraMessage = null ): array {
 		// Generate the HTML error message.
-		$error_text = '<p class="red">' . esc_html( $errorMessage ) . '</p>';
+		$error_text  = '<p class="red">' . esc_html( $errorMessage ) . '</p>';
 		$error_text .= '<p>' . esc_html( $instruction ) . '</p>';
 
 		// Prepare the response array.
-		$response = [ 'html' => $error_text, 'status' => $status ];
+		$response = array(
+			'html'   => $error_text,
+			'status' => $status,
+		);
 
 		// If there's an extra message, we add it to the response.
 		if ( $extraMessage ) {
@@ -247,7 +254,7 @@ class Helpscout extends Webhook{
 		if ( isset( $data_obj->customer->emails ) && is_array( $data_obj->customer->emails ) ) {
 			return $data_obj->customer->emails;
 		} elseif ( isset( $data_obj->customer->email ) ) {
-			return [ $data_obj->customer->email ];
+			return array( $data_obj->customer->email );
 		}
 
 		// If no emails were found, return false.
@@ -259,14 +266,20 @@ class Helpscout extends Webhook{
 	 *
 	 * @since 0.15.0
 	 *
-	 * @param array $licenses List of licenses.
+	 * @param array $licenses {
+	 *   List of licenses.
+	 *      @type object $license {
+	 *          @type string $key License key.
+	 *          @type string $status License status.
+	 *      }
+	 * }
 	 *
 	 * @return array Array with 'searchKeys' and 'statuses'.
 	 */
 	private function prepare_search_keys( array $licenses ): array {
 		// Initialize the data array and statuses array
-		$data     = [ 'searchKeys' => [] ];
-		$statuses = [];
+		$data     = array( 'searchKeys' => array() );
+		$statuses = array();
 
 		// Loop through licenses
 		foreach ( $licenses as $license ) {
@@ -292,9 +305,9 @@ class Helpscout extends Webhook{
 	/**
 	 * Generate item HTML for each secret in the response.
 	 *
-	 * @param array $response API response.
+	 * @param array  $response API response.
 	 * @param string $item_template Item template.
-	 * @param array $statuses Array of statuses.
+	 * @param array  $statuses Array of statuses.
 	 * @param string $account_id Account ID.
 	 *
 	 * @return string Item HTML.
@@ -316,10 +329,13 @@ class Helpscout extends Webhook{
 			// Loop through the reversed secrets array
 			foreach ( $secrets_reversed as $secret ) {
 				// Generate a URL with the account ID and access key as query parameters
-				$url = add_query_arg( [
-					AccessKeyLogin::ACCOUNT_ID_INPUT_NAME => $account_id,
-					AccessKeyLogin::ACCESS_KEY_INPUT_NAME => $key,
-				], admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG ) );
+				$url = add_query_arg(
+					array(
+						AccessKeyLogin::ACCOUNT_ID_INPUT_NAME => $account_id,
+						AccessKeyLogin::ACCESS_KEY_INPUT_NAME => $key,
+					),
+					admin_url( 'admin.php?page=' . AccessKeyLogin::PAGE_SLUG )
+				);
 
 				// Generate the item HTML and append it to the item HTML string
 				$item_html .= sprintf(
@@ -354,9 +370,11 @@ class Helpscout extends Webhook{
 			return false;
 		}
 
-		return hash_equals( $signature, $this->makeSignature(
-            is_array($data) ? wp_json_encode( $data ) : $data
-        ) );
+		return hash_equals(
+			$signature,
+			$this->makeSignature(
+				is_array( $data ) ? wp_json_encode( $data ) : $data
+			)
+		);
 	}
-
 }

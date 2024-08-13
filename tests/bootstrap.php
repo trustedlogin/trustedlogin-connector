@@ -6,11 +6,11 @@
  */
 
 define('DOING_TL_VENDOR_TESTS', true); // Added by TrustedLogin
-if( ! defined('WP_RUN_CORE_TESTS')){
-	define('WP_RUN_CORE_TESTS', false );
+if (! defined('WP_RUN_CORE_TESTS')) {
+	define('WP_RUN_CORE_TESTS', false);
 }
-if( ! defined('WP_TESTS_PHPUNIT_POLYFILLS_PATH')){
-	define('WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname(__FILE__,2).'/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php');
+if (! defined('WP_TESTS_PHPUNIT_POLYFILLS_PATH')) {
+	define('WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname(__FILE__, 2).'/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php');
 }
 
 $_tests_dir = getenv('WP_TESTS_DIR');
@@ -35,7 +35,6 @@ function _manually_load_plugin()
 	try {
 		$dotenv = Dotenv\Dotenv::createImmutable(dirname(dirname(__FILE__)));
 		$dotenv->load();
-
 	} catch (\Throwable $th) {
 		echo 'You must set .env. See README.md';
 		throw $th;

@@ -6,21 +6,19 @@ use TrustedLogin\Vendor\SettingsApi;
 /**
  * Endpoint to reset encryption keys
  */
-class ResetEncryption extends Settings
-{
+class ResetEncryption extends Settings {
+
 
 
 	/** @inheritdoc */
-	protected function route()
-	{
+	protected function route() {
 
 		return 'settings/encryption/reset';
 	}
 
 	/** @inheritdoc */
-	protected function updateArgs()
-	{
-		return [];
+	protected function updateArgs() {
+		return array();
 	}
 
 	/**
@@ -29,16 +27,13 @@ class ResetEncryption extends Settings
 	 * @param \WP_REST_Request $request
 	 * @return \WP_REST_Response
 	 */
-	public function update(\WP_REST_Request $request)
-	{
-		$encryption =\trustedlogin_connector()
+	public function update( \WP_REST_Request $request ) {
+		$encryption = \trustedlogin_connector()
 			->getEncryption();
-		//Delete keys
+		// Delete keys
 		$encryption->deleteKeys();
-		//Makes new keys
+		// Makes new keys
 		$encryption->getPublicKey();
-		return rest_ensure_response([],204);
-
+		return rest_ensure_response( array(), 204 );
 	}
-
 }

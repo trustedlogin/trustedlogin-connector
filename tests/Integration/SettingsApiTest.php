@@ -316,7 +316,6 @@ class SettingsApiTest extends \WP_UnitTestCase
 				->getHelpdeskData()['callback'],
 				'?trustedlogin=1&action=trustedlogin_webhook&provider=helpscout'
 			)
-
 		);
 		$this->assertArrayHasKey(
 			TeamSettings::HELPDESK_SETTINGS,
@@ -447,7 +446,8 @@ class SettingsApiTest extends \WP_UnitTestCase
 	 * @covers SettingsApi::addSetting()
 	 * @covers SettingsApi::count()
 	 */
-	public function testCount(){
+	public function testCount()
+	{
 		$data = [
 			[
 				'account_id'       => '2216',
@@ -471,7 +471,8 @@ class SettingsApiTest extends \WP_UnitTestCase
 	 * @covers SettingsApi::count()
 	 * @group a
 	 */
-	public function testToResponseData(){
+	public function testToResponseData()
+	{
 		$data = [
 			[
 				'account_id'       => '11',
@@ -511,10 +512,11 @@ class SettingsApiTest extends \WP_UnitTestCase
 	 * @covers SettingsApi::getIntegrationSettings()
 	 * @covers IsIntegrationActive::check()
 	 */
-	public function testIsIntegrationActive(){
+	public function testIsIntegrationActive()
+	{
 		$settings = new SettingsApi([]);
 		$this->assertTrue(
-			IsIntegrationActive::check( 'helpscout')
+			IsIntegrationActive::check('helpscout')
 		);
 		$settings->setGlobalSettings([
 			'integrations' => [
@@ -525,9 +527,8 @@ class SettingsApiTest extends \WP_UnitTestCase
 		]);
 		$settings->save();
 		$this->assertTrue(
-			IsIntegrationActive::check( 'helpscout')
+			IsIntegrationActive::check('helpscout')
 		);
-
 	}
 
 	/**
@@ -537,7 +538,8 @@ class SettingsApiTest extends \WP_UnitTestCase
 	 * @covers SettingsApi::toArray()
 	 * @covers SettingsApi::getIntegrationSettings()
 	 */
-	public function testGeneralSettings(){
+	public function testGeneralSettings()
+	{
 		$settings = new SettingsApi([]);
 
 		$settings->setGlobalSettings([
@@ -589,7 +591,8 @@ class SettingsApiTest extends \WP_UnitTestCase
 			$settings->getGlobalSettings()['integrations']['helpscout']['enabled']
 		);
 		$this->assertFalse(
-			$settings->getIntegrationSettings()['helpscout']['enabled']		);
+			$settings->getIntegrationSettings()['helpscout']['enabled']
+		);
 		$settings->save();
 		$settings = SettingsApi::fromSaved();
 		$this->assertFalse(
@@ -606,7 +609,8 @@ class SettingsApiTest extends \WP_UnitTestCase
 	 * @covers SettingsApi::getGlobalSettings()
 	 * @covers SettingsApi::reset()
 	 */
-	public function testGeneralSettingsReset(){
+	public function testGeneralSettingsReset()
+	{
 		$settings = new SettingsApi([]);
 
 		$settings->setGlobalSettings([

@@ -51,30 +51,29 @@ class WebhooksTest extends \WP_UnitTestCase
 		$account = SettingsApi::fromSaved()->getByAccountId(
 			self::ACCOUNT_ID
 		);
-		$webhook = Factory::webhook( $account );
-		$this->assertSame( 'helpscout', $webhook->getProviderName());
+		$webhook = Factory::webhook($account);
+		$this->assertSame('helpscout', $webhook->getProviderName());
 
-		$account->set( 'helpdesk', [ 'random' ] );
-		$this->expectException( '\Exception' );
-		Factory::webhook( $account );
-
+		$account->set('helpdesk', [ 'random' ]);
+		$this->expectException('\Exception');
+		Factory::webhook($account);
 	}
 
 	/**
 	 * @covers TrustedLogin\Vendor\Webhooks\Factory::actionUrl()
 	 */
-	public function testBuildActionUrl(){
+	public function testBuildActionUrl()
+	{
 
-		$url = Factory::actionUrl( 'test', self::ACCOUNT_ID, 'helpscout' );
+		$url = Factory::actionUrl('test', self::ACCOUNT_ID, 'helpscout');
 		$this->assertTrue(
-			(bool)filter_var($url,FILTER_VALIDATE_URL)
+			(bool)filter_var($url, FILTER_VALIDATE_URL)
 		);
 		$this->assertTrue(
-            (bool) preg_match('/'.self::ACCOUNT_ID.'/', $url)
-        );
+			(bool) preg_match('/'.self::ACCOUNT_ID.'/', $url)
+		);
 		$this->assertTrue(
-            (bool) preg_match('/helpscout/', $url)
-        );
+			(bool) preg_match('/helpscout/', $url)
+		);
 	}
-
 }

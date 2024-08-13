@@ -7,6 +7,7 @@ use TrustedLogin\Vendor\SettingsApi;
 
 trait Logger {
 
+
 	/**
 	 * The random hash used for log location
 	 *
@@ -26,9 +27,9 @@ trait Logger {
 	 *
 	 * @return bool|null True if the message was written to the log file, false if not, null if error logging is disabled.
 	 */
-	public function log( $message, $method, $logLevel = 'info', $context = [] ) {
+	public function log( $message, $method, $logLevel = 'info', $context = array() ) {
 
-		if( ! trustedlogin_connector()->getSettings()->isErrorLogggingEnabled() ) {
+		if ( ! trustedlogin_connector()->getSettings()->isErrorLogggingEnabled() ) {
 			return null;
 		}
 
@@ -40,8 +41,8 @@ trait Logger {
 			$message .= ' ' . wp_json_encode( $context, JSON_PRETTY_PRINT );
 		}
 
-		$logFileName   = $this->getLogFileName();
-		$logFileDir    = dirname( $logFileName );
+		$logFileName = $this->getLogFileName();
+		$logFileDir  = dirname( $logFileName );
 
 		$wp_filesystem = $this->init_wp_filesystem();
 
@@ -63,7 +64,7 @@ trait Logger {
 			$file = fopen( $logFileName, 'a' );
 
 			$file_written = fwrite( $file, $message . "\n" );
-			$file_closed = fclose( $file );
+			$file_closed  = fclose( $file );
 
 			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
@@ -122,7 +123,7 @@ trait Logger {
 			return $wp_filesystem;
 		}
 
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$filesystem_initialized = WP_Filesystem();
 
@@ -146,7 +147,7 @@ trait Logger {
 	 */
 	private function prevent_directory_browsing( $dirpath ) {
 
-		if( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) {
+		if ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) {
 			return false;
 		}
 
@@ -186,7 +187,7 @@ trait Logger {
 	 * @see https://github.com/katzgrau/KLogger/blob/master/src/Logger.php#L260-L294
 	 *
 	 * @param string $message The message to log
-	 * @param array $context The context
+	 * @param array  $context The context
 	 *
 	 * @param string $level The Log Level of the message
 	 *
@@ -266,7 +267,7 @@ trait Logger {
 
 		// Use plugin dir in development.
 		if ( ( defined( 'TRUSTEDLOGIN_DEBUG' ) && TRUSTEDLOGIN_DEBUG ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
-			return dirname( __FILE__, 3 ) . '/trustedlogin-connector.log';
+			return dirname( __DIR__, 2 ) . '/trustedlogin-connector.log';
 		}
 
 		$hash = $this->getHash();
@@ -286,6 +287,4 @@ trait Logger {
 
 		return wp_normalize_path( trailingslashit( $upload_dir['basedir'] ) . $this->getLogFileDirectoryName() . '/' ) . 'vendor-' . $hash . '.log';
 	}
-
-
 }

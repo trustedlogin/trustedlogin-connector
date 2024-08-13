@@ -119,7 +119,8 @@ class PluginTest extends TestCase
 		$this->assertSame('GET', $sender->method);
 	}
 
-	public function testVerifyAccount(){
+	public function testVerifyAccount()
+	{
 		$this->markTestIncomplete('Not sure what is up here');
 		$data = [
 				"id"=> 8,
@@ -127,6 +128,5 @@ class PluginTest extends TestCase
 				"status"=> "active"
 
 		];
-
 	}
 }

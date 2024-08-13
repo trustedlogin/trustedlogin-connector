@@ -4,13 +4,15 @@ namespace TrustedLogin\Vendor;
 use TrustedLogin\Vendor\Traits\VerifyUser;
 use TrustedLogin\Vendor\Traits\Logger;
 use TrustedLogin\Vendor\Webhooks\Factory;
+
 /**
  * Handler for access key login
  */
-class AccessKeyLogin
-{
+class AccessKeyLogin {
 
-	use Logger,VerifyUser;
+
+	use Logger;
+	use VerifyUser;
 
 	/**
 	 * WordPress admin slug for access key login
@@ -45,12 +47,14 @@ class AccessKeyLogin
 
 	/**
 	 * Error code when the current user isn't allowed to provide support.
+	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 	 */
 	const ERROR_INVALID_ROLE = 403;
 
 	/**
 	 * Error code when the there is no account in TrustedLogin matching the specified account ID.
+	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
 	 */
 	const ERROR_NO_ACCOUNT_ID = 404;
@@ -63,6 +67,7 @@ class AccessKeyLogin
 
 	/**
 	 * Error code when the secret keys provided are of an invalid format.
+	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
 	 */
 	const ERROR_INVALID_SECRET = 422;
@@ -77,12 +82,13 @@ class AccessKeyLogin
 
 	/**
 	 * The URL for access key login
+	 *
 	 * @param string $account_id The account ID
 	 * @param string $provider The provider name
 	 * @param string $access_key (Optional) The key for the access being requested.
 	 * @return string
 	 */
-	public static function url($account_id,$provider,$access_key = ''){
+	public static function url( $account_id, $provider, $access_key = '' ) {
 		return Factory::actionUrl(
 			self::ACCESS_KEY_ACTION_NAME,
 			$account_id,
@@ -91,8 +97,8 @@ class AccessKeyLogin
 		);
 	}
 
-	public static function makeSecret(){
-		return bin2hex(random_bytes(8));
+	public static function makeSecret() {
+		return bin2hex( random_bytes( 8 ) );
 	}
 
 
@@ -103,26 +109,26 @@ class AccessKeyLogin
 	 *
 	 * return array|WP_Error
 	 */
-	public function handle(array $args = [])
-	{	//If needed inputs, passed, used those.
-		if( isset( $args[self::ACCESS_KEY_INPUT_NAME] ) && isset($args[self::ACCOUNT_ID_INPUT_NAME]) ){
-			$access_key = $args[self::ACCESS_KEY_INPUT_NAME];
-			$account_id = $args[self::ACCOUNT_ID_INPUT_NAME];
+	public function handle( array $args = array() ) {
+		// If needed inputs, passed, used those.
+		if ( isset( $args[ self::ACCESS_KEY_INPUT_NAME ] ) && isset( $args[ self::ACCOUNT_ID_INPUT_NAME ] ) ) {
+			$access_key = $args[ self::ACCESS_KEY_INPUT_NAME ];
+			$account_id = $args[ self::ACCOUNT_ID_INPUT_NAME ];
 		}
-		//If not, use $_REQUEST
-		else{
+		// If not, use $_REQUEST
+		else {
 			$verified = $this->verifyGrantAccessRequest();
 
-			if ( is_wp_error($verified)) {
+			if ( is_wp_error( $verified ) ) {
 				return $verified;
 			}
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$access_key = sanitize_text_field($_REQUEST[ self::ACCESS_KEY_INPUT_NAME ]);
+			$access_key = sanitize_text_field( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] );
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$account_id = sanitize_text_field($_REQUEST[ self::ACCOUNT_ID_INPUT_NAME]);
+			$account_id = sanitize_text_field( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] );
 		}
 
-		if( self::ACCESS_KEY_STRING_LENGTH !== strlen( $access_key ) ) {
+		if ( self::ACCESS_KEY_STRING_LENGTH !== strlen( $access_key ) ) {
 			return new \WP_Error(
 				self::ERROR_INVALID_SECRET,
 				'invalid_secret',
@@ -130,12 +136,12 @@ class AccessKeyLogin
 			);
 		}
 
-		//Get saved settings and then team settings
+		// Get saved settings and then team settings
 		$settings = SettingsApi::fromSaved();
 
 		try {
-			$teamSettings =  $settings->getByAccountId($account_id);
-		} catch (\Exception $e) {
+			$teamSettings = $settings->getByAccountId( $account_id );
+		} catch ( \Exception $e ) {
 			return new \WP_Error(
 				self::ERROR_NO_ACCOUNT_ID,
 				'invalid_account_id',
@@ -143,7 +149,7 @@ class AccessKeyLogin
 			);
 		}
 
-		if ( ! $this->verifyUserRole($teamSettings) ) {
+		if ( ! $this->verifyUserRole( $teamSettings ) ) {
 			return new \WP_Error(
 				self::ERROR_INVALID_ROLE,
 				'invalid_user_role',
@@ -155,9 +161,9 @@ class AccessKeyLogin
 			trustedlogin_connector()
 		);
 
-		$secret_ids = $tl->apiGetSecretIds($access_key, $account_id);
+		$secret_ids = $tl->api_get_secret_ids( $access_key, $account_id );
 
-		if (is_wp_error($secret_ids)) {
+		if ( is_wp_error( $secret_ids ) ) {
 			return new \WP_Error(
 				400,
 				'invalid_secret_keys',
@@ -165,7 +171,7 @@ class AccessKeyLogin
 			);
 		}
 
-		if (empty($secret_ids)) {
+		if ( empty( $secret_ids ) ) {
 			return new \WP_Error(
 				self::ERROR_NO_SECRET_IDS_FOUND,
 				'no_secret_ids',
@@ -173,7 +179,7 @@ class AccessKeyLogin
 			);
 		}
 
-		$valid_secrets = $tl->getValidSecrets( $secret_ids, $account_id );
+		$valid_secrets = $tl->get_valid_secrets( $secret_ids, $account_id );
 
 		$this->log( 'Valid secrets: ', __METHOD__, 'debug', $valid_secrets );
 
@@ -185,10 +191,11 @@ class AccessKeyLogin
 			);
 		}
 
-	    /**
-	     * Return all url parts, not just 0
-	     * @see https://github.com/trustedlogin/vendor/issues/109
-	     */
+		/**
+		 * Return all url parts, not just 0
+		 *
+		 * @see https://github.com/trustedlogin/vendor/issues/109
+		 */
 		return wp_list_pluck( $valid_secrets, 'url_parts' );
 	}
 
@@ -198,37 +205,34 @@ class AccessKeyLogin
 	 * @param bool $checkNonce. Optional. Default true. Set false to bypass nonce check.
 	 * @return bool|\WP_Error
 	 */
-	public function verifyGrantAccessRequest(bool $checkNonce = true)
-	{
+	public function verifyGrantAccessRequest( bool $checkNonce = true ) {
 
-		if (empty($_REQUEST[ self::ACCESS_KEY_INPUT_NAME ])) {
-			$this->log('No access key sent.', __METHOD__, 'error');
-			return new \WP_Error('no_access_key', esc_html__('No access key was sent with the request.', 'trustedlogin-connector'));
+		if ( empty( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] ) ) {
+			$this->log( 'No access key sent.', __METHOD__, 'error' );
+			return new \WP_Error( 'no_access_key', esc_html__( 'No access key was sent with the request.', 'trustedlogin-connector' ) );
 		}
 
-		if (empty($_REQUEST[self::ACCOUNT_ID_INPUT_NAME ])) {
-			$this->log('No account id  sent.', __METHOD__, 'error');
-			return new \WP_Error('no_account_id', esc_html__('No account id was sent with the request.', 'trustedlogin-connector'));
+		if ( empty( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) ) {
+			$this->log( 'No account id  sent.', __METHOD__, 'error' );
+			return new \WP_Error( 'no_account_id', esc_html__( 'No account id was sent with the request.', 'trustedlogin-connector' ) );
 		}
 
-		if( $checkNonce ){
-			if (empty($_REQUEST[ self::NONCE_NAME ])) {
-				$this->log('No nonce set. Insecure request.', __METHOD__, 'error');
-				return new \WP_Error('no_nonce', esc_html__('No nonce was sent with the request.', 'trustedlogin-connector'));
+		if ( $checkNonce ) {
+			if ( empty( $_REQUEST[ self::NONCE_NAME ] ) ) {
+				$this->log( 'No nonce set. Insecure request.', __METHOD__, 'error' );
+				return new \WP_Error( 'no_nonce', esc_html__( 'No nonce was sent with the request.', 'trustedlogin-connector' ) );
 			}
 
 			// Valid nonce?
-			$valid = wp_verify_nonce($_REQUEST[ self::NONCE_NAME ], self::NONCE_ACTION);
+			$valid = wp_verify_nonce( $_REQUEST[ self::NONCE_NAME ], self::NONCE_ACTION );
 
-			if (! $valid) {
-				$this->log('Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error');
-				return new \WP_Error('bad_nonce', esc_html__('The nonce was not set for the request.', 'trustedlogin-connector'));
-
+			if ( ! $valid ) {
+				$this->log( 'Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error' );
+				return new \WP_Error( 'bad_nonce', esc_html__( 'The nonce was not set for the request.', 'trustedlogin-connector' ) );
 			}
 		}
 
-
-		//Ok, it's chill.
+		// Ok, it's chill.
 		return true;
 	}
 
@@ -238,13 +242,12 @@ class AccessKeyLogin
 	 * @param bool $ak Optional. If true, access key returned. If false, account ID.
 	 * @return string
 	 */
-	public static function fromRequest(bool $ak = true ){
+	public static function fromRequest( bool $ak = true ) {
 
-		if( $ak ){
-			return isset($_REQUEST[self::ACCESS_KEY_INPUT_NAME]) ? sanitize_text_field($_REQUEST[self::ACCESS_KEY_INPUT_NAME]) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $ak ) {
+			return isset( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] ) ? sanitize_text_field( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 
-		return isset($_REQUEST[self::ACCOUNT_ID_INPUT_NAME]) ? sanitize_text_field($_REQUEST[self::ACCOUNT_ID_INPUT_NAME]) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
+		return isset( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) ? sanitize_text_field( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 }
