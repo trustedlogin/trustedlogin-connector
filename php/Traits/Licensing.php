@@ -5,15 +5,15 @@ trait Licensing {
 
 
 	protected $licensing_platforms = array(
-		'edd' => 'TrustedLogin\Vendor\Licensing\Edd',
-		'woo' => 'TrustedLogin\Vendor\Licensing\Edd',
+		'edd' => 'TrustedLogin\Vendor\Licensing\Platform\Edd',
 	);
 
 	public function getActivePlatforms() {
 		$platforms = array();
 		foreach ( $this->licensing_platforms as $platform ) {
 			if ( $platform->isActive() ) {
-				$platforms[] = new() "{$platform}"();
+				$platform_class_name = get_class( $platform );
+				$platforms[] = new $platform_class_name();
 			}
 		}
 		return $platforms;
