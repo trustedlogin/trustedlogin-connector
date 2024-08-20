@@ -213,7 +213,7 @@ class AccessKeyLogin {
 		}
 
 		if ( empty( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) ) {
-			$this->log( 'No account id  sent.', __METHOD__, 'error' );
+			$this->log( 'No account id sent.', __METHOD__, 'error' );
 			return new \WP_Error( 'no_account_id', esc_html__( 'No account id was sent with the request.', 'trustedlogin-connector' ) );
 		}
 
