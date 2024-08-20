@@ -150,7 +150,7 @@ class TeamSettings {
 	 */
 	public function get( $key ) {
 		if ( $this->valid( $key ) ) {
-			$value = $this->values[ $key ];
+			$value = $this->values[ $key ] ?? null;
 			if ( is_object( $value ) ) {
 				$value = (array) $value;
 			}
