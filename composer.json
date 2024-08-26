@@ -17,8 +17,9 @@
         }
     },
     "require-dev": {
+        "paragonie/sodium_compat": "^1.17",
+        "phpunit/phpunit": "^7.0",
         "wp-coding-standards/wpcs": "^3.0",
-        "phpunit/phpunit": "^9.0",
         "yoast/phpunit-polyfills": "^1.0.1",
         "mockery/mockery": "1.2",
         "brain/monkey": "2.*",
