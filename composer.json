@@ -3,7 +3,6 @@
     "description": "TrustedLogin Connector Plugin",
     "require": {
         "php": "^7.2|^8.0",
-        "paragonie/sodium_compat": "^1.17",
         "ext-json": "*"
     },
     "type": "wordpress-plugin",
