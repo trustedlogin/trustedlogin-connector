@@ -44,6 +44,11 @@ class MenuPage {
 	protected $childSlug;
 
 	/**
+	 * @var string Optional name for the menu page.
+	 */
+	protected $childName;
+
+	/**
 	 * @var string
 	 */
 	protected $initialView;
