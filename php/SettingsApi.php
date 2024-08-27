@@ -120,7 +120,9 @@ class SettingsApi {
 				}
 				$account_id = $setting->get( 'account_id' );
 				foreach ( $setting->getHelpdesks() as $helpdesk ) {
-					if ( isset( $_setting[ TeamSettings::HELPDESK_SETTINGS ][ $helpdesk ] ) ) {
+					// Ensure the helpdesk settings are an array.
+					$helpdesk_settings = (array) ( $_setting[ TeamSettings::HELPDESK_SETTINGS ] ?? [] );
+					if ( isset( $helpdesk_settings[ $helpdesk ] ) ) {
 						continue;
 					}
 					$_setting[ TeamSettings::HELPDESK_SETTINGS ][ $helpdesk ] = $this->newHelpdeskSettings( $account_id, $helpdesk );
