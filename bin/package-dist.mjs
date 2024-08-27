@@ -14,6 +14,7 @@ const distArchive = 'trustedlogin-connector{version}{hash}.zip';
 const distArchiveContents = [
 	'trustedlogin-connector.php',
 	'readme.txt',
+	'composer.json',
 	'php',
 	'vendor',
 	'build',
