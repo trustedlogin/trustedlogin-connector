@@ -55,6 +55,8 @@ class TeamSettings {
 			'name'                  => '',
 			self::HELPDESK_SETTINGS => array(),
 		);
+
+		$this->values = wp_parse_args( $values, $this->defaults );
 	}
 
 	public function toArray() {
