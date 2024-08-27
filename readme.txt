@@ -20,7 +20,7 @@ TrustedLogin plugin to be installed on the website of the support provider.
 
 == Changelog ==
 
-= 1.2 on August 13, 2024 =
+= 1.2 on August 26, 2024 =
 
 - Added support for free trials
 - Added a loading indicator when adding, updating, or deleting a team
