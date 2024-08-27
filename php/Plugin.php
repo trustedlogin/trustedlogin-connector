@@ -7,9 +7,10 @@ use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\Traits\Logger;
 use TrustedLogin\Vendor\TeamSettings;
 
-class Plugin
-{
+class Plugin {
+
 	use Logger;
+
 	/**
 	 * @var Encryption
 	 */
@@ -28,11 +29,10 @@ class Plugin
 	/**
 	 * @param Encryption $encryption
 	 */
-	public function __construct(Encryption $encryption)
-	{
+	public function __construct( Encryption $encryption ) {
 		$this->encryption = $encryption;
-		$this->apiSender = new \TrustedLogin\Vendor\ApiSend();
-		$this->settings = SettingsApi::fromSaved();
+		$this->apiSender  = new \TrustedLogin\Vendor\ApiSend();
+		$this->settings   = SettingsApi::fromSaved();
 	}
 
 
@@ -42,24 +42,23 @@ class Plugin
 	 *
 	 * @uses "rest_api_init" action
 	 */
-	public function restApiInit()
-	{
-		(new \TrustedLogin\Vendor\Endpoints\Settings())
-			->register(true);
-		(new \TrustedLogin\Vendor\Endpoints\GlobalSettings())
-			->register(true);
-		(new \TrustedLogin\Vendor\Endpoints\ResetTeam())
-			->register(true,false);
-		(new \TrustedLogin\Vendor\Endpoints\PublicKey())
-			->register(false);
-		(new \TrustedLogin\Vendor\Endpoints\SignatureKey())
-			->register(false);
-		(new \TrustedLogin\Vendor\Endpoints\ResetEncryption())
-			->register(true, false);
-		(new \TrustedLogin\Vendor\Endpoints\AccessKey())
-			->register(true, false);
-		(new \TrustedLogin\Vendor\Endpoints\Logging())
-			->register(true, true);
+	public function restApiInit() {
+		( new \TrustedLogin\Vendor\Endpoints\Settings() )
+			->register( true );
+		( new \TrustedLogin\Vendor\Endpoints\GlobalSettings() )
+			->register( true );
+		( new \TrustedLogin\Vendor\Endpoints\ResetTeam() )
+			->register( true, false );
+		( new \TrustedLogin\Vendor\Endpoints\PublicKey() )
+			->register( false );
+		( new \TrustedLogin\Vendor\Endpoints\SignatureKey() )
+			->register( false );
+		( new \TrustedLogin\Vendor\Endpoints\ResetEncryption() )
+			->register( true, false );
+		( new \TrustedLogin\Vendor\Endpoints\AccessKey() )
+			->register( true, false );
+		( new \TrustedLogin\Vendor\Endpoints\Logging() )
+			->register( true, true );
 	}
 
 	/**
@@ -67,7 +66,7 @@ class Plugin
 	 *
 	 * @return SettingsApi
 	 */
-	public function getSettings(){
+	public function getSettings() {
 		return $this->settings;
 	}
 
@@ -76,8 +75,7 @@ class Plugin
 	 *
 	 * @return Encryption
 	 */
-	public function getEncryption()
-	{
+	public function getEncryption() {
 		return $this->encryption;
 	}
 
@@ -87,8 +85,7 @@ class Plugin
 	 *
 	 * @return string
 	 */
-	public function getPublicKey()
-	{
+	public function getPublicKey() {
 		return $this->encryption
 			->getPublicKey();
 	}
@@ -98,35 +95,36 @@ class Plugin
 	 *
 	 * @return string
 	 */
-	public function getSignatureKey()
-	{
+	public function getSignatureKey() {
 		return $this->encryption
-			->getPublicKey('sign_public_key');
+			->getPublicKey( 'sign_public_key' );
 	}
 
 
 	/**
 	 * Get API Handler by account id
 	 *
-	 * @param string $accountId Account ID, which must be saved in settings, to get handler for.
-	 * @param string $apiUrl Optional. URL override for TrustedLogin API.
+	 * @param string            $accountId Account ID, which must be saved in settings, to get handler for.
+	 * @param string            $apiUrl Optional. URL override for TrustedLogin API.
 	 * @param null|TeamSettings $team Optional. TeamSettings  to use.
 	 *
 	 * @return ApiHandler
 	 */
-	public function getApiHandler($accountId, $apiUrl = '', $team = null )
-	{
-		if( ! $team ) {
-			$team = SettingsApi::fromSaved()->getByAccountId($accountId);
+	public function getApiHandler( $accountId, $apiUrl = '', $team = null ) {
+		if ( ! $team ) {
+			$team = SettingsApi::fromSaved()->getByAccountId( $accountId );
 		}
 
-		return new ApiHandler([
-			'private_key' => $team->get('private_key'),
-			'public_key'  => $team->get('public_key'),
-			'debug_mode'  => $team->get('debug_enabled'),
-			'type'        => 'saas',
-			'api_url'     => $apiUrl ?: $this->getApiUrl(),
-		], $this->apiSender );
+		return new ApiHandler(
+			array(
+				'private_key' => $team->get( 'private_key' ),
+				'public_key'  => $team->get( 'public_key' ),
+				'debug_mode'  => $team->get( 'debug_enabled' ),
+				'type'        => 'saas',
+				'api_url'     => $apiUrl ?: $this->getApiUrl(),
+			),
+			$this->apiSender
+		);
 	}
 
 	/**
@@ -134,19 +132,23 @@ class Plugin
 	 *
 	 * @return bool
 	 */
-	public function verifyAccount(TeamSettings $team)
-	{
-		$handler = new ApiHandler([
-			'private_key' => $team->get('private_key'),
-			'public_key'  => $team->get('public_key'),
-			'debug_mode'  => $team->get('debug_enabled'),
-			'type'        => 'saas',
-			'api_url'     => $this->getApiUrl(),
-		], $this->apiSender );
+	public function verifyAccount( TeamSettings $team ) {
+		$handler = new ApiHandler(
+			array(
+				'private_key' => $team->get( 'private_key' ),
+				'public_key'  => $team->get( 'public_key' ),
+				'debug_mode'  => $team->get( 'debug_enabled' ),
+				'type'        => 'saas',
+				'api_url'     => $this->getApiUrl(),
+			),
+			$this->apiSender
+		);
 
-		return ! is_wp_error($handler->verify(
-			$team->get('account_id')
-		));
+		return ! is_wp_error(
+			$handler->verify(
+				$team->get( 'account_id' )
+			)
+		);
 	}
 
 	/**
@@ -154,9 +156,8 @@ class Plugin
 	 *
 	 * @return string
 	 */
-	public function getApiUrl()
-	{
-		return (string) apply_filters('trustedlogin/api-url/saas', TRUSTEDLOGIN_API_URL);
+	public function getApiUrl() {
+		return (string) apply_filters( 'trustedlogin/api-url/saas', TRUSTEDLOGIN_API_URL );
 	}
 
 	/**
@@ -165,22 +166,20 @@ class Plugin
 	 * @param ApiSend $apiSender
 	 * @return $this
 	 */
-	public function setApiSender(ApiSend $apiSender)
-	{
+	public function setApiSender( ApiSend $apiSender ) {
 		$this->apiSender = $apiSender;
 		return $this;
 	}
 
-	public function getAccessKeyActions()
-	{
-		$data = [];
-		foreach($this->settings->allTeams(false) as $team){
-			$helpdesk = $team->getHelpdesks()[0] ?? 'helpcout';
-			$url = AccessKeyLogin::url(
-				$team->get('account_id'),
+	public function getAccessKeyActions() {
+		$data = array();
+		foreach ( $this->settings->allTeams( false ) as $team ) {
+			$helpdesk                           = $team->getHelpdesks()[0] ?? 'helpcout';
+			$url                                = AccessKeyLogin::url(
+				$team->get( 'account_id' ),
 				$helpdesk
 			);
-			$data[$team->get('account_id')] = $url;
+			$data[ $team->get( 'account_id' ) ] = $url;
 		}
 		return $data;
 	}

@@ -49,18 +49,16 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 	public function testVerifyRequest()
 	{
 		$data = ['hi' => 'roy'];
-		$helpscout = new Helpscout( 'secret' );
-		$signature = $helpscout->makeSignature( wp_json_encode( $data ) );
+		$helpscout = new Helpscout('secret');
+		$signature = $helpscout->makeSignature(wp_json_encode($data));
 		$this->assertTrue(
-			$helpscout->verify_request( $data, $signature )
-
+			$helpscout->verify_request($data, $signature)
 		);
 		$this->assertFalse(
-			$helpscout->verify_request( $data, $signature . 1 )
-
+			$helpscout->verify_request($data, $signature . 1)
 		);
 		$this->assertFalse(
-			$helpscout->verify_request( ['a'], $signature )
+			$helpscout->verify_request(['a'], $signature)
 		);
 	}
 
@@ -70,12 +68,11 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 	public function testBuildActionUrl()
 	{
 		$this->assertTrue(
-			is_string( filter_var(
-				Helpscout::actionUrl( 'id' ),
+			is_string(filter_var(
+				Helpscout::actionUrl('id'),
 				FILTER_VALIDATE_URL
-			) )
+			))
 		);
-
 	}
 
 	/**
@@ -83,9 +80,10 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 	 * @covers TrustedLogin\Vendor\Webhooks\Helpscout::webhookEndpoint()
 	 * @covers TrustedLogin\Vendor\Webhooks\Helpscout::get_widget_response()
 	 */
-	public function testWebhookEndpoint(){
+	public function testWebhookEndpoint()
+	{
 		//Make webhook class
-		$helpscout = new Helpscout( 'secret' );
+		$helpscout = new Helpscout('secret');
 		//Mock data object
 		$data = (object)[
 			'customer' => [
@@ -96,7 +94,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 			'account_id' => self::ACCOUNT_ID
 		];
 		//Encode that data.
-		$encodedData = wp_json_encode( $data );
+		$encodedData = wp_json_encode($data);
 		//Sign that data.
 		$signature = $helpscout->makeSignature(
 			$encodedData
@@ -112,18 +110,14 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 		//Mock request signature
 		$_SERVER['X-HELPSCOUT-SIGNATURE']= $signature;
 		//Process request
-		$r = $helpscout->webhookEndpoint( $encodedData );
-		$this->assertArrayHasKey( 'html', $r );
-		$this->assertArrayHasKey( 'status', $r );
-		$this->assertEquals( 200, $r['status'] );
+		$r = $helpscout->webhookEndpoint($encodedData);
+		$this->assertArrayHasKey('html', $r);
+		$this->assertArrayHasKey('status', $r);
+		$this->assertEquals(200, $r['status']);
 
 		//Test with invalid signature
 		$_SERVER['X-HELPSCOUT-SIGNATURE']= md5($encodedData);
-		$r = $helpscout->webhookEndpoint( $encodedData );
-		$this->assertEquals( 403, $r['status'] );
-
-
+		$r = $helpscout->webhookEndpoint($encodedData);
+		$this->assertEquals(403, $r['status']);
 	}
-
-
 }

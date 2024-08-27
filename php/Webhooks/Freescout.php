@@ -7,6 +7,7 @@ namespace TrustedLogin\Vendor\Webhooks;
  */
 class Freescout extends Helpscout {
 
+
 	/**
 	 * Get slug for this webhook.
 	 *

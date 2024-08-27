@@ -7,6 +7,7 @@ import { SelectFieldArea, InputFieldArea } from "./teams/fields";
 import TitleDescriptionLink from "./TitleDescriptionLink";
 import { ToastError } from "./Errors";
 import { SecondaryButton } from "./Buttons";
+
 function collectFormData(form) {
   let data = {};
   const formData = new FormData(form);
@@ -26,28 +27,24 @@ const getAccessKey = () => {
 };
 
 const hasOnlyOneRedirectData = (redirectData) =>
-  redirectData && 1 == Object.keys(redirectData).length;
+    redirectData && 1 === Object.keys(redirectData).length;
 const firstRedirectData = (redirectData) =>
-  redirectData && redirectData[Object.keys(redirectData)[0]];
+    redirectData && redirectData[Object.keys(redirectData)[0]];
+
 const Layout = ({ children, minimal, title, description }) => {
   return (
-    <>
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="mx-auto bg-white rounded-lg px-8 py-3 text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:px-14 sm:py-8">
           <div className="w-full p-8 text-center">
             <HorizontalLogo />
           </div>
-
-          {!minimal ? (
-            <TitleDescriptionLink title={title} description={description} />
-          ) : null}
-
-          <>{children}</>
+          {!minimal && <TitleDescriptionLink title={title} description={description} />}
+          {children}
         </div>
       </div>
-    </>
   );
 };
+
 const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
   //State for access key in form or url
   //May be preset in window.tlVendor.accessKey.ak
@@ -87,21 +84,21 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
     return null;
   });
 
-  const { getTeam, teams } = useSettings();
+  const { getTeam, settings } = useSettings();
   //State for account_id (not index) of the chosen team
+  const teams = settings.teams;
+
+  //Would be index. Might be 0, which is valid
+  //Or null if not.
   const [accountId, setAccountId] = useState(() => {
-    //Would be index. Might be 0, which is valid
-    //Or null if not.
-    if (null != initialAccountId) {
-      let team = getTeam(initialAccountId);
+    if (initialAccountId !== null) {
+      const team = getTeam(initialAccountId);
       if (team) {
         return team.account_id;
       }
-    } else {
+    } else if (teams && teams.length === 1) {
       //Only one team? Use that.
-      if (1 == teams.length) {
-        return teams[0].account_id;
-      }
+      return teams[0].account_id;
     }
     return "";
   });
@@ -111,12 +108,10 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
     if (!teams) {
       return [];
     }
-    return teams.map((t) => {
-      return {
-        label: t.account_id,
-        value: t.name ? t.name : t.account_id,
-      };
-    });
+    return teams.map((t) => ({
+      label: t.name,
+      value: t.account_id,
+    }));
   }, [teams]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -133,7 +128,7 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
         setIsLoading(false);
         return;
       }
-      let data = collectFormData(form);
+      const data = collectFormData(form);
 
       e.preventDefault();
       //Try to get login redirect
@@ -143,36 +138,25 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
         method: "POST",
         data,
       })
-        .catch((err) => {
-          setIsLoading(false);
-          if (
-            err &&
-            err.hasOwnProperty("data") &&
-            "string" === typeof err.data
-          ) {
-            setErrorMessage(err.data);
-          } else if (
-            err &&
-            err.hasOwnProperty("message") &&
-            "string" === typeof err.message
-          ) {
-            setErrorMessage(err.message);
-          } else {
-            setErrorMessage(
-              __(
-                "There was an error processing the access key.",
-                "trustedlogin-connector"
-              )
-            );
-          }
-        })
-        .then((res) => {
-          if (res && res.hasOwnProperty("success") && res.success) {
-            const { data } = res;
-            setRedirectData(data);
+          .catch((err) => {
             setIsLoading(false);
-          }
-        });
+            if (err && err.hasOwnProperty("data") && typeof err.data === "string") {
+              setErrorMessage(err.data);
+            } else if (err && err.hasOwnProperty("message") && typeof err.message === "string") {
+              setErrorMessage(err.message);
+            } else {
+              setErrorMessage(
+                  __("There was an error processing the access key.", "trustedlogin-connector")
+              );
+            }
+          })
+          .then((res) => {
+            if (res && res.hasOwnProperty("success") && res.success) {
+              const { data } = res;
+              setRedirectData(data);
+              setIsLoading(false);
+            }
+          });
     } //Have redirectSite, login with it!
     else if (redirectSite) {
       e.preventDefault();
@@ -187,30 +171,24 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
         body: JSON.stringify(data),
         credentials: "include",
       })
-        .then((r) => {
+          .then((r) => {
           //Response good?
           if (r.ok()) {
             //Redirect to site,should be logged in already.
-            window.location = redirectSite.siteurl;
-            return;
-          }
-          setIsLoading(false);
-          setErrorMessage(
-            __(
-              "There was an error while logging in with the access key.",
-              "trustedlogin-connector"
-            )
-          );
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          setErrorMessage(
-            __(
-              "There was an error while logging in with the access key.",
-              "trustedlogin-connector"
-            )
-          );
-        });
+              window.location = redirectSite.siteurl;
+              return;
+            }
+            setIsLoading(false);
+            setErrorMessage(
+                __("There was an error while logging in with the access key.", "trustedlogin-connector")
+            );
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            setErrorMessage(
+                __("There was an error while logging in with the access key.", "trustedlogin-connector")
+            );
+          });
     }
   };
 
@@ -229,125 +207,92 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
     }
   }, [redirectSite]);
 
+  useEffect(() => {
+    console.log("Teams:", teams); // Debugging line
+  }, [teams]);
+
   //Have redirectData and not redirectSite, show select
   if (redirectData && !redirectSite) {
     return (
-      <Layout
-        minimal={minimal}
-        title={__("Select site to log into.", "trustedlogin-connector")}
-        description={__(
-          "There are multiple sites associated with this access key.",
-          "trustedlogin-connector"
-        )}>
-        <>
+        <Layout
+            minimal={minimal}
+            title={__("Select site to log into.", "trustedlogin-connector")}
+            description={__(
+                "There are multiple sites associated with this access key.",
+                "trustedlogin-connector"
+            )}>
           <div>
             <ul>
               {Object.keys(redirectData).map((id) => {
-                let site = redirectData[id];
+                const site = redirectData[id];
                 return (
-                  <li key={id}>
-                    <SecondaryButton
-                      onClick={() => {
-                        setRedirectSite(site);
-                      }}>
-                      {site.siteurl}
-                    </SecondaryButton>
-                  </li>
+                    <li key={id}>
+                      <SecondaryButton onClick={() => setRedirectSite(site)}>
+                        {site.siteurl}
+                      </SecondaryButton>
+                    </li>
                 );
               })}
             </ul>
           </div>
-        </>
-      </Layout>
+        </Layout>
     );
   }
+
   return (
-    <>
       <Layout
-        minimal={minimal}
-        title={__("Log In Using Access Key", "trustedlogin-connector")}
-        description={__(
-          "Paste the Access Key to log into the connected website.",
-          "trustedlogin-connector"
-        )}>
-        <>
-          <form
+          minimal={minimal}
+          title={__("Log In Using Access Key", "trustedlogin-connector")}
+          description={__("Paste the Access Key to log into the connected website.", "trustedlogin-connector")}>
+        <form
             aria-label={__("Log In Using Access Key", "trustedlogin-connector")}
             onSubmit={handler}
             id="access-key-form"
             method={"POST"}
             action={redirectSite ? redirectSite.siteurl : null}
             className="flex flex-col py-6 space-y-6 justify-center">
-            <>
-              {redirectSite ? (
-                <>
-                  <div className={"text-center"}>
-                    {__("Redirecting…", "trustedlogin-connector")}
-                  </div>
-                  <input type="hidden" name="action" value={"trustedlogin"} />
-                  <input
-                    type="hidden"
-                    name="endpoint"
-                    value={redirectSite.endpoint}
-                  />
-                  <input
-                    type="hidden"
-                    name="identifier"
-                    value={redirectSite.identifier}
-                  />
-                </>
-              ) : (
-                <>
-                  <input type="hidden" name="trustedlogin" value={1} />
-                  <input
-                    type="hidden"
-                    name="action"
-                    value={window.tlVendor.accessKey.action}
-                  />
-                  <input
-                    type="hidden"
-                    name="provider"
-                    value={window.tlVendor.accessKey.provider}
-                  />
-                  <input
-                    type="hidden"
-                    name="_tl_ak_nonce"
-                    value={window.tlVendor.accessKey._tl_ak_nonce}
-                  />
-                  {null !== initialAccountId ? (
-                    <input
-                      type="hidden"
-                      name="ak_account_id"
-                      value={accountId}
-                    />
-                  ) : (
+          {redirectSite ? (
+              <>
+                <div className="text-center">
+                  {__("Redirecting…", "trustedlogin-connector")}
+                </div>
+                <input type="hidden" name="action" value={"trustedlogin"} />
+                <input type="hidden" name="endpoint" value={redirectSite.endpoint} />
+                <input type="hidden" name="identifier" value={redirectSite.identifier} />
+              </>
+          ) : (
+              <>
+                <input type="hidden" name="trustedlogin" value={1} />
+                <input type="hidden" name="action" value={window.tlVendor.accessKey.action} />
+                <input type="hidden" name="provider" value={window.tlVendor.accessKey.provider} />
+                <input type="hidden" name="_tl_ak_nonce" value={window.tlVendor.accessKey._tl_ak_nonce} />
+                {initialAccountId !== null ? (
+                    <input type="hidden" name="ak_account_id" value={accountId} />
+                ) : (
                     <SelectFieldArea
-                      name="ak_account_id"
-                      id="ak_account_id"
-                      label={__("Account ID", "trustedlogin-connector")}
-                      value={accountId}
-                      onChange={(e) => setAccountId(e.target.value)}>
-                      <>
-                        <select
+                        name="ak_account_id"
+                        id="ak_account_id"
+                        label={__("Account ID", "trustedlogin-connector")}
+                        value={accountId}
+                        onChange={(e) => setAccountId(e.target.value)}>
+                      <select
                           name="ak_account_id"
                           id="ak_account_id"
                           className="bg-white block w-full pl-3 pr-8 py-2.5 sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500">
-                          {teamsOption.map(({ label, value }) => (
+                        {teamsOption.map(({ label, value }) => (
                             <option key={value} value={value}>
                               {label}
                             </option>
-                          ))}
-                        </select>
-                      </>
+                        ))}
+                      </select>
                     </SelectFieldArea>
-                  )}
-
-                  <div className="relative rounded-lg">
-                    <InputFieldArea
+                )}
+                <div className="relative rounded-lg">
+                  <InputFieldArea
                       name="ak"
                       id="ak"
                       label={__("Access Key", "trustedlogin-connector")}>
-                      <input
+                    <input
                         value={accessKey}
                         onChange={(e) => setAccessKey(e.target.value)}
                         type="text"
@@ -355,35 +300,26 @@ const AccessKeyForm = ({ initialAccountId = null, minimal = false }) => {
                         id="ak"
                         minLength={64}
                         maxLength={64}
-                        autoComplete={"off"}
+                        autoComplete="off"
                         className="block w-full pl-4 pr-10 py-4 sm:text-md border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 ring-offset-2 focus:ring-sky-500"
-                        placeholder={__(
-                          "Paste key received from customer",
-                          "trustedlogin-connector"
-                        )}
-                      />
-                    </InputFieldArea>
-                  </div>
-
-                  <>
-                    {isLoading ? (
-                      <div className="spinner-light-tl inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
-                    ) : (
-                      <input
+                        placeholder={__("Paste key received from customer", "trustedlogin-connector")}
+                    />
+                  </InputFieldArea>
+                </div>
+                {isLoading ? (
+                    <div className="spinner-light-tl inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl"></div>
+                ) : (
+                    <input
                         type="submit"
                         className="inline-flex justify-center p-4 border border-transparent text-md font-medium rounded-lg text-white bg-blue-tl hover:bg-indigo-700 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-sky-500"
                         value={__("Log In", "trustedlogin-connector")}
-                      />
-                    )}
-                  </>
-                </>
-              )}
-            </>
-          </form>
-          {errorMessage && <ToastError heading={errorMessage} />}
-        </>
+                    />
+                )}
+              </>
+          )}
+        </form>
+        {errorMessage && <ToastError heading={errorMessage} />}
       </Layout>
-    </>
   );
 };
 

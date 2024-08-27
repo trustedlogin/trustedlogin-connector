@@ -10,10 +10,12 @@ use TrustedLogin\Vendor\Webhooks\Webhook;
 /**
  * Checks for support redirect logins and tries to handle them.
  */
-class MaybeRedirect
-{
+class MaybeRedirect {
 
-	use Logger, VerifyUser;
+
+	use Logger;
+	use VerifyUser;
+
 	const REDIRECT_KEY = 'tl_redirect';
 
 	/**
@@ -21,32 +23,38 @@ class MaybeRedirect
 	 *
 	 * @uses "admin_init" action
 	 */
-	public static function adminInit(){
+	public static function adminInit() {
 
-		if( ! isset($_REQUEST['action']) || Reset::ACTION_NAME !== $_REQUEST['action'] ) {
+		if ( ! isset( $_REQUEST['action'] ) || Reset::ACTION_NAME !== $_REQUEST['action'] ) {
 			return;
 		}
 
-		if( ! wp_verify_nonce( $_REQUEST['_wpnonce'], Reset::NONCE_ACTION )){
+		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], Reset::NONCE_ACTION ) ) {
 			wp_safe_redirect(
-				add_query_arg( [
-					'page' => 'trustedlogin-settings',
-					'error' => 'nonce'
-				], admin_url() )
+				add_query_arg(
+					array(
+						'page'  => 'trustedlogin-settings',
+						'error' => 'nonce',
+					),
+					admin_url()
+				)
 			);
 			exit;
 		}
 
-		//Reset all data
-		(new Reset())->resetAll(
+		// Reset all data
+		( new Reset() )->resetAll(
 			\trustedlogin_connector()
 		);
 
 		wp_safe_redirect(
-			add_query_arg( [
-				'page' => 'trustedlogin-settings',
-				'success' => 'reset'
-			], admin_url() )
+			add_query_arg(
+				array(
+					'page'    => 'trustedlogin-settings',
+					'success' => 'reset',
+				),
+				admin_url()
+			)
 		);
 		exit;
 	}
@@ -57,51 +65,53 @@ class MaybeRedirect
 	 * @uses "template_redirect" action
 	 * @since 1.0.0
 	 */
-	public static function handle()
-	{
-		//Access key redirect
-		if ( ! isset($_REQUEST[ AccessKeyLogin::REDIRECT_ENDPOINT ])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	public static function handle() {
+		// Access key redirect
+		if ( ! isset( $_REQUEST[ AccessKeyLogin::REDIRECT_ENDPOINT ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 
-		if( isset($_REQUEST['action']) && Webhook::WEBHOOK_ACTION == $_REQUEST['action']){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$provider = $_REQUEST[Factory::PROVIDER_KEY]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			if( ! in_array($provider, Factory::getProviders())){
+		if ( isset( $_REQUEST['action'] ) && Webhook::WEBHOOK_ACTION == $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$provider = $_REQUEST[ Factory::PROVIDER_KEY ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( ! in_array( $provider, Factory::getProviders() ) ) {
 				return;
 			}
-			if( ! IsIntegrationActive::check($provider)){
+			if ( ! IsIntegrationActive::check( $provider ) ) {
 				return;
 			}
-			$accountId = $_REQUEST[AccessKeyLogin::ACCOUNT_ID_INPUT_NAME]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$accountId = $_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			try {
-				$team  = SettingsApi::fromSaved()->getByAccountId($accountId);
+				$team    = SettingsApi::fromSaved()->getByAccountId( $accountId );
 				$webhook = Factory::webhook( $team );
-				$r = $webhook->webhookEndpoint();
-				if( 200 === $r['status']){
-					wp_send_json($r);
-				}else{
-					wp_send_json($r,$r['status']);
+				$r       = $webhook->webhookEndpoint();
+				if ( 200 === $r['status'] ) {
+					wp_send_json( $r );
+				} else {
+					wp_send_json( $r, $r['status'] );
 				}
-			} catch (\Throwable $th) {
-				wp_send_json( ['message' => $th->getMessage()],404);
+			} catch ( \Throwable $th ) {
+				wp_send_json( array( 'message' => $th->getMessage() ), 404 );
 			}
 			exit;
 		}
 
 		$handler = new AccessKeyLogin();
-		$parts = $handler->handle();
+		$parts   = $handler->handle();
 
-		if( is_array($parts) ){
-			wp_send_json_success($parts);
+		if ( is_array( $parts ) ) {
+			wp_send_json_success( $parts );
 			exit;
 		}
 
 		wp_safe_redirect(
-			add_query_arg( [
-				'page' => 'trustedlogin-settings',
-				'error' => $parts->get_error_code()
-			], admin_url() )
+			add_query_arg(
+				array(
+					'page'  => 'trustedlogin-settings',
+					'error' => $parts->get_error_code(),
+				),
+				admin_url()
+			)
 		);
 		exit;
 	}

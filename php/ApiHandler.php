@@ -3,16 +3,16 @@ namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Contracts\SendsApiRequests as ApiSender;
 use TrustedLogin\Vendor\Traits\Logger;
-use \WP_Error;
-use \Exception;
+use WP_Error;
+use Exception;
 
 /**
  * Class: TrustedLogin API Handler
  *
  * @version 0.1.0
  */
-class ApiHandler
-{
+class ApiHandler {
+
 
 	use Logger;
 
@@ -62,22 +62,21 @@ class ApiHandler
 	private $apiSender;
 
 
-	public function __construct($data, ApiSender $apiSender)
-	{
+	public function __construct( $data, ApiSender $apiSender ) {
 		$this->apiSender = $apiSender;
-		$defaults = [
-			'private_key' => null,
-			'public_key'  => null,
-			'debug_mode'  => false,
-			'type'        => 'saas',
-			'api_url' => 'https://app.trustedlogin.com/api/v1/',
+		$defaults        = array(
+			'private_key'   => null,
+			'public_key'    => null,
+			'debug_mode'    => false,
+			'type'          => 'saas',
+			'api_url'       => TRUSTEDLOGIN_API_URL,
 			'auth_required' => true,
-		];
+		);
 
-		$atts = wp_parse_args($data, $defaults);
+		$atts = wp_parse_args( $data, $defaults );
 
-		foreach (array_keys($defaults) as $key) {
-			$this->$key = $atts[$key];
+		foreach ( array_keys( $defaults ) as $key ) {
+			$this->$key = $atts[ $key ];
 		}
 	}
 
@@ -85,25 +84,22 @@ class ApiHandler
 	 * @internal
 	 * @return string Full versioned API url, with trailing slash.
 	 */
-	public function getApiUrl()
-	{
+	public function getApiUrl() {
 		return $this->api_url;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getAuthHeaderType()
-	{
+	public function getAuthHeaderType() {
 		return $this->auth_header_type;
 	}
 
 	/**
 	 * @return string Authentication bearer token hash
 	 */
-	private function getAuthBearerToken()
-	{
-		return hash('sha256', $this->private_key);
+	private function getAuthBearerToken() {
+		return hash( 'sha256', $this->private_key );
 	}
 
 	/**
@@ -113,18 +109,17 @@ class ApiHandler
 	 *
 	 * @return string|WP_Error $saas_token Additional SaaS Token for authenticating API queries. WP_Error on error.
 	 */
-	public function getXTlToken()
-	{
+	public function getXTlToken() {
 
-		if (! $this->public_key) {
-			return new WP_Error('missing_public_key');
+		if ( ! $this->public_key ) {
+			return new WP_Error( 'missing_public_key' );
 		}
 
-		if (! $this->private_key) {
-			return new WP_Error('missing_private_key');
+		if ( ! $this->private_key ) {
+			return new WP_Error( 'missing_private_key' );
 		}
 
-		return hash('sha256', $this->public_key . $this->private_key);
+		return hash( 'sha256', $this->public_key . $this->private_key );
 	}
 
 	/**
@@ -132,19 +127,17 @@ class ApiHandler
 	 *
 	 * @return string
 	 */
-	public function getApiKey()
-	{
+	public function getApiKey() {
 		return $this->public_key;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getAdditionalHeader()
-	{
-		if (! empty($this->private_key)) {
+	public function getAdditionalHeader() {
+		if ( ! empty( $this->private_key ) ) {
 			$this->additional_headers[ $this->auth_header_type ] = 'Bearer ' . $this->getAuthBearerToken();
-			$this->additional_headers[ 'X-TL-TOKEN'] = $this->getXTlToken();
+			$this->additional_headers['X-TL-TOKEN']              = $this->getXTlToken();
 		}
 		return $this->additional_headers;
 	}
@@ -160,10 +153,9 @@ class ApiHandler
 	 *
 	 * @return array|false
 	 */
-	public function setAdditionalHeader($key, $value)
-	{
+	public function setAdditionalHeader( $key, $value ) {
 
-		if (empty($key) || empty($value) || is_wp_error($value)) {
+		if ( empty( $key ) || empty( $value ) || is_wp_error( $value ) ) {
 			return false;
 		}
 
@@ -179,35 +171,34 @@ class ApiHandler
 	 * @since 0.4.1
 	 *
 	 * @param string $endpoint - the API endpoint to be pinged
-	 * @param array $data - the data variables being synced
+	 * @param array  $data - the data variables being synced
 	 * @param string $method - HTTP RESTful method ('POST','GET','DELETE','PUT','UPDATE')
 	 *
 	 * @param string $type - where the API is being prepared for ('saas')
 	 *
 	 * @return object|bool|WP_Error - response from the RESTful API
 	 */
-	public function call($endpoint, $data, $method)
-	{
+	public function call( $endpoint, $data, $method ) {
 
 		$additional_headers = $this->getAdditionalHeader();
 
 		$url = $this->getApiUrl() . $endpoint;
 
-		if (! empty($this->private_key)) {
+		if ( ! empty( $this->private_key ) ) {
 			$additional_headers[ $this->auth_header_type ] = 'Bearer ' . $this->getAuthBearerToken();
 		}
 
-		if ($this->auth_required && empty($additional_headers)) {
-			$this->log("Auth required for API call", __METHOD__, 'error');
+		if ( $this->auth_required && empty( $additional_headers ) ) {
+			$this->log( 'Auth required for API call', __METHOD__, 'error' );
 
 			return false;
 		}
 
-		$this->log("Sending $method API call to $url", __METHOD__, 'debug');
+		$this->log( "Sending $method API call to $url", __METHOD__, 'debug' );
 
-		$api_response = $this->apiSend($url, $data, $method, $additional_headers);
+		$api_response = $this->apiSend( $url, $data, $method, $additional_headers );
 
-		return $this->handleResponse($api_response);
+		return $this->handleResponse( $api_response );
 	}
 
 	/**
@@ -217,103 +208,116 @@ class ApiHandler
 	 *
 	 * @return \stdClass|WP_Error If valid status received, returns object with a few details, otherwise a WP_Error for the status code provided.
 	 */
-	public function verify($account_id = '')
-	{
+	public function verify( $account_id = '' ) {
 
-		$account_id = intval($account_id);
+		$account_id = intval( $account_id );
 
-		if (0 === $account_id) {
+		if ( 0 === $account_id ) {
 			return new WP_Error(
 				'verify-failed',
-				__('No account ID provided.', 'trustedlogin-connector')
+				__( 'No account ID provided.', 'trustedlogin-connector' )
 			);
 		}
 
-		$url 	  = $this->getApiUrl() . 'accounts/' . $account_id ;
-		$method   = 'POST';
-		$body     = array(
+		$url     = $this->getApiUrl() . 'accounts/' . $account_id;
+		$method  = 'POST';
+		$body    = array(
 			'api_endpoint' => get_rest_url(),
-		 );
-		$headers  = $this->getAdditionalHeader();
+		);
+		$headers = $this->getAdditionalHeader();
 
-		$verification = $this->apiSend($url, $body, $method, $headers);
+		$verification = $this->apiSend( $url, $body, $method, $headers );
 
-		$this->log( 'Verification results:', __METHOD__ . ':' . __LINE__, 'debug', [ '$verification' => $verification ] );
+		$this->log( 'Verification results:', __METHOD__ . ':' . __LINE__, 'debug', array( '$verification' => $verification ) );
 
-		if (is_wp_error($verification)) {
+		if ( is_wp_error( $verification ) ) {
 			return new WP_Error(
 				$verification->get_error_code(),
-				__('We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-connector'),
+				__( 'We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-connector' ),
 				$verification->get_error_message()
 			);
 		}
 
-		if (! $verification) {
+		if ( ! $verification ) {
 			return new WP_Error(
 				'verify-failed',
-				__('We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-connector')
+				__( 'We could not verify your TrustedLogin credentials, please try save settings again.', 'trustedlogin-connector' )
 			);
 		}
 
-		$status = wp_remote_retrieve_response_code($verification);
+		$status = wp_remote_retrieve_response_code( $verification );
+		$body   = wp_remote_retrieve_body( $verification );
 
-		switch ($status) {
-			case 400:
-			case 403:
-				return new WP_Error(
-					'verify-failed-' . $status,
-					__('Could not verify API and Private keys, please confirm the provided keys.', 'trustedlogin-connector')
-				);
-				break;
-			case 404:
-				return new WP_Error(
-					'verify-failed-404',
-					__('Account not found, please check the ID provided.', 'trustedlogin-connector')
-				);
-				break;
-			case 405:
-				return new WP_Error(
-					'verify-failed-405',
-					sprintf(
+		$body = json_decode( $body );
+
+		if ( $status > 399 ) {
+			switch ( $status ) {
+				case 402:
+					return new WP_Error(
+						'verify-failed-402',
+						__( 'You do not have a valid TrustedLogin subscription.', 'trustedlogin-connector' )
+					);
+					break;
+				case 400:
+				case 403:
+					return new WP_Error(
+						'verify-failed-' . $status,
+						__( 'Could not verify API and Private keys, please confirm the provided keys.', 'trustedlogin-connector' )
+					);
+					break;
+				case 404:
+					return new WP_Error(
+						'verify-failed-404',
+						__( 'Account not found, please check the ID provided.', 'trustedlogin-connector' )
+					);
+					break;
+				case 405:
+					return new WP_Error(
+						'verify-failed-405',
+						sprintf(
 						// translators: %1$s is the HTTP method used, %2$s is the URL.
-						__('Incorrect method (%1$s) used for %2$s', 'trustedlogin-connector'),
-						/* %1$s */ $method,
-						/* %2$s */ $url
-					)
-				);
-			case 500:
-				return new WP_Error(
-					'verify-failed-500',
-					// translators: %d is the HTTP status code.
-					sprintf(__('Status %d returned', 'trustedlogin-connector'), $status)
-				);
-				break;
+							__( 'Incorrect method (%1$s) used for %2$s', 'trustedlogin-connector' ),
+							/* %1$s */ $method,
+							/* %2$s */ $url
+						)
+					);
+				case 500:
+					return new WP_Error(
+						'verify-failed-500',
+						// translators: %d is the HTTP status code.
+						sprintf( __( 'Status %d returned', 'trustedlogin-connector' ), $status )
+					);
+					break;
+				default:
+					return new WP_Error(
+						'verify-failed-' . $status,
+						// translators: %s is the Response message if available otherwise the HTTP status code.
+						sprintf( __( "The TrustedLogin Service Responded with:\n%s\nIf the problem continues please contact support.", 'trustedlogin-connector' ), $body['message'] ?? $status )
+					);
+			}
 		}
 
-		$body = wp_remote_retrieve_body($verification);
-
-		$body = json_decode($body);
 		$this->log( 'Verification response on line ' . __LINE__ . ':', __METHOD__, 'debug', $body );
 
-		if (! $body) {
+		if ( ! $body ) {
 			return new WP_Error(
 				'verify-failed',
-				__('Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-connector')
+				__( 'Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-connector' )
 			);
 		}
 
-		if (isset($body->status) && 'active' !== $body->status) {
+		if ( isset( $body->status ) && 'active' !== $body->status ) {
 			return new WP_Error(
 				'verify-failed-inactive',
-				__('Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-connector')
+				__( 'Your TrustedLogin account is not active, please login to activate your account.', 'trustedlogin-connector' )
 			);
 		}
 
-		if (isset($body->error) && $body->error) {
+		if ( isset( $body->error ) && $body->error ) {
 			return new WP_Error(
 				'verify-failed-other',
 				// translators: %d is the HTTP status code.
-				sprintf(__('Please contact support (Error Status #%d)', 'trustedlogin-connector'), $status)
+				sprintf( __( 'Please contact support (Error Status #%d)', 'trustedlogin-connector' ), $status )
 			);
 		}
 
@@ -329,67 +333,81 @@ class ApiHandler
 	 *
 	 * @return object|true|WP_Error  Either `json_decode()` of the result's body, or true if status === 204 (successful response, but no sites found) or WP_Error if empty body or error.
 	 */
-	public function handleResponse($api_response)
-	{
+	public function handleResponse( $api_response ) {
 
-		if (is_wp_error($api_response)) {
+		if ( is_wp_error( $api_response ) ) {
 			return $api_response; // Logging intentionally left out; already logged in apiSend()
 		}
 
-		if (empty($api_response) || ! is_array($api_response)) {
-			$this->log('Malformed api_response received:', __METHOD__, 'error',[
-				'response' => $api_response
-			]);
+		if ( empty( $api_response ) || ! is_array( $api_response ) ) {
+			$this->log(
+				'Malformed api_response received:',
+				__METHOD__,
+				'error',
+				array(
+					'response' => $api_response,
+				)
+			);
 
-			return new WP_Error('malformed_response', esc_html__('Malformed API response received.', 'trustedlogin-connector'));
+			return new WP_Error( 'malformed_response', esc_html__( 'Malformed API response received.', 'trustedlogin-connector' ) );
 		}
 
 		// first check the HTTP Response code
-		$response_code = wp_remote_retrieve_response_code($api_response);
+		$response_code = wp_remote_retrieve_response_code( $api_response );
 
 		// successful response, but no sites found. does not return any body content, so can bounce out successfully here
-		if (204 === $response_code) {
+		if ( 204 === $response_code ) {
 			return true;
 		}
 
-		$body = wp_remote_retrieve_body($api_response);
+		$body = wp_remote_retrieve_body( $api_response );
 
-		$body = json_decode($body);
+		$body = json_decode( $body );
 
-		if (empty($body) || ! is_object($body)) {
-			$this->log('No body received:' , __METHOD__, 'error',['body' => $body]);
+		if ( empty( $body ) || ! is_object( $body ) ) {
+			$this->log( 'No body received:', __METHOD__, 'error', array( 'body' => $body ) );
 
-			return new WP_Error('empty_body', esc_html__('No body received.', 'trustedlogin-connector'));
+			return new WP_Error( 'empty_body', esc_html__( 'No body received.', 'trustedlogin-connector' ) );
 		}
 
-		$body_message = isset($body->message) ? $body->message : null;
+		$body_message = isset( $body->message ) ? $body->message : null;
 
-		switch ($response_code) {
+		switch ( $response_code ) {
 			case 424:
-				$this->log('Error Getting Signature Key from Vendor: ', __METHOD__, 'error',[
-					'response' => $api_response
-				]);
-				return new WP_Error('signature_key_error', $body_message);
+				$this->log(
+					'Error Getting Signature Key from Vendor: ',
+					__METHOD__,
+					'error',
+					array(
+						'response' => $api_response,
+					)
+				);
+				return new WP_Error( 'signature_key_error', $body_message );
 			case 410:
-				$this->log('Error Getting Signature Key from Vendor: ', __METHOD__, 'error',[
-					'response' => $api_response
-				]);
-				return new WP_Error('gone', 'This support request is gone. Please create a new request. (SecretNotFoundInVaultException)');
+				$this->log(
+					'Error Getting Signature Key from Vendor: ',
+					__METHOD__,
+					'error',
+					array(
+						'response' => $api_response,
+					)
+				);
+				return new WP_Error( 'gone', 'This support request is gone. Please create a new request. (SecretNotFoundInVaultException)' );
 			case 403:
 				// Problem with Token
 				// TODO: Handle this
 			case 404:
-				return new WP_Error('not_found', esc_html__('Not found.', 'trustedlogin-connector'));
+				return new WP_Error( 'not_found', esc_html__( 'Not found.', 'trustedlogin-connector' ) );
 			default:
 		}
 
-		if (isset($body->errors)) {
-			$errors = implode('', (array) $body->errors);
+		if ( isset( $body->errors ) ) {
+			$errors = implode( '', (array) $body->errors );
 
-			$this->log("Error from API: {$errors}", __METHOD__, 'error');
+			$this->log( "Error from API: {$errors}", __METHOD__, 'error' );
 
 			// translators: %s is the error message from the API.
-			return new WP_Error('api_errors', sprintf(esc_html__('Errors returned from API: %s', 'trustedlogin-connector'), $errors));
+			return new WP_Error( 'api_errors', sprintf( esc_html__( 'Errors returned from API: %s', 'trustedlogin-connector' ), $errors ) );
 		}
 
 		return $body;
@@ -401,15 +419,14 @@ class ApiHandler
 	 * @since 0.4.0
 	 *
 	 * @param string $url The complete url for the REST API request
-	 * @param mixed $data Data to send as JSON-encoded request body
+	 * @param mixed  $data Data to send as JSON-encoded request body
 	 * @param string $method HTTP request method (must be 'POST', 'PUT', 'GET', 'PUSH', or 'DELETE')
-	 * @param array $additional_headers Any additional headers to send in request (required for auth/etc)
+	 * @param array  $additional_headers Any additional headers to send in request (required for auth/etc)
 	 *
 	 * @return array|false|WP_Error - wp_remote_post response, false if invalid HTTP method, WP_Error if request errors
 	 */
-	public function apiSend($url, $data, $method, $additional_headers)
-	{
+	public function apiSend( $url, $data, $method, $additional_headers ) {
 
-		return $this->apiSender->send($url, $data, $method, $additional_headers);
+		return $this->apiSender->send( $url, $data, $method, $additional_headers );
 	}
 }

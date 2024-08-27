@@ -10,7 +10,7 @@ import {
   initialTeams,
   initialIntegrationSettings,
 } from "./trustedlogin-settings/setupVars";
-import SettingsProvider from "./hooks/useSettings";
+import { SettingsProvider } from "./hooks/useSettings";
 import AccessKeyForm from "./components/AccessKeyForm";
 import { useView } from "./hooks/useView";
 
@@ -26,6 +26,7 @@ render(
     hasOnboarded={hasOnboarded}
     initialTeams={initialTeams}
     initialIntegrationSettings={initialIntegrationSettings}
+    loading={false}
     api={api}>
     <>
       <App />

@@ -1,4 +1,4 @@
-import SettingsProvider from "../hooks/useSettings";
+import { SettingsProvider } from "../hooks/useSettings";
 import ViewProvider from "../hooks/useView";
 export const testTeam = {
   account_id: "1",

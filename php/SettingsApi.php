@@ -12,8 +12,8 @@ use TrustedLogin\Vendor\Webhooks\Helpscout;
  *
  * Encryption class doesn't follow this rule BTW, but you should.
  */
-class SettingsApi
-{
+class SettingsApi {
+
 
 	/**
 	 * The name of the option we store team settings in.
@@ -27,6 +27,7 @@ class SettingsApi
 
 	/**
 	 * The name of the option we store log hash in.
+	 *
 	 * @see Traits/Logger
 	 */
 	const LOG_LOCATION_SETTING_NAME = 'trustedlogin_vendor_log_location';
@@ -34,7 +35,7 @@ class SettingsApi
 	/**
 	 * @var TeamSettings[]
 	 */
-	protected $teamSettings = [];
+	protected $teamSettings = array();
 
 	/**
 	 * @var []
@@ -44,30 +45,29 @@ class SettingsApi
 	/**
 	 * @var []
 	 */
-	protected $globalSettingsDefaults = [
-		'integrations' => [
-			'helpscout' => [
+	protected $globalSettingsDefaults = array(
+		'integrations'  => array(
+			'helpscout' => array(
 				'enabled' => true,
-			],
-			'freescout' => [
+			),
+			'freescout' => array(
 				'enabled' => true,
-			]
-		],
-		'error_logging' => false
-	];
+			),
+		),
+		'error_logging' => false,
+	);
 
 	/**
 	 * @param TeamSettings[]|array[] $teamData Collection of team data
 	 */
-	public function __construct(array $team_data,array $globaSlettings = [])
-	{
+	public function __construct( array $team_data, array $globaSlettings = array() ) {
 
-		$this->setGlobalSettings($globaSlettings);
-		foreach ($team_data as $values) {
-			if (is_array($values)) {
-				$values = new TeamSettings($values);
+		$this->setGlobalSettings( $globaSlettings );
+		foreach ( $team_data as $values ) {
+			if ( is_array( $values ) ) {
+				$values = new TeamSettings( $values );
 			}
-			if (is_a($values, TeamSettings::class)) {
+			if ( is_a( $values, TeamSettings::class ) ) {
 				$this->teamSettings[] = $values;
 			}
 		}
@@ -75,32 +75,30 @@ class SettingsApi
 
 	/**
 	 * Create instance from saved data.
+	 *
 	 * @return SettingsApi
 	 */
-	public static function fromSaved()
-	{
+	public static function fromSaved() {
 
-		$saved = get_option(self::TEAM_SETTING_NAME, []);
+		$saved = get_option( self::TEAM_SETTING_NAME, array() );
 
-		$data = [];
-		if (! empty($saved)) {
-			$saved = (array)json_decode($saved);
-			foreach ($saved as $value) {
-				$team = new TeamSettings((array)$value);
+		$data = array();
+		if ( ! empty( $saved ) ) {
+			$saved = (array) json_decode( $saved );
+			foreach ( $saved as $value ) {
+				$team   = new TeamSettings( (array) $value );
 				$data[] = $team;
 			}
 		}
-		$obj = new static($data);
-		$globals = get_option(self::GLOBAL_SETTING_NAME, null);
-		if (! empty($globals)) {
-			$globals = (array)json_decode($globals);
+		$obj     = new static( $data );
+		$globals = get_option( self::GLOBAL_SETTING_NAME, null );
+		if ( ! empty( $globals ) ) {
+			$globals = (array) json_decode( $globals );
 
 			$obj->setGlobalSettings(
-				is_array($globals) ? $globals : []
-
-			 );
+				is_array( $globals ) ? $globals : array()
+			);
 		}
-
 
 		return $obj;
 	}
@@ -111,24 +109,24 @@ class SettingsApi
 	 * @since 0.10.0
 	 * @return SettingsApi
 	 */
-	public function save()
-	{
-		$data = [];
-		foreach ($this->teamSettings as $setting) {
+	public function save() {
+		$data = array();
+		foreach ( $this->teamSettings as $setting ) {
 			$_setting = $setting->toArray();
-			//If enabled a helpdesk...
-			if( ! empty( $setting->getHelpdesks() ) ) {
-				if( ! isset($_setting[TeamSettings::HELPDESK_SETTINGS]) ) {
-					$_setting[TeamSettings::HELPDESK_SETTINGS] = [];
+			// If enabled a helpdesk...
+			if ( ! empty( $setting->getHelpdesks() ) ) {
+				if ( ! isset( $_setting[ TeamSettings::HELPDESK_SETTINGS ] ) ) {
+					$_setting[ TeamSettings::HELPDESK_SETTINGS ] = array();
 				}
-				$account_id = $setting->get( 'account_id');
-				foreach( $setting->getHelpdesks() as $helpdesk){
-					if( isset( $_setting[TeamSettings::HELPDESK_SETTINGS][$helpdesk])){
+				$account_id = $setting->get( 'account_id' );
+				foreach ( $setting->getHelpdesks() as $helpdesk ) {
+					// Ensure the helpdesk settings are an array.
+					$helpdesk_settings = (array) ( $_setting[ TeamSettings::HELPDESK_SETTINGS ] ?? [] );
+					if ( isset( $helpdesk_settings[ $helpdesk ] ) ) {
 						continue;
 					}
-					$_setting[TeamSettings::HELPDESK_SETTINGS][$helpdesk] = $this->newHelpdeskSettings($account_id,$helpdesk);
+					$_setting[ TeamSettings::HELPDESK_SETTINGS ][ $helpdesk ] = $this->newHelpdeskSettings( $account_id, $helpdesk );
 				}
-
 			}
 			$data[] = $_setting;
 		}
@@ -145,10 +143,10 @@ class SettingsApi
 		/**
 		 * @deprecated 1.1
 		 */
-		do_action_deprecated( 'trustedlogin_vendor_settings_saved', [ $count ], '1.1', 'trustedlogin_connector_settings_saved' );
+		do_action_deprecated( 'trustedlogin_vendor_settings_saved', array( $count ), '1.1', 'trustedlogin_connector_settings_saved' );
 
-		//When saving settings, maybe mark onboarding complete
-		if( $count ){
+		// When saving settings, maybe mark onboarding complete
+		if ( $count ) {
 			\TrustedLogin\Vendor\Status\Onboarding::setHasOnboarded();
 		}
 
@@ -164,16 +162,15 @@ class SettingsApi
 	 * @param string|int $account_id Account to search for.
 	 * @return TeamSettings
 	 */
-	public function getByAccountId($account_id)
-	{
-		foreach ($this->teamSettings as $setting) {
-			if (intval($account_id) === intval($setting->get('account_id'))) {
+	public function getByAccountId( $account_id ) {
+		foreach ( $this->teamSettings as $setting ) {
+			if ( intval( $account_id ) === intval( $setting->get( 'account_id' ) ) ) {
 				return $setting;
 			}
 		}
 
 		// translators: %s is the account id that wasn't found.
-		throw new \Exception(sprintf( esc_html__( 'Account not found: %s.', 'trustedlogin-connector' ), esc_attr( $account_id ) ) );
+		throw new \Exception( sprintf( esc_html__( 'Account not found: %s.', 'trustedlogin-connector' ), esc_attr( $account_id ) ) );
 	}
 
 	/*
@@ -183,11 +180,10 @@ class SettingsApi
 	 * @param TeamSettings $values New settings object
 	 * @return SettingsApi
 	 */
-	public function updateByAccountId(TeamSettings $value)
-	{
-		foreach ($this->teamSettings as $key => $setting) {
-			if ($value->get('account_id') == $setting->get('account_id')) {
-				$this->teamSettings[$key] = $value;
+	public function updateByAccountId( TeamSettings $value ) {
+		foreach ( $this->teamSettings as $key => $setting ) {
+			if ( $value->get( 'account_id' ) == $setting->get( 'account_id' ) ) {
+				$this->teamSettings[ $key ] = $value;
 				return $this;
 			}
 		}
@@ -196,14 +192,14 @@ class SettingsApi
 
 	/**
 	 * Check if setting is in collection
+	 *
 	 * @since 0.10.0
 	 * @param string $account_id
 	 * @return bool
 	 */
-	public function hasSetting($account_id)
-	{
-		foreach ($this->teamSettings as $setting) {
-			if ($account_id == $setting->get('account_id')) {
+	public function hasSetting( $account_id ) {
+		foreach ( $this->teamSettings as $setting ) {
+			if ( $account_id == $setting->get( 'account_id' ) ) {
 				return true;
 			}
 		}
@@ -212,18 +208,18 @@ class SettingsApi
 
 	/**
 	 * Add or update a setting to collection
+	 *
 	 * @since 0.10.0
 	 * @param TeamSettings $setting
 	 * @return $this
 	 */
-	public function addSetting(TeamSettings $setting)
-	{
-		//If we have it already, update
-		if ($this->hasSetting($setting->get('account_id'))) {
-			$this->updateByAccountId($setting);
+	public function addSetting( TeamSettings $setting ) {
+		// If we have it already, update
+		if ( $this->hasSetting( $setting->get( 'account_id' ) ) ) {
+			$this->updateByAccountId( $setting );
 			return $this;
 		}
-		//add it to collection
+		// add it to collection
 		$this->teamSettings[] = $setting;
 		return $this;
 	}
@@ -233,21 +229,20 @@ class SettingsApi
 	 *
 	 * @return int
 	 */
-	public function count(){
-		return isset($this->teamSettings) ? count($this->teamSettings): 0;
+	public function count() {
+		return isset( $this->teamSettings ) ? count( $this->teamSettings ) : 0;
 	}
 
 	/**
-	* Reset all teams and maybe global settings
+	 * Reset all teams and maybe global settings
 
-	* @param bool $resetGeneralSettings
-	* @since 0.10.0
-	* @return $this
-	*/
-	public function reset($resetGeneralSettings = false )
-	{
-		$this->teamSettings = [];
-		if( $resetGeneralSettings ){
+	 * @param bool $resetGeneralSettings
+	 * @since 0.10.0
+	 * @return $this
+	 */
+	public function reset( $resetGeneralSettings = false ) {
+		$this->teamSettings = array();
+		if ( $resetGeneralSettings ) {
 			$this->globalSettings = $this->globalSettingsDefaults;
 		}
 		return $this;
@@ -259,13 +254,12 @@ class SettingsApi
 	 * @since 0.10.0
 	 * @return array
 	 */
-	public function toArray()
-	{
+	public function toArray() {
 
-		return [
-			'teams' => $this->allTeams(true),
+		return array(
+			'teams'        => $this->allTeams( true ),
 			'integrations' => $this->getIntegrationSettings(),
-		];
+		);
 	}
 
 
@@ -276,12 +270,12 @@ class SettingsApi
 	 * @param bool $as_array If true, teams are converted to array.
 	 * @return array
 	 */
-	public function allTeams($as_array = false){
-		$data = [];
-		foreach ($this->teamSettings as $setting) {
-			if( $as_array ){
+	public function allTeams( $as_array = false ) {
+		$data = array();
+		foreach ( $this->teamSettings as $setting ) {
+			if ( $as_array ) {
 				$data[] = $setting->toArray();
-			}else{
+			} else {
 				$data[] = $setting;
 			}
 		}
@@ -290,6 +284,7 @@ class SettingsApi
 
 	/**
 	 * Check if any connected team is active.
+	 *
 	 * @since 1.15.0
 	 * @return bool
 	 */
@@ -308,29 +303,28 @@ class SettingsApi
 	 *
 	 * @return array
 	 */
-	public function toResponseData(){
-		$data = $this->toArray();
-		$teams = $data['teams'] ?? [];
+	public function toResponseData() {
+		$data  = $this->toArray();
+		$teams = $data['teams'] ?? array();
 
-		foreach ($teams as $i => $team) {
-
-			$teams[$i][IsTeamConnected::KEY] = IsTeamConnected::valueToBoolean(
-				isset($team[IsTeamConnected::KEY]) ? $team[IsTeamConnected::KEY] : null
+		foreach ( $teams as $i => $team ) {
+			$teams[ $i ][ IsTeamConnected::KEY ] = IsTeamConnected::valueToBoolean(
+				isset( $team[ IsTeamConnected::KEY ] ) ? $team[ IsTeamConnected::KEY ] : null
 			);
 		}
 		$data['teams'] = $teams;
-		$debugMode = TRUSTEDLOGIN_DEBUG;
-		if( is_null($debugMode) ){
+		$debugMode     = TRUSTEDLOGIN_DEBUG;
+		if ( is_null( $debugMode ) ) {
 			$debugMode = 'NULL';
 		}
 
 		return array_merge(
 			$data,
-			[
-				'debug_mode' => $debugMode,
+			array(
+				'debug_mode'    => $debugMode,
 				'error_logging' => $this->isErrorLogggingEnabled(),
-				'integrations' => $this->getIntegrationSettings(),
-			]
+				'integrations'  => $this->getIntegrationSettings(),
+			)
 		);
 	}
 
@@ -340,8 +334,8 @@ class SettingsApi
 	 * @since 0.10.0
 	 * @return array
 	 */
-	public function getIntegrationSettings(){
-		$settings = isset($this->globalSettings['integrations']) ? $this->globalSettings['integrations'] : [];
+	public function getIntegrationSettings() {
+		$settings = isset( $this->globalSettings['integrations'] ) ? $this->globalSettings['integrations'] : array();
 		return $settings;
 	}
 
@@ -349,20 +343,20 @@ class SettingsApi
 	/**
 	 * Get the global settings
 	 */
-	public function getGlobalSettings()
-	{
+	public function getGlobalSettings() {
 		return $this->globalSettings;
 	}
 
 	/**
 	 * Is error logging enabled?
+	 *
 	 * @return bool
 	 */
-	public function isErrorLogggingEnabled(){
-		if( ! isset($this->globalSettings['error_logging'])){
+	public function isErrorLogggingEnabled() {
+		if ( ! isset( $this->globalSettings['error_logging'] ) ) {
 			return false;
 		}
-		return (bool)$this->globalSettings['error_logging'];
+		return (bool) $this->globalSettings['error_logging'];
 	}
 
 	/**
@@ -373,19 +367,18 @@ class SettingsApi
 	 * @param array $globalSettings
 	 * @return $this
 	 */
-	public function setGlobalSettings(array $globalSettings)
-	{
+	public function setGlobalSettings( array $globalSettings ) {
 
-		//When resetting from saved, deal with json_decode not being recursive for array conversion
-		if( isset($globalSettings['integrations'])&& is_object($globalSettings['integrations'])){
-			$globalSettings['integrations'] = (array)$globalSettings['integrations'];
-			foreach ($globalSettings['integrations'] as $i => $value) {
-				$globalSettings['integrations'][$i] = (array)$value;
+		// When resetting from saved, deal with json_decode not being recursive for array conversion
+		if ( isset( $globalSettings['integrations'] ) && is_object( $globalSettings['integrations'] ) ) {
+			$globalSettings['integrations'] = (array) $globalSettings['integrations'];
+			foreach ( $globalSettings['integrations'] as $i => $value ) {
+				$globalSettings['integrations'][ $i ] = (array) $value;
 			}
 		}
 		$this->globalSettings = wp_parse_args(
 			$globalSettings,
-			! empty($this->globalSettings)? $this->globalSettings : $this->globalSettingsDefaults
+			! empty( $this->globalSettings ) ? $this->globalSettings : $this->globalSettingsDefaults
 		);
 		return $this;
 	}
@@ -397,20 +390,21 @@ class SettingsApi
 	 * @param string $helpdesk
 	 * @return SettingsApi
 	 */
-	public function resetHelpdeskSettings($accountId,$helpdesk){
-		$team = $this->getByAccountId($accountId);
-		$settings = $this->newHelpdeskSettings($accountId,$helpdesk);
-		$team->set(TeamSettings::HELPDESK_SETTINGS,
+	public function resetHelpdeskSettings( $accountId, $helpdesk ) {
+		$team     = $this->getByAccountId( $accountId );
+		$settings = $this->newHelpdeskSettings( $accountId, $helpdesk );
+		$team->set(
+			TeamSettings::HELPDESK_SETTINGS,
 			array_merge(
-				$team->get(TeamSettings::HELPDESK_SETTINGS, []),
-				[ $helpdesk => $settings ]
+				$team->get( TeamSettings::HELPDESK_SETTINGS, array() ),
+				array( $helpdesk => $settings )
 			)
 		);
 		$this->save();
 		return $this;
 	}
 
-	protected function newHelpdeskSettings($accountId, $helpdesk) {
+	protected function newHelpdeskSettings( $accountId, $helpdesk ) {
 
 		switch ( $helpdesk ) {
 			case 'freescout':
@@ -422,9 +416,9 @@ class SettingsApi
 				break;
 		}
 
-		return [
-			'secret' => AccessKeyLogin::makeSecret(),
-			'callback' => $callback
-		];
+		return array(
+			'secret'   => AccessKeyLogin::makeSecret(),
+			'callback' => $callback,
+		);
 	}
 }

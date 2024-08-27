@@ -150,7 +150,7 @@ exports[`ScreenError renders with text & heading 1`] = `
 exports[`ToastError renders with only heading 1`] = `
 <div>
   <div
-    class="tl-error max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden"
+    class="tl-error max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out mb-2 slide-in"
   >
     <div
       class="p-4"
@@ -212,7 +212,7 @@ exports[`ToastError renders with only heading 1`] = `
 exports[`ToastError renders with text & heading 1`] = `
 <div>
   <div
-    class="tl-error max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden"
+    class="tl-error max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out mb-2 slide-in"
   >
     <div
       class="p-4"

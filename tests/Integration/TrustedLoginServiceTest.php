@@ -43,7 +43,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 	}
 
 	/**
-	 * @covers TrustedLoginService::apiGetSecretIds()
+	 * @covers TrustedLoginService::api_get_secret_ids()
 	 */
 	public function testGetSecretIds()
 	{
@@ -58,12 +58,12 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 		$service = new TrustedLoginService(
 			trustedlogin_connector()
 		);
-		$r = $service->apiGetSecretIds('accessKey1', self::ACCOUNT_ID);
+		$r = $service->api_get_secret_ids('accessKey1', self::ACCOUNT_ID);
 		$this->assertTrue(
 			is_wp_error($r)
 		);
 		wp_set_current_user(self::factory()->user->create());
-		$r = $service->apiGetSecretIds('accessKey1', self::ACCOUNT_ID);
+		$r = $service->api_get_secret_ids('accessKey1', self::ACCOUNT_ID);
 		$this->assertIsArray(
 			$r
 		);
@@ -71,26 +71,26 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 	}
 
 	 /**
-	 * @covers TrustedLoginService::apiGetEnvelope()
+	 * @covers TrustedLoginService::api_get_envelope()
 	 */
 	public function testApiGetEnvelope()
 	{
 		$service = new TrustedLoginService(
 			trustedlogin_connector()
 		);
-		$r = $service->apiGetEnvelope('secret?', self::ACCOUNT_ID);
+		$r = $service->api_get_envelope('secret?', self::ACCOUNT_ID);
 		$this->assertTrue(
 			is_wp_error($r)
 		);
 		wp_set_current_user(self::factory()->user->create());
-		$r = $service->apiGetEnvelope('secret?', self::ACCOUNT_ID);
+		$r = $service->api_get_envelope('secret?', self::ACCOUNT_ID);
 		$this->assertFalse(
 			is_wp_error($r)
 		);
 	}
 
 	/**
-	 * @covers TrustedLoginService::envelopeToUrl()
+	 * @covers TrustedLoginService::envelope_to_url()
 	 */
 	public function testEnvelopeToUrl()
 	{
@@ -103,7 +103,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 		);
 		//Get envelope and try to turn it into a URL.
 		$envelope = json_decode($this->getEnvelopeData(), true);
-		$r = $service->envelopeToUrl($envelope);
+		$r = $service->envelope_to_url($envelope);
 
 		//Is valid URL?
 		$this->assertTrue(

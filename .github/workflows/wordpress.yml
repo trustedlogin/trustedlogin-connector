@@ -31,6 +31,13 @@ jobs:
       # Set up plugin
       - name: Checkout
         uses: actions/checkout@v1
+
+      # Install Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
       - name: Docker Compose Version
         run: docker-compose -v
 

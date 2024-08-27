@@ -1,6 +1,7 @@
 <?php
 
 namespace TrustedLogin\Vendor;
+
 use TrustedLogin\Vendor\MenuPage;
 
 /**
@@ -9,21 +10,23 @@ use TrustedLogin\Vendor\MenuPage;
  */
 class ReturnScreen {
 
-    /**
-     * The relative path to the template HTML file.
-     * @since 1.1
-     */
-    const TEMPLATE_RELATIVE_PATH = '/build/index.html';
 
-    /**
-     * @var string The template HTML for the redirection form.
-     */
-    protected $template;
+	/**
+	 * The relative path to the template HTML file.
+	 *
+	 * @since 1.1
+	 */
+	const TEMPLATE_RELATIVE_PATH = '/build/index.html';
 
-    protected $settings;
-    public function __construct( SettingsApi $settings ){
-        $this->settings = $settings;
-    }
+	/**
+	 * @var string The template HTML for the redirection form.
+	 */
+	protected $template;
+
+	protected $settings;
+	public function __construct( SettingsApi $settings ) {
+		$this->settings = $settings;
+	}
 
 	/**
 	 * Get the template HTML for the redirection form.
@@ -32,7 +35,7 @@ class ReturnScreen {
 	 *
 	 * @return string The template HTML, if found. Otherwise, an empty string.
 	 */
-	private function getTemplate() : string {
+	private function getTemplate(): string {
 
 		if ( ! empty( $this->template ) ) {
 			return $this->template;
@@ -47,7 +50,7 @@ class ReturnScreen {
 		global $wp_filesystem;
 
 		if ( ! $wp_filesystem ) {
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			require_once ABSPATH . 'wp-admin/includes/file.php';
 			WP_Filesystem();
 		}
 
@@ -56,61 +59,64 @@ class ReturnScreen {
 		return $this->template;
 	}
 
-    /**
-     * Should we attempt to handle this request?
-     *
-     * @return bool
-     */
-    public function shouldHandle(){
-        return ! empty(
-            AccessKeyLogin::fromRequest(true)
-        ) && ! empty(
-            AccessKeyLogin::fromRequest(false)
-        );
-    }
+	/**
+	 * Should we attempt to handle this request?
+	 *
+	 * @return bool
+	 */
+	public function shouldHandle() {
+		return ! empty(
+			AccessKeyLogin::fromRequest( true )
+		) && ! empty(
+			AccessKeyLogin::fromRequest( false )
+		);
+	}
 
-    /**
-     * Return the HTML for the return screen.
-     *
-     * @uses "admin_init"
-     */
-    public function callback() {
-	    if ( ! $this->shouldHandle() ) {
-		    return;
-	    }
+	/**
+	 * Return the HTML for the return screen.
+	 *
+	 * @uses "admin_init"
+	 */
+	public function callback() {
+		if ( ! $this->shouldHandle() ) {
+			return;
+		}
 
-	    $data = trustedlogin_connector_prepare_data( $this->settings );
+		$data = trustedlogin_connector_prepare_data( $this->settings );
 
-	    if ( ! isset( $data['redirectData'] ) ) {
-		    return;
-	    }
+		if ( ! isset( $data['redirectData'] ) ) {
+			return;
+		}
 
-	    $html = $this->getTemplate();
+		$html = $this->getTemplate();
 
-	    // There is no template, so we cannot continue.
-	    if ( '' === $html ) {
-		    wp_die( sprintf(
+		// There is no template, so we cannot continue.
+		if ( '' === $html ) {
+			wp_die(
+				sprintf(
 				// translators: %s is the replaced by the error message.
-			    esc_html__( 'Cannot load TrustedLogin Connector plugin: %s', 'trustedlogin-connector' ),
-			    esc_html__( 'A required template was not found. Please re-install the plugin.', 'trustedlogin-connector' )
-		    ), esc_html__( 'Template not found.', 'trustedlogin-connector' ), 424 );
-	    }
+					esc_html__( 'Cannot load TrustedLogin Connector plugin: %s', 'trustedlogin-connector' ),
+					esc_html__( 'A required template was not found. Please re-install the plugin.', 'trustedlogin-connector' )
+				),
+				esc_html__( 'Template not found.', 'trustedlogin-connector' ),
+				424
+			);
+		}
 
-	    //Make URLs absolute and correct
-	    $plugin_dir_url = plugin_dir_url( TRUSTEDLOGIN_PLUGIN_FILE );
+		// Make URLs absolute and correct
+		$plugin_dir_url = plugin_dir_url( TRUSTEDLOGIN_PLUGIN_FILE );
 
-	    $replacements = [
-		    '/tlfavicon.ico'             => $plugin_dir_url . 'build/tlfavicon.ico', // Fix favicon src.
-		    '/static/js'                 => $plugin_dir_url . 'build/static/js', // Fix script source.
-		    '/src/trustedlogin-dist.css' => $plugin_dir_url . 'src/trustedlogin-dist.css', // Fix style source.
-	    ];
+		$replacements = array(
+			'/tlfavicon.ico'             => $plugin_dir_url . 'build/tlfavicon.ico', // Fix favicon src.
+			'/static/js'                 => $plugin_dir_url . 'build/static/js', // Fix script source.
+			'/src/trustedlogin-dist.css' => $plugin_dir_url . 'src/trustedlogin-dist.css', // Fix style source.
+		);
 
-	    // Place the window.tlVendor object in the HTML.
-	    $replacements['<script></script>'] = '<script>window.tlVendor=' . wp_json_encode( $data ) . ';</script>';
+		// Place the window.tlVendor object in the HTML.
+		$replacements['<script></script>'] = '<script>window.tlVendor=' . wp_json_encode( $data ) . ';</script>';
 
-	    echo strtr( $html, $replacements ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo strtr( $html, $replacements ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	    exit;
-    }
-
+		exit;
+	}
 }

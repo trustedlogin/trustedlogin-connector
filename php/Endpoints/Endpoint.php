@@ -5,8 +5,8 @@ namespace TrustedLogin\Vendor\Endpoints;
 /**
  * Base class for all endpoints to extend
  */
-abstract class Endpoint
-{
+abstract class Endpoint {
+
 	/**
 	 * Error code for public key sucess.
 	 */
@@ -20,38 +20,37 @@ abstract class Endpoint
 	/**
 	 * Namespace for all routes
 	 */
-	const NAMESPACE =  'trustedlogin/v1';
+	const NAMESPACE = 'trustedlogin/v1';
 
 	/**
 	 * Register endpoint
 	 *
 	 * @param bool $editable Defaults to true. If false, the endpoint will not be updateable.
 	 */
-	public function register($editable = true,$readable = true)
-	{
+	public function register( $editable = true, $readable = true ) {
 
-		if ($editable) {
+		if ( $editable ) {
 			register_rest_route(
 				self::NAMESPACE,
 				$this->route(),
-				[
+				array(
 					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'update' ],
-					'permission_callback' => [$this, 'authorize'],
-					'args' 				  => $this->updateArgs(),
-				]
+					'callback'            => array( $this, 'update' ),
+					'permission_callback' => array( $this, 'authorize' ),
+					'args'                => $this->updateArgs(),
+				)
 			);
 		}
-		if( $readable ){
+		if ( $readable ) {
 			register_rest_route(
 				self::NAMESPACE,
 				$this->route(),
-				[
+				array(
 					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get' ],
-					'permission_callback' => [$this, 'authorize'],
-					'args' => $this->getArgs(),
-				]
+					'callback'            => array( $this, 'get' ),
+					'permission_callback' => array( $this, 'authorize' ),
+					'args'                => $this->getArgs(),
+				)
 			);
 		}
 	}
@@ -68,9 +67,8 @@ abstract class Endpoint
 	 *
 	 * @return array
 	 */
-	protected function getArgs()
-	{
-		return [];
+	protected function getArgs() {
+		return array();
 	}
 
 	/**
@@ -78,9 +76,8 @@ abstract class Endpoint
 	 *
 	 * @return array
 	 */
-	protected function updateArgs()
-	{
-		return [];
+	protected function updateArgs() {
+		return array();
 	}
 
 
@@ -89,19 +86,20 @@ abstract class Endpoint
 	 * Callback for GET requests
 	 *
 	 * @param \WP_REST_Request $request
+	 *
 	 * @return \WP_REST_Response
 	 */
-	abstract public function get(\WP_REST_Request $request);
+	abstract public function get( \WP_REST_Request $request );
 
 	/**
 	 * Callback for POST requests
+	 *
 	 * @param \WP_REST_Request $request
 	 * @return \WP_REST_Response
 	 */
-	public function update(\WP_REST_Request $request)
-	{
+	public function update( \WP_REST_Request $request ) {
 		return new \WP_REST_Response(
-			[],
+			array(),
 			501
 		);
 	}
@@ -112,11 +110,8 @@ abstract class Endpoint
 	 * @param \WP_REST_Request $request
 	 * @return bool
 	 */
-	public function authorize(\WP_REST_Request $request)
-	{
+	public function authorize( \WP_REST_Request $request ) {
 		$capability = is_multisite() ? 'delete_sites' : 'manage_options';
-		return current_user_can($capability);
+		return current_user_can( $capability );
 	}
-
-
 }

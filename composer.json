@@ -3,7 +3,6 @@
     "description": "TrustedLogin Connector Plugin",
     "require": {
         "php": "^7.2|^8.0",
-        "paragonie/sodium_compat": "^1.17",
         "ext-json": "*"
     },
     "type": "wordpress-plugin",
@@ -18,7 +17,9 @@
         }
     },
     "require-dev": {
+        "paragonie/sodium_compat": "^1.17",
         "phpunit/phpunit": "^7.0",
+        "wp-coding-standards/wpcs": "^3.0",
         "yoast/phpunit-polyfills": "^1.0.1",
         "mockery/mockery": "1.2",
         "brain/monkey": "2.*",
@@ -30,7 +31,8 @@
     "scripts": {
         "test": "composer test:wordpress",
         "test:wordpress": "phpunit --config=phpunit-integration.xml",
-        "sniffs": "vendor/bin/phpcs ./php ./trustedlogin-connector.php --report=summary",
+        "summary": "vendor/bin/phpcs ./php ./trustedlogin-connector.php --report=summary",
+        "sniffs": "vendor/bin/phpcs ./php ./trustedlogin-connector.php",
         "fixes": "./vendor/bin/phpcbf ./php ./trustedlogin-connector.php ./tests ",
         "compat": "./vendor/bin/phpcs -p ./php ./trustedlogin-connector.php ./tests  --standard=PHPCompatibilityWP --extensions=php --runtime-set testVersion 7.2-"
     },
