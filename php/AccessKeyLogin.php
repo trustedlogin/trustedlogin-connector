@@ -224,7 +224,7 @@ class AccessKeyLogin {
 			}
 
 			// Valid nonce?
-			$valid = wp_verify_nonce( $_REQUEST[ self::NONCE_NAME ], self::NONCE_ACTION );
+			$valid = wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION );
 
 			if ( ! $valid ) {
 				$this->log( 'Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error' );

@@ -26,7 +26,7 @@ class AccessKey extends Endpoint {
 	public function authorize( \WP_REST_Request $request ) {
 		// Valid nonce?
 		$valid = wp_verify_nonce(
-			$request->get_param( AccessKeyLogin::NONCE_NAME ),
+			sanitize_text_field( wp_unslash( $request->get_param( AccessKeyLogin::NONCE_NAME ) ) ),
 			AccessKeyLogin::NONCE_ACTION
 		);
 

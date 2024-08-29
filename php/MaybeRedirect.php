@@ -29,7 +29,7 @@ class MaybeRedirect {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], Reset::NONCE_ACTION ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), Reset::NONCE_ACTION ) ) {
 			wp_safe_redirect(
 				add_query_arg(
 					array(
