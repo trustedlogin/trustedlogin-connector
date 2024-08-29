@@ -43,7 +43,7 @@ class ReturnScreen {
 
 		$template_path = dirname( TRUSTEDLOGIN_PLUGIN_FILE ) . self::TEMPLATE_RELATIVE_PATH;
 
-		if ( ! file_exists( $template_path ) ) {
+		if ( ! is_readable( $template_path ) ) {
 			return '';
 		}
 

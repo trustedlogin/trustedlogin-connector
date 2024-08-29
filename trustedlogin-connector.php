@@ -43,7 +43,7 @@ $path = plugin_dir_path( __FILE__ );
 // Set register deactivation hook
 register_deactivation_hook( __FILE__, 'trustedlogin_connector_deactivate' );
 // Include files and call trustedlogin_connector() function.
-if ( file_exists( $path . 'vendor/autoload.php' ) ) {
+if ( is_readable( $path . 'vendor/autoload.php' ) ) {
 	include_once $path . 'vendor/autoload.php';
 	// Include admin init file
 	include_once __DIR__ . '/src/trustedlogin-settings/init.php';
