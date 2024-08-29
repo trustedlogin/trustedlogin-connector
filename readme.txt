@@ -11,11 +11,35 @@ Empower support team members to securely and easily log into client sites using 
 
 == Description ==
 
-TrustedLogin plugin to be installed on the website of the support provider.
+## Use TrustedLogin to log into your customers’ sites securely and easily
+
+Do you provide support for WordPress websites? TrustedLogin allows you to log into your customers’ sites securely. The TrustedLogin Connector plugin connects your WordPress site to the [TrustedLogin](https://www.trustedlogin.com) service.
+
+### How it works
+
+1. [Create an account on TrustedLogin.com](https://app.trustedlogin.com)
+1. Install the TrustedLogin Connector plugin on your WordPress site
+1. Integrate the TrustedLogin SDK into your code
+
+Your users will then be able to grant you access to their site and provide you with an Access Key. With this plugin, you can log into their site using the Access Key.
+
+== Frequently Asked Questions ==
+
+### Do I need to have a TrustedLogin account?
+
+Yes, you need to have a TrustedLogin account to use this plugin. You can create an account at [TrustedLogin.com](https://app.trustedlogin.com).
+
+### Does it require any special configuration?
+
+Yes, you need to have the TrustedLogin SDK integrated into your code. You can find the SDK and instructions on how to integrate it in the [TrustedLogin documentation](https://docs.trustedlogin.com).
+
+### What are the Terms of Service?
+
+By using TrustedLogin, you agree to the [TrustedLogin Terms of Service](https://www.trustedlogin.com/authorized-user-terms/).
 
 == Installation ==
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
+1. Upload this plugin to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
