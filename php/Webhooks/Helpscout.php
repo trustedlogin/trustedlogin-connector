@@ -192,17 +192,23 @@ class Helpscout extends Webhook {
 	private function get_signature_from_headers(): ?string {
 		// Create the provider name in uppercase.
 		$provider_name = strtoupper( $this->getProviderName() );
+
 		// Get the provider name with capitals.
 		$provider_name_capitalized = $this->getProviderNameCapitalized();
+
 		// Check different locations for the signature, return when found.
 		if ( isset( $_SERVER[ "X-{$provider_name}-SIGNATURE" ] ) ) {
-			return $_SERVER[ "X-{$provider_name}-SIGNATURE" ];
-		} elseif ( isset( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] ) ) {
-			return $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ];
-		} elseif ( function_exists( 'apache_request_headers' ) ) {
+			return sanitize_text_field( $_SERVER[ "X-{$provider_name}-SIGNATURE" ] );
+		}
+
+		if ( isset( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] ) ) {
+			return sanitize_text_field( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] );
+		}
+
+		if ( function_exists( 'apache_request_headers' ) ) {
 			$headers = apache_request_headers();
 
-			return $headers[ "X-{$provider_name_capitalized}-Signature" ] ?? null;
+			return sanitize_text_field( $headers[ "X-{$provider_name_capitalized}-Signature" ] ) ?? null;
 		}
 
 		// If we couldn't find the signature, we return null.
