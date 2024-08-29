@@ -411,8 +411,10 @@ class ApiHandler {
 			default:
 		}
 
-		if ( isset( $body->errors ) ) {
-			$errors = implode( '', (array) $body->errors );
+		// The API may return either error or errors, so we need to check both.
+		if ( isset( $body->errors ) || isset( $body->error ) ) {
+			$errors = isset( $body->errors ) ? $body->errors : $body->error;
+			$errors = implode( ', ', (array) $errors );
 
 			$this->log( "Error from API: {$errors}", __METHOD__, 'error' );
 
