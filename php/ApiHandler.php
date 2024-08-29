@@ -373,6 +373,16 @@ class ApiHandler {
 		$body_message = isset( $body->message ) ? $body->message : null;
 
 		switch ( $response_code ) {
+			case 423:
+				$this->log(
+					'Pause mode is activated on TrustedLogin.com:',
+					__METHOD__,
+					'error',
+					array(
+						'response' => $api_response,
+					)
+				);
+				return new WP_Error( 'pause_mode_error', esc_html__( 'Cannot log in: Pause Mode is activated for this account on TrustedLogin.com.', 'trustedlogin-connector' ) );
 			case 424:
 				$this->log(
 					'Error Getting Signature Key from Vendor: ',
