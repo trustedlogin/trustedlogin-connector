@@ -37,6 +37,10 @@ Yes, you need to have the TrustedLogin SDK integrated into your code. You can fi
 
 By using TrustedLogin, you agree to the [TrustedLogin Terms of Service](https://www.trustedlogin.com/authorized-user-terms/).
 
+### What is the Privacy Policy?
+
+By using TrustedLogin, you agree to the [TrustedLogin Privacy Policy](https://www.trustedlogin.com/privacy-policy/).
+
 == Installation ==
 
 1. Upload this plugin to the `/wp-content/plugins/` directory
