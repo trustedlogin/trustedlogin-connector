@@ -13,7 +13,7 @@ trait Licensing {
 		foreach ( $this->licensing_platforms as $platform ) {
 			if ( $platform->isActive() ) {
 				$platform_class_name = get_class( $platform );
-				$platforms[] = new $platform_class_name();
+				$platforms[]         = new $platform_class_name();
 			}
 		}
 		return $platforms;

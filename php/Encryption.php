@@ -521,7 +521,7 @@ class Encryption {
 	private function generateNonce() {
 
 		if ( ! function_exists( 'sodium_bin2hex' ) ) {
-			return new \WP_Error( 'sodium_not_exists', 'Sodium isn\'t loaded. Upgrade to PHP 7.0 or WordPress 5.2 or higher.' );
+			return new WP_Error( 'sodium_not_exists', 'Sodium isn\'t loaded. Upgrade to PHP 7.0 or WordPress 5.2 or higher.' );
 		}
 
 		try {
@@ -548,11 +548,11 @@ class Encryption {
 
 		try {
 			if ( empty( $data ) || empty( $key ) ) {
-				return new \WP_Error( 'no_data', 'No data provided.' );
+				return new WP_Error( 'no_data', 'No data provided.' );
 			}
 
 			if ( ! function_exists( 'sodium_crypto_sign_detached' ) ) {
-				return new \WP_Error( 'sodium_not_exists', 'Sodium isn\'t loaded. Upgrade to PHP 7.0 or WordPress 5.2 or higher.' );
+				return new WP_Error( 'sodium_not_exists', 'Sodium isn\'t loaded. Upgrade to PHP 7.0 or WordPress 5.2 or higher.' );
 			}
 
 			$signed = \sodium_crypto_sign_detached( $data, \sodium_hex2bin( $key ) );
