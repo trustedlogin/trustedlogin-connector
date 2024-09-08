@@ -262,7 +262,7 @@ class ApiHandler {
 				case 403:
 					return new WP_Error(
 						'verify-failed-' . $status,
-						__( 'Could not verify the Public Key and Private Key. Please confirm the keys are correct.', 'trustedlogin-connector' )
+						__( 'Could not verify the team. Please confirm the Public Key and Private Key settings are correct.', 'trustedlogin-connector' )
 					);
 					break;
 				case 404:
