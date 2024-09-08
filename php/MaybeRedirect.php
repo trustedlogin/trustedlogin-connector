@@ -71,7 +71,7 @@ class MaybeRedirect {
 			return;
 		}
 
-		if ( isset( $_REQUEST['action'] ) && Webhook::WEBHOOK_ACTION == $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_REQUEST['action'] ) && Webhook::WEBHOOK_ACTION === $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$provider = $_REQUEST[ Factory::PROVIDER_KEY ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( ! in_array( $provider, Factory::getProviders() ) ) {
 				return;
