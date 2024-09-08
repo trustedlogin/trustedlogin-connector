@@ -210,7 +210,7 @@ class ApiHandler {
 	 */
 	public function verify( $account_id = '' ) {
 
-		$account_id = intval( $account_id );
+		$account_id = (int) $account_id;
 
 		if ( 0 === $account_id ) {
 			return new WP_Error(
