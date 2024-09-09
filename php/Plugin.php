@@ -168,17 +168,4 @@ class Plugin {
 		$this->apiSender = $apiSender;
 		return $this;
 	}
-
-	public function getAccessKeyActions() {
-		$data = array();
-		foreach ( $this->settings->allTeams( false ) as $team ) {
-			$helpdesk                           = $team->getHelpdesks()[0] ?? 'helpcout';
-			$url                                = AccessKeyLogin::url(
-				$team->get( 'account_id' ),
-				$helpdesk
-			);
-			$data[ $team->get( 'account_id' ) ] = $url;
-		}
-		return $data;
-	}
 }
