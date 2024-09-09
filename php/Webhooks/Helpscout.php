@@ -48,14 +48,15 @@ class Helpscout extends Webhook {
 			return $this->build_error_message( 403, 'Unauthorized.', 'Verify your site\'s TrustedLogin Settings match the Help Scout widget settings.' );
 		}
 
-		// Decode the data from JSON.
-		$data_obj = json_decode( $data, false );
 		$account_id = Helpers::get_post_or_get( AccessKeyLogin::ACCOUNT_ID_INPUT_NAME, 'sanitize_text_field' );
 
 		// If there's no account_id, we return an error.
 		if ( ! $account_id ) {
 			return $this->build_error_message( 401, 'Missing Account ID.', 'Verify your site\'s TrustedLogin Settings match the Help Scout widget settings.', 'missing_account_id' );
 		}
+
+		// Decode the data from JSON.
+		$data_obj = json_decode( $data, false );
 
 		// Extract customer emails from data.
 		$customer_emails = $this->extract_customer_emails( $data_obj );
