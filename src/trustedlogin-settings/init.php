@@ -1,5 +1,11 @@
 <?php
-//Register assets for TrustedLogin Settings
+/**
+ * Initialize the TrustedLogin Connector plugin.
+ *
+ * @package TrustedLogin\Connector
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 use TrustedLogin\Vendor\Status\Onboarding;
 use TrustedLogin\Vendor\MenuPage;
