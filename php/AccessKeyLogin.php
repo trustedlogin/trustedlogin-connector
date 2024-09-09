@@ -241,12 +241,12 @@ class AccessKeyLogin {
 	/**
 	 * Get access key or account ID from requests
 	 *
-	 * @param bool $ak Optional. If true, access key returned. If false, account ID.
+	 * @param bool $return_access_key Optional. If true, access key returned. If false, account ID.
 	 * @return string
 	 */
-	public static function fromRequest( bool $ak = true ) {
+	public static function fromRequest( bool $return_access_key = true ) {
 
-		if ( $ak ) {
+		if ( $return_access_key ) {
 			return (string) Helpers::get_post_or_get( self::ACCESS_KEY_INPUT_NAME, 'sanitize_text_field' );
 		}
 
