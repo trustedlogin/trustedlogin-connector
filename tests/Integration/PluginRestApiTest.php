@@ -15,7 +15,7 @@ class PluginRestApiTest extends TestCase
 	 */
 	protected $server;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		/** @var WP_REST_Server $wp_rest_server */

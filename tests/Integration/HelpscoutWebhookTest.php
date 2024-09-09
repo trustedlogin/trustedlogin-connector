@@ -12,7 +12,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 
 	const ACCOUNT_ID = 'test-tl-service';
 	const ACCESS_KEY = 'a218';
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->setTlApiMock();
 		SettingsApi::fromSaved()->reset()->save();
@@ -34,7 +34,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 	}
 
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		SettingsApi::fromSaved()->reset()->save();
 		//Always reset API sender
@@ -106,7 +106,7 @@ class HelpscoutWebhookTest extends \WP_UnitTestCase
 				$signature
 			)
 		);
-		$_REQUEST[ \TrustedLogin\Vendor\AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] = self::ACCOUNT_ID;
+		$_POST[ \TrustedLogin\Vendor\AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] = self::ACCOUNT_ID;
 		//Mock request signature
 		$_SERVER['X-HELPSCOUT-SIGNATURE']= $signature;
 		//Process request

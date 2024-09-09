@@ -23,7 +23,7 @@ class EncryptionTest extends \WP_UnitTestCase
 	/**
 	 * AuditLogTest constructor.
 	 */
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->encryption = new Encryption();
 	}

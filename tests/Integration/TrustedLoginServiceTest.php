@@ -13,7 +13,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 {
 	use MocksTLApi;
 	const ACCOUNT_ID = 'test-tl-service';
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->setTlApiMock();
 
@@ -35,7 +35,7 @@ class TrustedLoginServiceTests extends \WP_UnitTestCase
 		parent::setUp();
 	}
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		SettingsApi::fromSaved()->reset()->save();
 		$this->resetTlApiMock();

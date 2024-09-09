@@ -13,7 +13,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 
 	const ACCOUNT_ID = 'test-tl-service';
 	const ACCESS_KEY = 'a218a218a218a218a218218218218218a218a218a218a218a218218218218218';
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->setTlApiMock();
 		SettingsApi::fromSaved()->reset()->save();
@@ -35,7 +35,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 	}
 
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		foreach ([
 			AccessKeyLogin::ACCESS_KEY_INPUT_NAME,
@@ -44,7 +44,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 			'_wp_http_referer'
 
 		] as $key) {
-			unset($_REQUEST[ $key]);
+			unset($_POST[ $key]);
 		}
 		SettingsApi::fromSaved()->reset()->save();
 		//Always reset API sender
@@ -70,7 +70,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 			$ak->verifyGrantAccessRequest()->errors
 		);
 		//Set access key
-		$_REQUEST[ AccessKeyLogin::ACCESS_KEY_INPUT_NAME ] ='something';
+		$_POST[ AccessKeyLogin::ACCESS_KEY_INPUT_NAME ] ='something';
 		//Check for no no_account_id error
 		$this->assertTrue(
 			is_wp_error(
@@ -82,7 +82,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 			$ak->verifyGrantAccessRequest()->errors
 		);
 		//Set account id
-		$_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] = 'whatever';
+		$_POST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ] = 'whatever';
 		//Check for no no_nonce
 		$this->assertTrue(
 			is_wp_error(
@@ -101,7 +101,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 
 
 		//Set invalid nonce
-		$_REQUEST[AccessKeyLogin::NONCE_NAME ] = wp_create_nonce('bad-action');
+		$_POST[AccessKeyLogin::NONCE_NAME ] = wp_create_nonce('bad-action');
 
 		//Return WP_Error for bad nonce
 		$this->assertTrue(
@@ -111,7 +111,7 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 		);
 
 		//Set valid nonce
-		$_REQUEST[AccessKeyLogin::NONCE_NAME ] = wp_create_nonce(AccessKeyLogin::NONCE_ACTION);
+		$_POST[AccessKeyLogin::NONCE_NAME ] = wp_create_nonce(AccessKeyLogin::NONCE_ACTION);
 
 		$this->assertTrue(
 			$ak->verifyGrantAccessRequest()
@@ -137,9 +137,9 @@ class AccesKeyLoginTest extends \WP_UnitTestCase
 		};
 		//Set up REQUEST var
 		$access_key = self::ACCESS_KEY;
-		$_REQUEST[ AccessKeyLogin::ACCESS_KEY_INPUT_NAME ]= $access_key;
+		$_POST[ AccessKeyLogin::ACCESS_KEY_INPUT_NAME ]= $access_key;
 		$account_id = self::ACCOUNT_ID;
-		$_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME] = $account_id;
+		$_POST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME] = $account_id;
 
 
 		//login - we test authentication in self::testVerifyRequest()

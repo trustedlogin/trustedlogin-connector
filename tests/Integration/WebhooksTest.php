@@ -12,7 +12,7 @@ class WebhooksTest extends \WP_UnitTestCase
 
 	const ACCOUNT_ID = 'WebhooksTest';
 	const ACCESS_KEY = 'r218';
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->setTlApiMock();
 		SettingsApi::fromSaved()->reset()->save();
@@ -34,7 +34,7 @@ class WebhooksTest extends \WP_UnitTestCase
 	}
 
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		SettingsApi::fromSaved()->reset()->save();
 		//Always reset API sender
