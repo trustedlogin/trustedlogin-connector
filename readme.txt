@@ -3,7 +3,7 @@ Contributors: trustedlogin
 Donate link: https://www.trustedlogin.com
 Tags: support, security, login
 Tested up to: 6.6
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,12 @@ By using TrustedLogin, you agree to the [TrustedLogin Privacy Policy](https://ww
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.2.1 on September 8, 2024 =
+
+* Updated the plugin readme to point to the [TrustedLogin Privacy Policy](https://www.trustedlogin.com/privacy-policy/) and [Terms of Service](https://www.trustedlogin.com/authorized-user-terms/).
+* Code formatting improvements
+* Security improvements
 
 = 1.2 on August 26, 2024 =
 

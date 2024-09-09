@@ -1,9 +1,8 @@
 <?php
 /**
  * Plugin Name: TrustedLogin Connector
- * Plugin URI: https://www.trustedlogin.com
  * Description: Authenticate support team members to securely log them in to client sites via TrustedLogin
- * Version: 1.2
+ * Version: 1.2.1
  * Requires PHP: 7.2
  * Author: TrustedLogin
  * Author URI: https://www.trustedlogin.com
@@ -21,7 +20,7 @@ use TrustedLogin\Vendor\Webhooks\Factory;
 
 // Exit if accessed directly
 
-define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '1.2' );
+define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '1.2.1' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
 if ( ! defined( 'TRUSTEDLOGIN_API_URL' ) ) {
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
@@ -52,6 +51,7 @@ if ( is_readable( $path . 'vendor/autoload.php' ) ) {
 	$plugin = trustedlogin_connector();
 
 	// Maybe register error handler
+	// @phpstan-ignore-next-line
 	if ( TRUSTEDLOGIN_DEBUG || $plugin->getSettings()->isErrorLogggingEnabled() ) {
 		\TrustedLogin\Vendor\ErrorHandler::register();
 	}

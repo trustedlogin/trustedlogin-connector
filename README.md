@@ -13,9 +13,9 @@
     - `yarn`
 - Install php dependencies
     - `composer install`
-    - `docker run --rm -it --volume "$(pwd)":/app
-prooph/composer:7.4 install`
-
+    - `docker run --rm -it --volume "$(pwd)":/app prooph/composer:7.4 install`
+- Ensure `wp-scripts` is installed globally
+    - `yarn global add @wordpress/scripts`
 
 ### Develop
 
