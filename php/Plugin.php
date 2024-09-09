@@ -1,8 +1,8 @@
 <?php
-
 namespace TrustedLogin\Vendor;
 
 use TrustedLogin\Vendor\Contracts\SendsApiRequests as ApiSend;
+use TrustedLogin\Vendor\Endpoints\SignatureKey;
 use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\Traits\Logger;
 use TrustedLogin\Vendor\TeamSettings;
@@ -51,7 +51,7 @@ class Plugin {
 			->register( true, false );
 		( new \TrustedLogin\Vendor\Endpoints\PublicKey() )
 			->register( false );
-		( new \TrustedLogin\Vendor\Endpoints\SignatureKey() )
+		( new SignatureKey() )
 			->register( false );
 		( new \TrustedLogin\Vendor\Endpoints\ResetEncryption() )
 			->register( true, false );
@@ -83,7 +83,7 @@ class Plugin {
 	/**
 	 * Get the encyption public key
 	 *
-	 * @return string
+	 * @return string|\WP_Error
 	 */
 	public function getPublicKey() {
 		return $this->encryption
@@ -93,7 +93,7 @@ class Plugin {
 	/**
 	 * Get the encyption signature key
 	 *
-	 * @return string
+	 * @return string|\WP_Error
 	 */
 	public function getSignatureKey() {
 		return $this->encryption
@@ -104,7 +104,7 @@ class Plugin {
 	/**
 	 * Get API Handler by account id
 	 *
-	 * @param string            $accountId Account ID, which must be saved in settings, to get handler for.
+	 * @param int            $accountId Account ID, which must be saved in settings, to get handler for.
 	 * @param string            $apiUrl Optional. URL override for TrustedLogin API.
 	 * @param null|TeamSettings $team Optional. TeamSettings  to use.
 	 *
@@ -120,7 +120,6 @@ class Plugin {
 				'private_key' => $team->get( 'private_key' ),
 				'public_key'  => $team->get( 'public_key' ),
 				'debug_mode'  => $team->get( 'debug_enabled' ),
-				'type'        => 'saas',
 				'api_url'     => $apiUrl ?: $this->getApiUrl(),
 			),
 			$this->apiSender
@@ -138,7 +137,6 @@ class Plugin {
 				'private_key' => $team->get( 'private_key' ),
 				'public_key'  => $team->get( 'public_key' ),
 				'debug_mode'  => $team->get( 'debug_enabled' ),
-				'type'        => 'saas',
 				'api_url'     => $this->getApiUrl(),
 			),
 			$this->apiSender

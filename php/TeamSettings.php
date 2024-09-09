@@ -8,6 +8,7 @@
 
 namespace TrustedLogin\Vendor;
 
+use Exception;
 use TrustedLogin\Vendor\Status\IsTeamConnected;
 use TrustedLogin\Vendor\Webhooks\Freescout;
 use TrustedLogin\Vendor\Webhooks\Helpscout;
@@ -20,6 +21,10 @@ class TeamSettings {
 
 	const HELPDESK_SETTINGS = 'helpdesk_settings';
 
+	const DEFAULT_HELPDESKS = array(
+		'helpscout',
+		'freescout',
+	);
 
 	/**
 	 * @var array
@@ -71,20 +76,20 @@ class TeamSettings {
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param array $values Values to set
+	 * @return array Array of helpdesk keys (e.g. 'helpscout', 'freescout').
 	 */
-	public function getHelpdesks( $helpdesks = null ) {
-		if ( empty( $helpdesks ) ) {
+	public function getHelpdesks() {
+		try {
 			$helpdesks = $this->get( 'helpdesk' );
+		} catch ( Exception $e ) {
+			$helpdesks = array();
 		}
+
 		if ( is_string( $helpdesks ) ) {
 			$helpdesks = array( $helpdesks );
 		}
 		if ( empty( $helpdesks ) ) {
-			return array(
-				'helpscout',
-				'freescout',
-			);
+			return self::DEFAULT_HELPDESKS;
 		}
 		return $helpdesks;
 	}
@@ -138,7 +143,7 @@ class TeamSettings {
 		if ( $this->valid( $key ) ) {
 			$this->values[ $key ] = $value;
 		} else {
-			throw new \Exception( 'Invalid key' );
+			throw new Exception( 'Invalid key' );
 		}
 		return $this;
 	}
@@ -147,7 +152,8 @@ class TeamSettings {
 	 * Get a value
 	 *
 	 * @since 0.10.0
-	 * @param string $key Setting to get
+	 * @param string $key Setting to get.
+	 * @throws Exception If $key is invalid.
 	 * @return mixed
 	 */
 	public function get( $key ) {
@@ -158,14 +164,14 @@ class TeamSettings {
 			}
 			return $value;
 		}
-		throw new \Exception( 'Invalid key' );
+		throw new Exception( 'Invalid key' );
 	}
 
 	/**
 	 * Check if key is valid
 	 *
 	 * @since 0.10.0
-	 * @param string $key Setting to get
+	 * @param string $key Setting to get.
 	 * @return bool
 	 */
 	public function valid( $key ) {
@@ -199,7 +205,7 @@ class TeamSettings {
 				break;
 		}
 
-		$helpdeskSettings = $this->get( self::HELPDESK_SETTINGS, array() );
+		$helpdeskSettings = $this->get( self::HELPDESK_SETTINGS );
 		if ( $helpdeskSettings ) {
 			$helpdesk = $helpdesks[0];
 			if ( isset( $helpdeskSettings[ $helpdesk ] ) ) {
@@ -213,5 +219,7 @@ class TeamSettings {
 				);
 			}
 		}
+
+		return array();
 	}
 }

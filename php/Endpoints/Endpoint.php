@@ -87,7 +87,7 @@ abstract class Endpoint {
 	 *
 	 * @param \WP_REST_Request $request
 	 *
-	 * @return \WP_REST_Response
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	abstract public function get( \WP_REST_Request $request );
 
@@ -95,7 +95,7 @@ abstract class Endpoint {
 	 * Callback for POST requests
 	 *
 	 * @param \WP_REST_Request $request
-	 * @return \WP_REST_Response
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function update( \WP_REST_Request $request ) {
 		return new \WP_REST_Response(
@@ -108,7 +108,7 @@ abstract class Endpoint {
 	 * permission_callback for get and update.
 	 *
 	 * @param \WP_REST_Request $request
-	 * @return bool
+	 * @return bool|\WP_Error
 	 */
 	public function authorize( \WP_REST_Request $request ) {
 		$capability = is_multisite() ? 'delete_sites' : 'manage_options';

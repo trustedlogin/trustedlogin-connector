@@ -1,7 +1,8 @@
 <?php
 namespace TrustedLogin\Vendor\Endpoints;
 
-use TrustedLogin\Vendor\SettingsApi;
+use WP_REST_Response;
+use WP_REST_Request;
 
 /**
  * Endpoint to reset encryption keys
@@ -24,16 +25,17 @@ class ResetEncryption extends Settings {
 	/**
 	 * Reset encryption keys with POST request
 	 *
-	 * @param \WP_REST_Request $request
-	 * @return \WP_REST_Response
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response
 	 */
-	public function update( \WP_REST_Request $request ) {
+	public function update( WP_REST_Request $request ) {
 		$encryption = \trustedlogin_connector()
 			->getEncryption();
-		// Delete keys
+		// Delete keys.
 		$encryption->deleteKeys();
-		// Makes new keys
+		// Makes new keys.
 		$encryption->getPublicKey();
-		return rest_ensure_response( array(), 204 );
+
+		return new WP_REST_Response( array(), 204 );  // Set the status code to 204 No Content.
 	}
 }

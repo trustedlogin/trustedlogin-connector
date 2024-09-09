@@ -62,10 +62,12 @@ class IsTeamConnected {
 
 	/**
 	 * Check if we need to verify the team's connection
+	 *
+	 * @throws \Exception
 	 */
 	public static function needToCheck( TeamSettings $team ) {
 		return in_array(
-			$team->get( static::KEY, null ),
+			$team->get( static::KEY ),
 			array(
 				static::VALUE_NOT_CHECKED,
 				null,

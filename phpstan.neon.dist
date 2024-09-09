@@ -1,0 +1,14 @@
+parameters:
+    level: 5
+    paths:
+        - bin/
+        - src/
+        - php/
+        - trustedlogin-connector.php
+    bootstrapFiles:
+        - bin/phpstan-bootstrap.php
+        - %rootDir%/../../../vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+    phpVersion: 70200 # or set to 70200 if using PHP 7.2
+    treatPhpDocTypesAsCertain: false
+    stubFiles:
+    - stubs/edd_software_licensing.stub

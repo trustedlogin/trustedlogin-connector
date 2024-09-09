@@ -240,7 +240,7 @@ trait Logger {
 			return $hash;
 		}
 
-		$this->hash = hash( 'sha256', uniqid( wp_rand(), true ) );
+		$this->hash = hash( 'sha256', uniqid( (string) wp_rand(), true ) );
 
 		update_option( SettingsApi::LOG_LOCATION_SETTING_NAME, $this->hash );
 
@@ -266,7 +266,12 @@ trait Logger {
 	public function getLogFileName( $fullPath = true ) {
 
 		// Use plugin dir in development.
-		if ( ( defined( 'TRUSTEDLOGIN_DEBUG' ) && TRUSTEDLOGIN_DEBUG ) || ( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS ) ) {
+		if (
+			// @phpstan-ignore-next-line
+			( defined( 'TRUSTEDLOGIN_DEBUG' ) && TRUSTEDLOGIN_DEBUG ) ||
+			// @phpstan-ignore-next-line
+			( defined( 'DOING_TL_VENDOR_TESTS' ) && DOING_TL_VENDOR_TESTS )
+		) {
 			return dirname( __DIR__, 2 ) . '/trustedlogin-connector.log';
 		}
 

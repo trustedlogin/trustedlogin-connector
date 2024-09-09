@@ -9,7 +9,7 @@ use TrustedLogin\Vendor\Traits\Logger;
  *
  * @see https://github.com/inpsyde/Wonolog/blob/master/src/PhpErrorController.php
  */
-class ErrorHandler {
+final class ErrorHandler {
 
 
 	use Logger;

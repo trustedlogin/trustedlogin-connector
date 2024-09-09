@@ -137,6 +137,7 @@ class AccessKeyLogin {
 
 		// Get saved settings and then team settings
 		$settings = SettingsApi::fromSaved();
+		$account_id = (int) $account_id;
 
 		try {
 			$teamSettings = $settings->getByAccountId( $account_id );
@@ -156,11 +157,11 @@ class AccessKeyLogin {
 			);
 		}
 
-		$tl = new TrustedLoginService(
+		$trustedlogin_service = new TrustedLoginService(
 			trustedlogin_connector()
 		);
 
-		$secret_ids = $tl->api_get_secret_ids( $access_key, $account_id );
+		$secret_ids = $trustedlogin_service->api_get_secret_ids( $access_key, $account_id );
 
 		if ( is_wp_error( $secret_ids ) ) {
 			return new \WP_Error(
@@ -178,7 +179,7 @@ class AccessKeyLogin {
 			);
 		}
 
-		$valid_secrets = $tl->get_valid_secrets( $secret_ids, $account_id );
+		$valid_secrets = $trustedlogin_service->get_valid_secrets( $secret_ids, $account_id );
 
 		$this->log( 'Valid secrets: ', __METHOD__, 'debug', $valid_secrets );
 

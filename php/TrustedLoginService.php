@@ -49,7 +49,7 @@ class TrustedLoginService {
 	 *
 	 * @since 0.12.0
 	 *
-	 * @param array $secret_ids
+	 * @param string[] $secret_ids
 	 * @param int   $account_id The account ID of the TrustedLogin account.
 	 *
 	 * @return array{ id:string, url_parts:array, envelope:array }
@@ -112,7 +112,7 @@ class TrustedLoginService {
 	 * @since  1.0.0
 	 *
 	 * @param string $access_key The key we're checking for connected sites
-	 * @param string $account_id The account ID for access key.
+	 * @param int $account_id The account ID for access key.
 	 * @return array|\WP_Error  Array of siteIds or \WP_Error  on issue.
 	 */
 	public function api_get_secret_ids( $access_key, $account_id ) {
@@ -165,8 +165,8 @@ class TrustedLoginService {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $site_id Unique secret_id of a site.
-	 * @param string $account_id The ID for the TrustedLogin account.
+	 * @param string $secret_id Unique secret_id of a site.
+	 * @param int $account_id The ID for the TrustedLogin account.
 	 *
 	 * @return array|false|\WP_Error
 	 */
@@ -203,6 +203,8 @@ class TrustedLoginService {
 
 		$data['nonce']       = $auth_nonce['nonce'];
 		$data['signedNonce'] = $auth_nonce['signed'];
+
+		$account_id = (int) $account_id;
 
 		$endpoint = 'sites/' . $account_id . '/' . $secret_id . '/get-envelope';
 
@@ -324,6 +326,7 @@ class TrustedLoginService {
 				$this->log(
 					'There was an error decrypting the envelope:',
 					__METHOD__,
+					'error',
 					array(
 						'error_code'    => $decrypted_identifier->get_error_code(),
 						'error_message' => $decrypted_identifier->get_error_message(),

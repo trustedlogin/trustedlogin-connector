@@ -18,8 +18,8 @@ class AccessKey extends Endpoint {
 
 	/** @inheritdoc */
 	public function get( \WP_REST_Request $request ) {
-		// This should never happen, but just in case
-		return array();
+		// This should never happen, but just in case!
+		return new \WP_Error( 'method_not_allowed', esc_html__( 'Method not allowed.', 'trustedlogin-connector' ), array( 'status' => 405 ) );
 	}
 
 	/** @inheritdoc */

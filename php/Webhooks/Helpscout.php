@@ -67,7 +67,7 @@ class Helpscout extends Webhook {
 		}
 
 		// Get response for the widget and return it.
-		$return_html = $this->get_widget_response( $customer_emails, $account_id );
+		$return_html = $this->get_widget_response( $customer_emails, (int) $account_id );
 
 		return array(
 			'html'   => $return_html,
@@ -79,11 +79,11 @@ class Helpscout extends Webhook {
 	 * Get HTML for the Help Scout widget.
 	 *
 	 * @param array  $customer_emails List of customer emails.
-	 * @param string $account_id Account ID.
+	 * @param int $account_id Account ID.
 	 *
 	 * @return string The HTML response.
 	 */
-	protected function get_widget_response( array $customer_emails, string $account_id ): string {
+	protected function get_widget_response( array $customer_emails, int $account_id ): string {
 		// Get licenses by customer emails
 		$licenses = $this->getLicensesByEmails( $customer_emails );
 
@@ -316,11 +316,11 @@ class Helpscout extends Webhook {
 	 * @param array  $response API response.
 	 * @param string $item_template Item template.
 	 * @param array  $statuses Array of statuses.
-	 * @param string $account_id Account ID.
+	 * @param int $account_id Account ID.
 	 *
 	 * @return string Item HTML.
 	 */
-	private function generate_item_html( array $response, string $item_template, array $statuses, string $account_id ): string {
+	private function generate_item_html( array $response, string $item_template, array $statuses, int $account_id ): string {
 		// Initialize the item HTML string
 		$item_html = '';
 

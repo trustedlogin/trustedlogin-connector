@@ -12,7 +12,7 @@ use TrustedLogin\Vendor\Webhooks\Helpscout;
  *
  * Encryption class doesn't follow this rule BTW, but you should.
  */
-class SettingsApi {
+final class SettingsApi {
 
 
 	/**
@@ -38,12 +38,12 @@ class SettingsApi {
 	protected $teamSettings = array();
 
 	/**
-	 * @var []
+	 * @var array
 	 */
 	protected $globalSettings;
 
 	/**
-	 * @var []
+	 * @var array
 	 */
 	protected $globalSettingsDefaults = array(
 		'integrations'  => array(
@@ -58,11 +58,13 @@ class SettingsApi {
 	);
 
 	/**
-	 * @param TeamSettings[]|array[] $teamData Collection of team data
+	 * @param TeamSettings[]|array[] $team_data Collection of team data.
+	 * @param array                  $globalSettings Values for global settings.
 	 */
-	public function __construct( array $team_data, array $globaSlettings = array() ) {
+	public function __construct( array $team_data, array $globalSettings = array() ) {
 
-		$this->setGlobalSettings( $globaSlettings );
+		$this->setGlobalSettings( $globalSettings );
+
 		foreach ( $team_data as $values ) {
 			if ( is_array( $values ) ) {
 				$values = new TeamSettings( $values );
@@ -163,14 +165,16 @@ class SettingsApi {
 	 * @return TeamSettings
 	 */
 	public function getByAccountId( $account_id ) {
+		$account_id = (int) $account_id;
+
 		foreach ( $this->teamSettings as $setting ) {
-			if ( (int) $account_id === (int) $setting->get( 'account_id' ) ) {
+			if ( $account_id === (int) $setting->get( 'account_id' ) ) {
 				return $setting;
 			}
 		}
 
 		// translators: %s is the account id that wasn't found.
-		throw new \Exception( sprintf( esc_html__( 'Account not found: %s.', 'trustedlogin-connector' ), esc_attr( $account_id ) ) );
+		throw new \Exception( sprintf( esc_html__( 'Account not found: %d.', 'trustedlogin-connector' ), $account_id ) );
 	}
 
 	/*
@@ -230,7 +234,7 @@ class SettingsApi {
 	 * @return int
 	 */
 	public function count() {
-		return isset( $this->teamSettings ) ? count( $this->teamSettings ) : 0;
+		return ! empty( $this->teamSettings ) ? count( $this->teamSettings ) : 0;
 	}
 
 	/**
@@ -396,7 +400,7 @@ class SettingsApi {
 		$team->set(
 			TeamSettings::HELPDESK_SETTINGS,
 			array_merge(
-				$team->get( TeamSettings::HELPDESK_SETTINGS, array() ),
+				$team->get( TeamSettings::HELPDESK_SETTINGS ),
 				array( $helpdesk => $settings )
 			)
 		);
@@ -408,11 +412,11 @@ class SettingsApi {
 
 		switch ( $helpdesk ) {
 			case 'freescout':
-				$callback = Freescout::actionUrl( $accountId, $helpdesk );
+				$callback = Freescout::actionUrl( $accountId );
 				break;
 			case 'helpscout':
 			default:
-				$callback = Helpscout::actionUrl( $accountId, $helpdesk );
+				$callback = Helpscout::actionUrl( $accountId );
 				break;
 		}
 

@@ -11,7 +11,7 @@ trait VerifyUser {
 	/**
 	 * Helper: Check if the current user can be redirected to the client site
 	 *
-	 * @param TrustedLogin\Vendor\TeamSettings $settings Team settings to check if is approved role.
+	 * @param TeamSettings $settings Team settings to check if is approved role.
 	 * @return bool
 	 */
 	public function verifyUserRole( TeamSettings $settings ) {

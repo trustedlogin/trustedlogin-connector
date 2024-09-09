@@ -13,7 +13,6 @@ use Exception;
  */
 class ApiHandler {
 
-
 	use Logger;
 
 	/**
@@ -27,7 +26,7 @@ class ApiHandler {
 	private $api_url;
 
 	/**
-	 * @var string The API private key for authenticating API calls
+	 * @var string The API private key for authenticating API calls.
 	 */
 	private $private_key;
 
@@ -42,7 +41,7 @@ class ApiHandler {
 	private $auth_required = true;
 
 	/**
-	 * @var string The type of Header to use for sending the token
+	 * @var string The type of Header to use for sending the token.
 	 */
 	private $auth_header_type = 'Authorization';
 
@@ -52,7 +51,7 @@ class ApiHandler {
 	private $additional_headers = array();
 
 	/**
-	 * @var bool Whether or not debug logging is enabled
+	 * @var bool Whether debug logging is enabled.
 	 */
 	private $debug_mode = false;
 
@@ -68,7 +67,6 @@ class ApiHandler {
 			'private_key'   => null,
 			'public_key'    => null,
 			'debug_mode'    => false,
-			'type'          => 'saas',
 			'api_url'       => TRUSTEDLOGIN_API_URL,
 			'auth_required' => true,
 		);
@@ -76,7 +74,7 @@ class ApiHandler {
 		$atts = wp_parse_args( $data, $defaults );
 
 		foreach ( array_keys( $defaults ) as $key ) {
-			$this->$key = $atts[ $key ];
+			$this->{$key} = $atts[ $key ];
 		}
 	}
 
@@ -96,7 +94,7 @@ class ApiHandler {
 	}
 
 	/**
-	 * @return string Authentication bearer token hash
+	 * @return string Authentication bearer token hash.
 	 */
 	private function getAuthBearerToken() {
 		return hash( 'sha256', $this->private_key );
@@ -147,7 +145,7 @@ class ApiHandler {
 	 *
 	 * @since 0.8.0
 	 *
-	 * @param string $value The Header value to add.
+	 * @param string|WP_Error $value The Header value to add.
 	 *
 	 * @param string $key The Header key to add.
 	 *
@@ -173,8 +171,6 @@ class ApiHandler {
 	 * @param string $endpoint - the API endpoint to be pinged
 	 * @param array  $data - the data variables being synced
 	 * @param string $method - HTTP RESTful method ('POST','GET','DELETE','PUT','UPDATE')
-	 *
-	 * @param string $type - where the API is being prepared for ('saas')
 	 *
 	 * @return object|bool|WP_Error - response from the RESTful API
 	 */
@@ -257,20 +253,17 @@ class ApiHandler {
 						'verify-failed-402',
 						__( 'You do not have a valid TrustedLogin subscription.', 'trustedlogin-connector' )
 					);
-					break;
 				case 400:
 				case 403:
 					return new WP_Error(
 						'verify-failed-' . $status,
 						__( 'Could not verify the team. Please confirm the Public Key and Private Key settings are correct.', 'trustedlogin-connector' )
 					);
-					break;
 				case 404:
 					return new WP_Error(
 						'verify-failed-404',
 						__( 'Account not found, please check the ID provided.', 'trustedlogin-connector' )
 					);
-					break;
 				case 405:
 					return new WP_Error(
 						'verify-failed-405',
@@ -287,7 +280,6 @@ class ApiHandler {
 						// translators: %d is the HTTP status code.
 						sprintf( __( 'Status %d returned', 'trustedlogin-connector' ), $status )
 					);
-					break;
 				default:
 					return new WP_Error(
 						'verify-failed-' . $status,

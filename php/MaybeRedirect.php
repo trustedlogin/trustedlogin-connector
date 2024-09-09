@@ -101,7 +101,6 @@ class MaybeRedirect {
 			} catch ( \Throwable $th ) {
 				wp_send_json( array( 'message' => $th->getMessage() ), 404 );
 			}
-			exit;
 		}
 
 		$handler = new AccessKeyLogin();
@@ -109,7 +108,6 @@ class MaybeRedirect {
 
 		if ( is_array( $parts ) ) {
 			wp_send_json_success( $parts );
-			exit;
 		}
 
 		wp_safe_redirect(

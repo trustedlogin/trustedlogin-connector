@@ -37,14 +37,14 @@ class Settings extends Endpoint {
 	}
 
 	/**
-	 * Handler for requests to POST settings updates
+	 * Handler for requests to POST settings updates.
 	 *
 	 * @param \WP_REST_Request $request
 	 * @return \WP_REST_Response
 	 */
 	public function update( \WP_REST_Request $request ) {
 		$settings_api = SettingsApi::fromSaved()->reset();
-		$teams        = $request->get_param( 'teams', array() );
+		$teams        = $request->get_param( 'teams' );
 		if ( ! empty( $teams ) ) {
 			foreach ( $teams as $team ) {
 				try {
@@ -64,7 +64,7 @@ class Settings extends Endpoint {
 
 		$settings_api->save();
 		return $this->createResponse(
-			// Get from saved so generated secret/ url is returned
+			// Get from saved so generated secret/ url is returned.
 			SettingsApi::fromSaved()
 		);
 	}
@@ -72,7 +72,7 @@ class Settings extends Endpoint {
 	/**
 	 * Verify that the account id is valid
 	 *
-	 * @param TeamSettings $teamSetting
+	 * @param TeamSettings $team
 	 * @return void|bool
 	 */
 	public function verifyAccountId( TeamSettings $team ) {

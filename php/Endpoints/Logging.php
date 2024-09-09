@@ -50,7 +50,7 @@ class Logging extends Settings {
 	 * @return \WP_REST_Response
 	 */
 	public function update( \WP_REST_Request $request ) {
-		$error_logging_setting = (bool) $request->get_param( 'error', false );
+		$error_logging_setting = (bool) $request->get_param( 'error' );
 
 		$settingsApi = SettingsApi::fromSaved();
 		$settingsApi->setGlobalSettings(

@@ -59,7 +59,7 @@ abstract class Webhook {
 	 * Calculate signature from request data
 	 *
 	 * @param string $data JSON encoded data
-	 * @return bool
+	 * @return string
 	 */
 	public function makeSignature( string $data ) {
 		return base64_encode( hash_hmac( 'sha1', $data, $this->secret, true ) );

@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @return EDD_Software_Licensing
+ */
+function edd_software_licensing() {
+	return EDD_Software_Licensing::instance();
+}
+
+class EDD_Software_Licensing {
+    public function __construct() {
+    }
+
+    /**
+     * @return EDD_Software_Licensing
+     */
+    static public function instance() {
+        return new EDD_Software_Licensing();
+    }
+
+    /**
+     * Retrieve a EDD_SL_License object by ID or key
+     *
+     * @since  3.5
+     * @since  3.8.7 When using an ID, if a valid license is not found, return false.
+     * @param  string|int $id_or_key License key or license ID
+     * @param  bool $by_key True if retrieving with a key instead of ID
+     * @return EDD_SL_License|bool  License object if found. False if not found.
+     */
+    public function get_license( $id_or_key, bool $by_key = false ) {
+    }
+}
+
+
+class EDD_SL_License {
+}

@@ -14,13 +14,15 @@ class Onboarding {
 	const ONBOARDED = 'trustedlogin_has_onboarded';
 
 	/**
-	 * Reset status of unboarding
+	 * Reset status of unboarding.
+	 *
+	 * @return void
 	 */
 	public static function reset() {
 		delete_option( self::ONBOARDED );
 	}
 	/**
-	 * Check if we have already unboarded
+	 * Check if we have already unboarded.
 	 *
 	 * @return bool
 	 */
@@ -29,9 +31,9 @@ class Onboarding {
 	}
 
 	/**
-	 * Set onboarding status to has onboarded
+	 * Set onboarding status to has onboarded.
 	 *
-	 * @param void
+	 * @return void
 	 */
 	public static function setHasOnboarded() {
 		update_option( self::ONBOARDED, 1 );
