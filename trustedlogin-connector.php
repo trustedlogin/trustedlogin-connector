@@ -18,10 +18,11 @@ use TrustedLogin\Vendor\SettingsApi;
 use TrustedLogin\Vendor\Status\Onboarding;
 use TrustedLogin\Vendor\Webhooks\Factory;
 
-// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 define( 'TRUSTEDLOGIN_PLUGIN_VERSION', '1.2.1' );
 define( 'TRUSTEDLOGIN_PLUGIN_FILE', __FILE__ );
+
 if ( ! defined( 'TRUSTEDLOGIN_API_URL' ) ) {
 	define( 'TRUSTEDLOGIN_API_URL', 'https://app.trustedlogin.com/api/v1/' );
 }
