@@ -48,7 +48,7 @@ class ApiSend implements SendsApiRequests {
 		$request_atts = array(
 			'method'      => $method,
 			'timeout'     => 5,
-			'redirection' => 5,
+			'redirection' => 0,
 			'httpversion' => '1.0',
 			'blocking'    => true,
 			'headers'     => $headers,
