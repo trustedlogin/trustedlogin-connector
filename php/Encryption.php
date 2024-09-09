@@ -220,7 +220,7 @@ class Encryption {
 			return $keys;
 		}
 
-		if ( ! in_array( $key_slug, array( 'public_key', 'sign_public_key' ) ) ) {
+		if ( ! in_array( $key_slug, array( 'public_key', 'sign_public_key' ), true ) ) {
 			return new \WP_Error( 'not_public_key', 'This function can only return public keys' );
 		}
 
@@ -249,7 +249,7 @@ class Encryption {
 			return $keys;
 		}
 
-		if ( ! in_array( $key_slug, array( 'private_key', 'sign_private_key' ) ) ) {
+		if ( ! in_array( $key_slug, array( 'private_key', 'sign_private_key' ), true ) ) {
 			return new \WP_Error( 'not_public_key', 'This function can only return private keys' );
 		}
 

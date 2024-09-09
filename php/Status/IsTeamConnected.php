@@ -69,7 +69,8 @@ class IsTeamConnected {
 			array(
 				static::VALUE_NOT_CHECKED,
 				null,
-			)
+			),
+			true
 		);
 	}
 

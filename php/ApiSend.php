@@ -30,7 +30,7 @@ class ApiSend implements SendsApiRequests {
 	 */
 	public function send( $url, $data, $method, $additional_headers ) {
 
-		if ( ! in_array( $method, array( 'POST', 'PUT', 'GET', 'PUSH', 'DELETE' ) ) ) {
+		if ( ! in_array( $method, array( 'POST', 'PUT', 'GET', 'PUSH', 'DELETE' ), true ) ) {
 			$this->log( "Error: Method not in allowed array list ($method)", __METHOD__, 'error' );
 
 			return false;

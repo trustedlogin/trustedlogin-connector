@@ -94,7 +94,8 @@ class MenuPage {
 				self::SLUG_SETTINGS,
 				self::SLUG_ACCESS_KEY,
 				self::PARENT_MENU_SLUG,
-			)
+			),
+			true
 		) ) {
 			return true;
 		}
