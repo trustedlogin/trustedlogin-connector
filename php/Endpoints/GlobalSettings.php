@@ -30,10 +30,12 @@ class GlobalSettings extends Settings {
 	 */
 	public function update( \WP_REST_Request $request ) {
 		$settingsApi = SettingsApi::fromSaved();
-		if ( is_array( $request->get_param( 'integrations', false ) ) ) {
+
+		$integrations = $request->get_param( 'integrations' );
+		if ( is_array( $integrations ) ) {
 			$settingsApi = $settingsApi->setGlobalSettings(
 				array(
-					'integrations' => $request->get_param( 'integrations' ),
+					'integrations' => $integrations,
 				)
 			);
 			$settingsApi->save();
