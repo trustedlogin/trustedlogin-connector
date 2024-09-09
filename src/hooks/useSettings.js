@@ -394,3 +394,5 @@ export const SettingsProvider = ({
     </SettingsContext.Provider>
   );
 };
+
+export default SettingsProvider;

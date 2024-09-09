@@ -147,47 +147,42 @@ exports[`AddTeam Renders & Matches snapshot 1`] = `
             <div
               class="mt-2"
             >
-              <div
-                class="multiselect-container multiSelectContainer "
-                id="approved_roles"
-              >
+              <div>
                 <div
-                  class="search-wrapper searchWrapper "
+                  class="multiselect-container multiSelectContainer  "
+                  id="approved_roles"
                 >
-                  <input
-                    autocomplete="off"
-                    class="searchBox"
-                    id="approved_roles_input"
-                    placeholder="Select"
-                    type="text"
-                    value=""
-                  />
-                </div>
-                <div
-                  class="optionListContainer displayNone"
-                >
-                  <ul
-                    class="optionContainer"
+                  <div
+                    class="search-wrapper searchWrapper "
                   >
-                    <li
-                      class="
-              highlightOption highlight 
-              false 
-              false option
-            "
+                    <input
+                      autocomplete="off"
+                      class="searchBox "
+                      id="approved_roles_input"
+                      name="search_name_input"
+                      placeholder="Select"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="optionListContainer displayNone"
+                  >
+                    <ul
+                      class="optionContainer"
                     >
-                      Administrator
-                    </li>
-                    <li
-                      class="
-               
-              false 
-              false option
-            "
-                    >
-                      Editor
-                    </li>
-                  </ul>
+                      <li
+                        class="option  highlightOption highlight  "
+                      >
+                        Administrator
+                      </li>
+                      <li
+                        class="option    "
+                      >
+                        Editor
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -394,47 +389,42 @@ exports[`EditTeam Renders & Matches snapshot 1`] = `
             <div
               class="mt-2"
             >
-              <div
-                class="multiselect-container multiSelectContainer "
-                id="approved_roles"
-              >
+              <div>
                 <div
-                  class="search-wrapper searchWrapper "
+                  class="multiselect-container multiSelectContainer  "
+                  id="approved_roles"
                 >
-                  <input
-                    autocomplete="off"
-                    class="searchBox"
-                    id="approved_roles_input"
-                    placeholder="Select"
-                    type="text"
-                    value=""
-                  />
-                </div>
-                <div
-                  class="optionListContainer displayNone"
-                >
-                  <ul
-                    class="optionContainer"
+                  <div
+                    class="search-wrapper searchWrapper "
                   >
-                    <li
-                      class="
-              highlightOption highlight 
-              false 
-              false option
-            "
+                    <input
+                      autocomplete="off"
+                      class="searchBox "
+                      id="approved_roles_input"
+                      name="search_name_input"
+                      placeholder="Select"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="optionListContainer displayNone"
+                  >
+                    <ul
+                      class="optionContainer"
                     >
-                      Administrator
-                    </li>
-                    <li
-                      class="
-               
-              false 
-              false option
-            "
-                    >
-                      Editor
-                    </li>
-                  </ul>
+                      <li
+                        class="option  highlightOption highlight  "
+                      >
+                        Administrator
+                      </li>
+                      <li
+                        class="option    "
+                      >
+                        Editor
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -664,6 +654,10 @@ exports[`TeamsList Renders & Matches snapshot 1`] = `
         class="divide-y divide-gray-200 px-5 sm:px-8"
         role="list"
       >
+        <div
+          hidden=""
+          style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px; display: none;"
+        />
         <li
           class="py-5 flex flex-col items-center justify-between sm:py-8 sm:flex-row"
         >

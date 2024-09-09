@@ -115,7 +115,6 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
         >
           Paste the Access Key to log into the connected website.
         </p>
-        
       </div>
       <form
         aria-label="Log In Using Access Key"
@@ -141,7 +140,7 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
         <input
           name="_tl_ak_nonce"
           type="hidden"
-          value="nonce"
+          value=""
         />
         <input
           name="ak_account_id"
@@ -181,7 +180,6 @@ exports[`Access Key Login Form renders and matches snapshot 1`] = `
           value="Log In"
         />
       </form>
-      
     </div>
   </div>
 </div>
