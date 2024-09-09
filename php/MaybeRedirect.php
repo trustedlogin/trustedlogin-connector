@@ -25,11 +25,15 @@ class MaybeRedirect {
 	 */
 	public static function adminInit() {
 
-		if ( ! isset( $_REQUEST['action'] ) || Reset::ACTION_NAME !== $_REQUEST['action'] ) {
+		$action = Helpers::get_post_or_get( 'action' );
+
+		if ( Reset::ACTION_NAME !== $action ) {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), Reset::NONCE_ACTION ) ) {
+		$nonce = Helpers::get_post_or_get( '_wpnonce', 'sanitize_text_field' );
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, Reset::NONCE_ACTION ) ) {
 			wp_safe_redirect(
 				add_query_arg(
 					array(
@@ -66,14 +70,15 @@ class MaybeRedirect {
 	 * @since 1.0.0
 	 */
 	public static function handle() {
-		// Access key redirect
-		if ( ! isset( $_REQUEST[ AccessKeyLogin::REDIRECT_ENDPOINT ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		// Access key redirect.
+		if ( ! Helpers::get_post_or_get( AccessKeyLogin::REDIRECT_ENDPOINT ) ) {
 			return;
 		}
 
-		if ( isset( $_REQUEST['action'] ) && Webhook::WEBHOOK_ACTION === $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$provider = $_REQUEST[ Factory::PROVIDER_KEY ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			if ( ! in_array( $provider, Factory::getProviders() ) ) {
+		if ( Webhook::WEBHOOK_ACTION === Helpers::get_post_or_get( 'action' ) ) {
+			$provider = Helpers::get_post_or_get( Factory::PROVIDER_KEY  );
+
 			if ( ! in_array( $provider, Factory::getProviders(), true ) ) {
 				return;
 			}
@@ -81,7 +86,8 @@ class MaybeRedirect {
 			if ( ! IsIntegrationActive::check( $provider ) ) {
 				return;
 			}
-			$accountId = $_REQUEST[ AccessKeyLogin::ACCOUNT_ID_INPUT_NAME ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+			$accountId = Helpers::get_post_or_get( AccessKeyLogin::ACCOUNT_ID_INPUT_NAME, 'sanitize_text_field' );
 
 			try {
 				$team    = SettingsApi::fromSaved()->getByAccountId( $accountId );

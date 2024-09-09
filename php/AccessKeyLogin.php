@@ -122,10 +122,9 @@ class AccessKeyLogin {
 			if ( is_wp_error( $verified ) ) {
 				return $verified;
 			}
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$access_key = sanitize_text_field( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] );
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$account_id = sanitize_text_field( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] );
+
+			$access_key = Helpers::get_post_or_get(self::ACCESS_KEY_INPUT_NAME, 'sanitize_text_field' );
+			$account_id = Helpers::get_post_or_get( self::ACCOUNT_ID_INPUT_NAME, 'sanitize_text_field' );
 		}
 
 		if ( self::ACCESS_KEY_STRING_LENGTH !== strlen( $access_key ) ) {
@@ -207,24 +206,27 @@ class AccessKeyLogin {
 	 */
 	public function verifyGrantAccessRequest( bool $checkNonce = true ) {
 
-		if ( empty( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] ) ) {
+		if ( ! Helpers::get_post_or_get( self::ACCESS_KEY_INPUT_NAME  ) ) {
 			$this->log( 'No access key sent.', __METHOD__, 'error' );
 			return new \WP_Error( 'no_access_key', esc_html__( 'No access key was sent with the request.', 'trustedlogin-connector' ) );
 		}
 
-		if ( empty( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) ) {
+		if ( ! Helpers::get_post_or_get( self::ACCOUNT_ID_INPUT_NAME ) ) {
 			$this->log( 'No account id sent.', __METHOD__, 'error' );
 			return new \WP_Error( 'no_account_id', esc_html__( 'No account id was sent with the request.', 'trustedlogin-connector' ) );
 		}
 
 		if ( $checkNonce ) {
-			if ( empty( $_REQUEST[ self::NONCE_NAME ] ) ) {
+
+			$nonce = Helpers::get_post_or_get( self::NONCE_NAME, 'sanitize_text_field'  );
+
+			if ( ! $nonce ) {
 				$this->log( 'No nonce set. Insecure request.', __METHOD__, 'error' );
 				return new \WP_Error( 'no_nonce', esc_html__( 'No nonce was sent with the request.', 'trustedlogin-connector' ) );
 			}
 
 			// Valid nonce?
-			$valid = wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION );
+			$valid = wp_verify_nonce( $nonce, self::NONCE_ACTION );
 
 			if ( ! $valid ) {
 				$this->log( 'Nonce is invalid; could be insecure request. Refresh the page and try again.', __METHOD__, 'error' );
@@ -245,9 +247,9 @@ class AccessKeyLogin {
 	public static function fromRequest( bool $ak = true ) {
 
 		if ( $ak ) {
-			return isset( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] ) ? sanitize_text_field( $_REQUEST[ self::ACCESS_KEY_INPUT_NAME ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return (string) Helpers::get_post_or_get( self::ACCESS_KEY_INPUT_NAME, 'sanitize_text_field' );
 		}
 
-		return isset( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) ? sanitize_text_field( $_REQUEST[ self::ACCOUNT_ID_INPUT_NAME ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return (string) Helpers::get_post_or_get( self::ACCOUNT_ID_INPUT_NAME, 'sanitize_text_field' );
 	}
 }

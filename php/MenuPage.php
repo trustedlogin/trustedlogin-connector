@@ -178,9 +178,8 @@ class MenuPage {
 		// see: https://github.com/trustedlogin/trustedlogin-connector/issues/35
 		remove_all_actions( 'admin_notices' );
 		remove_all_actions( 'all_admin_notices' );
-		if ( isset(
-			$_REQUEST[ MaybeRedirect::REDIRECT_KEY ] // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		) ) {
+
+		if ( Helpers::get_post_or_get( MaybeRedirect::REDIRECT_KEY ) ) {
 			return;
 		}
 		// Enqueue assets
