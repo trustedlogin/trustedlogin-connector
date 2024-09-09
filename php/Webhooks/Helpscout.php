@@ -197,17 +197,19 @@ class Helpscout extends Webhook {
 
 		// Check different locations for the signature, return when found.
 		if ( isset( $_SERVER[ "X-{$provider_name}-SIGNATURE" ] ) ) {
-			return sanitize_text_field( $_SERVER[ "X-{$provider_name}-SIGNATURE" ] );
+			return sanitize_text_field( wp_unslash( $_SERVER[ "X-{$provider_name}-SIGNATURE" ] ) );
 		}
 
 		if ( isset( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] ) ) {
-			return sanitize_text_field( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] );
+			return sanitize_text_field( wp_unslash( $_SERVER[ "HTTP_X_{$provider_name}_SIGNATURE" ] ) );
 		}
 
 		if ( function_exists( 'apache_request_headers' ) ) {
 			$headers = apache_request_headers();
 
-			return sanitize_text_field( $headers[ "X-{$provider_name_capitalized}-Signature" ] ) ?? null;
+			if ( isset( $headers[ "X-{$provider_name_capitalized}-Signature" ] ) ) {
+				return sanitize_text_field( wp_unslash( $headers[ "X-{$provider_name_capitalized}-Signature" ] ) );
+			}
 		}
 
 		// If we couldn't find the signature, we return null.
