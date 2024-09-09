@@ -134,7 +134,7 @@ function register_trustedlogin_connector_assets() {
 	}
 
 	if ( isset( $_GET['error'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$error = sanitize_text_field( $_GET['error'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$error = sanitize_text_field( wp_unslash( $_GET['error'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		switch ( $error ) {
 			case 'nonce':
 				$error = __( 'Nonce is invalid', 'trustedlogin-connector' );
