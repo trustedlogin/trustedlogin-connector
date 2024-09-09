@@ -16,10 +16,10 @@ class Helpers {
 	static function get_post_or_get( string $key, callable $sanitize_callback = null ) {
 		$value = null;
 
-		if ( isset( $_POST[ $key ] ) ) {
-			$value = $_POST[ $key ];
-		} elseif ( isset( $_GET[ $key ] ) ) {
-			$value = $_GET[ $key ];
+		if ( isset( $_POST[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$value = $_POST[ $key ];  // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		} elseif ( isset( $_GET[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$value = $_GET[ $key ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 
 		if ( null === $value ) {

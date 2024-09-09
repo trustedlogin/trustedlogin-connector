@@ -173,8 +173,8 @@ final class SettingsApi {
 			}
 		}
 
-		// translators: %s is the account id that wasn't found.
-		throw new \Exception( sprintf( esc_html__( 'Account not found: %d.', 'trustedlogin-connector' ), $account_id ) );
+		// translators: %d is the account id that wasn't found.
+		throw new \Exception( esc_html( sprintf( __( 'Account not found: %d.', 'trustedlogin-connector' ), $account_id ) ) );
 	}
 
 	/*
