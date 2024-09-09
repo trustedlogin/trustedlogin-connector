@@ -147,7 +147,7 @@ class ApiHandler {
 	 *
 	 * @param string|WP_Error $value The Header value to add.
 	 *
-	 * @param string $key The Header key to add.
+	 * @param string          $key The Header key to add.
 	 *
 	 * @return array|false
 	 */

@@ -123,7 +123,7 @@ class AccessKeyLogin {
 				return $verified;
 			}
 
-			$access_key = Helpers::get_post_or_get(self::ACCESS_KEY_INPUT_NAME, 'sanitize_text_field' );
+			$access_key = Helpers::get_post_or_get( self::ACCESS_KEY_INPUT_NAME, 'sanitize_text_field' );
 			$account_id = Helpers::get_post_or_get( self::ACCOUNT_ID_INPUT_NAME, 'sanitize_text_field' );
 		}
 
@@ -136,7 +136,7 @@ class AccessKeyLogin {
 		}
 
 		// Get saved settings and then team settings
-		$settings = SettingsApi::fromSaved();
+		$settings   = SettingsApi::fromSaved();
 		$account_id = (int) $account_id;
 
 		try {
@@ -207,7 +207,7 @@ class AccessKeyLogin {
 	 */
 	public function verifyGrantAccessRequest( bool $checkNonce = true ) {
 
-		if ( ! Helpers::get_post_or_get( self::ACCESS_KEY_INPUT_NAME  ) ) {
+		if ( ! Helpers::get_post_or_get( self::ACCESS_KEY_INPUT_NAME ) ) {
 			$this->log( 'No access key sent.', __METHOD__, 'error' );
 			return new \WP_Error( 'no_access_key', esc_html__( 'No access key was sent with the request.', 'trustedlogin-connector' ) );
 		}
@@ -218,8 +218,7 @@ class AccessKeyLogin {
 		}
 
 		if ( $checkNonce ) {
-
-			$nonce = Helpers::get_post_or_get( self::NONCE_NAME, 'sanitize_text_field'  );
+			$nonce = Helpers::get_post_or_get( self::NONCE_NAME, 'sanitize_text_field' );
 
 			if ( ! $nonce ) {
 				$this->log( 'No nonce set. Insecure request.', __METHOD__, 'error' );

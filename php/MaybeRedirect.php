@@ -77,7 +77,7 @@ class MaybeRedirect {
 		}
 
 		if ( Webhook::WEBHOOK_ACTION === Helpers::get_post_or_get( 'action' ) ) {
-			$provider = Helpers::get_post_or_get( Factory::PROVIDER_KEY  );
+			$provider = Helpers::get_post_or_get( Factory::PROVIDER_KEY );
 
 			if ( ! in_array( $provider, Factory::getProviders(), true ) ) {
 				return;

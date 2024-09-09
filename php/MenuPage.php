@@ -44,7 +44,7 @@ class MenuPage {
 	protected $childSlug;
 
 	/**
-	 * @var string Optional name for the menu page.
+	 * @var string|null Optional name for the menu page.
 	 */
 	protected $childName;
 
@@ -54,7 +54,7 @@ class MenuPage {
 	protected $initialView;
 
 	/**
-	 * @var string
+	 * @var bool
 	 */
 	protected $show_menu_to_support;
 
@@ -76,8 +76,9 @@ class MenuPage {
 	/**
 	 * Check if assets should be enqueued.
 	 *
-	 * @param string
-	 * @return bool
+	 * @param string $page Hook suffix for the current admin page.
+	 *
+	 * @return bool True if assets should be enqueued.
 	 */
 	public function shouldEnqueueAssets( $page ) {
 
@@ -170,18 +171,24 @@ class MenuPage {
 	 * @uses "admin_enqueue_scripts"
 	 */
 	public function enqueueAssets( $hook ) {
-		// @see https://github.com/trustedlogin/vendor/issues/116
+
+		/** @see https://github.com/trustedlogin/vendor/issues/116 */
 		if ( ! $this->shouldEnqueueAssets( $hook ) ) {
 			return;
 		}
-		// Remove admin notices added correctly
-		// see: https://github.com/trustedlogin/trustedlogin-connector/issues/35
+
+		/**
+		 * Remove admin notices from the page.
+		 *
+		 * @see https://github.com/trustedlogin/trustedlogin-connector/issues/35
+		 */
 		remove_all_actions( 'admin_notices' );
 		remove_all_actions( 'all_admin_notices' );
 
 		if ( Helpers::get_post_or_get( MaybeRedirect::REDIRECT_KEY ) ) {
 			return;
 		}
+
 		// Enqueue assets
 		wp_enqueue_script( self::ASSET_HANDLE );
 		wp_enqueue_style( self::ASSET_HANDLE );

@@ -78,8 +78,8 @@ class Helpscout extends Webhook {
 	/**
 	 * Get HTML for the Help Scout widget.
 	 *
-	 * @param array  $customer_emails List of customer emails.
-	 * @param int $account_id Account ID.
+	 * @param array $customer_emails List of customer emails.
+	 * @param int   $account_id Account ID.
 	 *
 	 * @return string The HTML response.
 	 */
@@ -316,7 +316,7 @@ class Helpscout extends Webhook {
 	 * @param array  $response API response.
 	 * @param string $item_template Item template.
 	 * @param array  $statuses Array of statuses.
-	 * @param int $account_id Account ID.
+	 * @param int    $account_id Account ID.
 	 *
 	 * @return string Item HTML.
 	 */

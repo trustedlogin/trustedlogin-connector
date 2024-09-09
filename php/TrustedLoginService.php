@@ -50,7 +50,7 @@ class TrustedLoginService {
 	 * @since 0.12.0
 	 *
 	 * @param string[] $secret_ids
-	 * @param int   $account_id The account ID of the TrustedLogin account.
+	 * @param int      $account_id The account ID of the TrustedLogin account.
 	 *
 	 * @return array{ id:string, url_parts:array, envelope:array }
 	 */
@@ -112,7 +112,7 @@ class TrustedLoginService {
 	 * @since  1.0.0
 	 *
 	 * @param string $access_key The key we're checking for connected sites
-	 * @param int $account_id The account ID for access key.
+	 * @param int    $account_id The account ID for access key.
 	 * @return array|\WP_Error  Array of siteIds or \WP_Error  on issue.
 	 */
 	public function api_get_secret_ids( $access_key, $account_id ) {
@@ -166,7 +166,7 @@ class TrustedLoginService {
 	 * @since 0.2.0
 	 *
 	 * @param string $secret_id Unique secret_id of a site.
-	 * @param int $account_id The ID for the TrustedLogin account.
+	 * @param int    $account_id The ID for the TrustedLogin account.
 	 *
 	 * @return array|false|\WP_Error
 	 */

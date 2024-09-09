@@ -92,7 +92,7 @@ final class SettingsApi {
 				$data[] = $team;
 			}
 		}
-		$obj     = new static( $data );
+		$obj     = new self( $data );
 		$globals = get_option( self::GLOBAL_SETTING_NAME, null );
 		if ( ! empty( $globals ) ) {
 			$globals = (array) json_decode( $globals );

@@ -104,7 +104,7 @@ class Plugin {
 	/**
 	 * Get API Handler by account id
 	 *
-	 * @param int            $accountId Account ID, which must be saved in settings, to get handler for.
+	 * @param int               $accountId Account ID, which must be saved in settings, to get handler for.
 	 * @param string            $apiUrl Optional. URL override for TrustedLogin API.
 	 * @param null|TeamSettings $team Optional. TeamSettings  to use.
 	 *

@@ -8,7 +8,7 @@ class Helpers {
 	/**
 	 * Retrieve a value from $_POST or $_GET with optional sanitization.
 	 *
-	 * @param string $key The input name to check for.
+	 * @param string        $key The input name to check for.
 	 * @param callable|null $sanitize_callback Optional. The sanitization callback function. Default: null (no sanitization).
 	 *
 	 * @return mixed|null The value from $_POST or $_GET, or null if not found.

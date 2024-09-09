@@ -5,12 +5,11 @@ namespace TrustedLogin\Vendor;
 use TrustedLogin\Vendor\Traits\Logger;
 
 /**
- * When in debug mode, log all errors to our log
+ * When in debug mode, log all errors to our log.
  *
  * @see https://github.com/inpsyde/Wonolog/blob/master/src/PhpErrorController.php
  */
 final class ErrorHandler {
-
 
 	use Logger;
 
@@ -21,7 +20,7 @@ final class ErrorHandler {
 	 */
 	public static function register() {
 
-		$controller = new static();
+		$controller = new self();
 		register_shutdown_function( array( $controller, 'onFatal' ) );
 		set_error_handler( array( $controller, 'onError' ), E_ALL | E_STRICT );
 		set_exception_handler( array( $controller, 'onException' ) );
